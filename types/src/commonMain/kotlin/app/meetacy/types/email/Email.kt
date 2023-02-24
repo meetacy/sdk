@@ -1,8 +1,8 @@
 @file:Suppress("MemberVisibilityCanBePrivate")
 
-package app.meetacy.sdk.email
+package app.meetacy.types.email
 
-import app.meetacy.sdk.annotation.UnsafeConstructor
+import app.meetacy.types.annotation.UnsafeConstructor
 import kotlin.jvm.JvmInline
 
 @JvmInline

@@ -1,4 +1,4 @@
-package app.meetacy.sdk.email
+package app.meetacy.types.email
 
 public sealed interface ConfirmEmailResult {
     public data object Success : ConfirmEmailResult

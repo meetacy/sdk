@@ -23,4 +23,4 @@ include(
     ":types"
 )
 
-rootProject.name = "meetacy-client"
+rootProject.name = "meetacy-sdk"

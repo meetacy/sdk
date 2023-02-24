@@ -12,5 +12,4 @@ repositories {
 dependencies {
     api(libs.kotlinSerializationGradle)
     api(libs.kotlinGradlePlugin)
-    api(libs.detektGradlePlugin)
 }

@@ -1,6 +1,6 @@
 package app.meetacy.api.requests
 
-import app.meetacy.sdk.auth.Token
+import app.meetacy.types.auth.Token
 
 public data class GenerateAuthRequest(
     val nickname: String

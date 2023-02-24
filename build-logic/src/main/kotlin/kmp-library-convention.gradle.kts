@@ -1,6 +1,9 @@
+@file:Suppress("UNUSED_VARIABLE")
+
 plugins {
     kotlin("multiplatform")
     kotlin("plugin.serialization")
+    id("publication-convention")
 }
 
 kotlin {

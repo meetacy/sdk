@@ -1,0 +1,21 @@
+name: Production Deploy
+
+on:
+  push:
+    branches: [ "dev" ]
+  workflow_dispatch:
+
+jobs:
+  production-deploy:
+    runs-on: macos-latest
+    env:
+      GITHUB_USERNAME: "meetacy"
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'corretto'
+          java-version: '11'
+          cache: 'gradle'
+      - run: ./gradlew publish --no-daemon

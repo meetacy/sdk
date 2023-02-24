@@ -1,8 +1,8 @@
 package app.meetacy.api.requests
 
-import app.meetacy.sdk.email.ConfirmEmailHash
-import app.meetacy.sdk.email.ConfirmEmailResult
-import app.meetacy.sdk.email.Email
+import app.meetacy.types.email.ConfirmEmailHash
+import app.meetacy.types.email.ConfirmEmailResult
+import app.meetacy.types.email.Email
 
 public data class ConfirmEmailRequest(
     val email: Email,

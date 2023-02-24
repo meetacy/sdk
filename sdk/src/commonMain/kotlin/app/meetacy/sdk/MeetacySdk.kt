@@ -1,7 +1,7 @@
 package app.meetacy.sdk
 
 import app.meetacy.api.MeetacyApi
-import app.meetacy.sdk.auth.Token
+import app.meetacy.types.auth.Token
 
 public class MeetacySdk(public val executor: MeetacyApi) {
 

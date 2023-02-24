@@ -1,6 +1,6 @@
-package app.meetacy.sdk.auth
+package app.meetacy.types.auth
 
-import app.meetacy.sdk.annotation.UnsafeConstructor
+import app.meetacy.types.annotation.UnsafeConstructor
 import kotlin.jvm.JvmInline
 
 @JvmInline

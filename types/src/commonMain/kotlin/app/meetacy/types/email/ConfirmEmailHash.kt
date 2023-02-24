@@ -1,4 +1,4 @@
-package app.meetacy.sdk.email
+package app.meetacy.types.email
 
 import kotlin.jvm.JvmInline
 

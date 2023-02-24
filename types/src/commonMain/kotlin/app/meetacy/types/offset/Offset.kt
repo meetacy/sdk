@@ -1,6 +1,6 @@
-package app.meetacy.sdk.offset
+package app.meetacy.types.offset
 
-import app.meetacy.sdk.annotation.UnsafeConstructor
+import app.meetacy.types.annotation.UnsafeConstructor
 import kotlin.jvm.JvmInline
 
 @JvmInline

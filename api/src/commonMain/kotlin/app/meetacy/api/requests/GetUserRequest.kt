@@ -1,8 +1,8 @@
 package app.meetacy.api.requests
 
-import app.meetacy.sdk.auth.Token
-import app.meetacy.sdk.user.User
-import app.meetacy.sdk.user.UserId
+import app.meetacy.types.auth.Token
+import app.meetacy.types.user.User
+import app.meetacy.types.user.UserId
 
 public data class GetUserRequest(
     val token: Token,

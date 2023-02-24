@@ -1,6 +1,6 @@
-package app.meetacy.sdk.user
+package app.meetacy.types.user
 
-import app.meetacy.sdk.email.Email
+import app.meetacy.types.email.Email
 
 public interface SelfUser : User {
     public val emailVerified: Boolean

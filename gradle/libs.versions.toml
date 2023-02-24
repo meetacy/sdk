@@ -1,55 +1,15 @@
 [versions]
 
 kotlin = "1.8.0"
-##  ⬆ = "1.7.21"
-##  ⬆ = "1.7.22"
-##  ⬆ = "1.8.0"
-##  ⬆ = "1.7.22"
-##  ⬆ = "1.8.0"
-androidGradle = "7.2.2"
-##         ⬆ = "7.3.0"
-##         ⬆ = "7.3.1"
 ktor = "2.0.2"
-mokoNetwork = "0.20.0"
-mokoResources = "0.20.1"
-mokoMvvm = "0.15.0"
-mokoPaging = "0.7.2"
-mokoErrors = "0.6.0"
-mokoUtils = "0.3.0"
-kswift = "0.6.1"
-mokoUnits = "0.8.0"
-mokoCrashReporting = "0.4.0"
-compose = "1.3.2"
-composeOld = "1.3.1"
-runtimeTracing = "1.0.0-alpha01"
-slf4jVersion = "1.7.36"
+meetacySdk = "0.0.1-build1"
 
 # kotlinx
 kotlinxCoroutines = "1.6.4"
 kotlinxSerialization = "1.4.1"
 kotlinxDateTime = "0.4.0"
 
-# multiplatform
-multiplatformSettings = "0.9"
-napier = "2.6.1"
-
-# database
-sqlDelight = "1.5.4"
-
-# ads
-yandexAdsVersion = "5.5.0"
-googleAdsVersion = "21.4.0"
-
-#detekt
-
-detektVersion = "1.19.0"
-
 [libraries]
-
-# compose
-composeRuntime = { module = "androidx.compose.runtime:runtime", version.ref = "compose" }
-composeUiTooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "composeOld" }
-composeRuntimeTracing = { module = "androidx.compose.runtime:runtime-tracing", version.ref = "runtimeTracing"}
 
 # ktor
 ktorClient = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
@@ -57,7 +17,6 @@ ktorClientContentNegotiation = { module = "io.ktor:ktor-client-content-negotiati
 ktorClientCio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
 ktorClientLogging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
 ktorSerializationJson = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
-ktorClientOkHttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 ktorClientDarwin = { module = "io.ktor:ktor-client-darwin-legacy", version.ref = "ktor" }
 ktorClientMock = { module = "io.ktor:ktor-client-mock", version.ref = "ktor" }
 ktorClientJson = { module = "io.ktor:ktor-client-serialization", version.ref = "ktor" }
@@ -69,46 +28,6 @@ kotlinSerialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-js
 kotlinSerializationProperties = { module = "org.jetbrains.kotlinx:kotlinx-serialization-properties", version.ref = "kotlinxSerialization" }
 kotlinxDateTime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDateTime" }
 
-# multiplatform
-multiplatformSettings = { module = "com.russhwolf:multiplatform-settings", version.ref = "multiplatformSettings" }
-multiplatformSettingsCoroutines = { module = "com.russhwolf:multiplatform-settings-coroutines-native-mt", version.ref = "multiplatformSettings" }
-multiplatformSerialization = { module = "com.russhwolf:multiplatform-settings-serialization", version.ref = "multiplatformSettings" }
-napier = { module = "io.github.aakira:napier", version.ref = "napier" }
-
-# moko
-mokoNetwork = { module = "dev.icerock.moko:network", version.ref = "mokoNetwork" }
-mokoNetworkErrors = { module = "dev.icerock.moko:network-errors", version.ref = "mokoNetwork" }
-mokoResources = { module = "dev.icerock.moko:resources", version.ref = "mokoResources" }
-mokoResourcesCompose = { module = "dev.icerock.moko:resources-compose", version.ref = "mokoResources" }
-mokoMvvmCore = { module = "dev.icerock.moko:mvvm-core", version.ref = "mokoMvvm" }
-mokoMvvmFlow = { module = "dev.icerock.moko:mvvm-flow", version.ref = "mokoMvvm" }
-mokoPaging = { module = "dev.icerock.moko:paging", version.ref = "mokoPaging" }
-mokoErrors = { module = "dev.icerock.moko:errors", version.ref = "mokoErrors" }
-mokoUtils = { module = "dev.icerock.moko:utils", version.ref = "mokoUtils" }
-mokoUnits = { module = "dev.icerock.moko:units", version.ref = "mokoUnits" }
-mokoCrashReportingFirebase = { module = "dev.icerock.moko:crash-reporting-crashlytics", version.ref = "mokoCrashReporting" }
-mokoCrashReportingNapier = { module = "dev.icerock.moko:crash-reporting-napier", version.ref = "mokoCrashReporting" }
-
-# database
-sqlDelightDriverAndroid = { module = "com.squareup.sqldelight:android-driver", version.ref = "sqlDelight"}
-sqlDelightDriverNative = { module = "com.squareup.sqldelight:native-driver", version.ref = "sqlDelight"}
-sqlDelightDriverJvm = { module = "com.squareup.sqldelight:sqlite-driver", version.ref = "sqlDelight"}
-sqlDelightCoroutinesExt = {module = "com.squareup.sqldelight:coroutines-extensions", version.ref = "sqlDelight"}
-
 # gradle plugins
-detektGradlePlugin = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detektVersion" }
 kotlinSerializationGradle = { module = "org.jetbrains.kotlin:kotlin-serialization", version.ref = "kotlin" }
 kotlinGradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
-androidGradlePlugin = { module = "com.android.tools.build:gradle", version.ref = "androidGradle" }
-mokoNetworkGradlePlugin = { module = "dev.icerock.moko:network-generator", version.ref = "mokoNetwork" }
-mokoResourcesGradlePlugin = { module = "dev.icerock.moko:resources-generator", version.ref = "mokoResources" }
-mobileMultiplatformGradlePlugin = { module = "dev.icerock:mobile-multiplatform", version = "0.14.2" }
-kswiftGradlePlugin = { module = "dev.icerock.moko:kswift-gradle-plugin", version.ref = "kswift" }
-sqlDelightGradlePlugin = { module = "com.squareup.sqldelight:gradle-plugin", version.ref = "sqlDelight" }
-
-# logging
-slf4j = { module = "org.slf4j:slf4j-simple", version.ref = "slf4jVersion" }
-
-# ads
-yandexAds = { module = "com.yandex.android:mobileads", version.ref = "yandexAdsVersion" }
-googleAds = { module = "com.google.android.gms:play-services-ads", version.ref = "googleAdsVersion" }
