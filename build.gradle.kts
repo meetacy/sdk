@@ -1,7 +1,5 @@
 plugins {
-    id("kmp-module-convention")
-    id("detekt-convention")
-
+    id("kmp-library")
 }
 
 dependencies {
@@ -9,6 +7,5 @@ dependencies {
     commonMainImplementation(libs.ktorSerializationJson)
     commonMainImplementation(libs.ktorClientContentNegotiation)
     commonMainImplementation(libs.ktorClientLogging)
-
     jvmMainImplementation(libs.ktorClientCio)
 }

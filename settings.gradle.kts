@@ -1,4 +1,3 @@
-
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
@@ -17,5 +16,11 @@ dependencyResolutionManagement {
 }
 
 includeBuild("build-logic")
+
+include(
+    ":api",
+    ":sdk",
+    ":types"
+)
 
 rootProject.name = "meetacy-client"
