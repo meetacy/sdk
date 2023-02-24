@@ -1,4 +1,4 @@
-name: Production Deploy
+name: Library Deploy
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  production-deploy:
+  library-deploy:
     runs-on: macos-latest
     env:
       GITHUB_USERNAME: "meetacy"
