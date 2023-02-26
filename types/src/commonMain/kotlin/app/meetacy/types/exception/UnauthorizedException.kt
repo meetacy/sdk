@@ -1,5 +1,5 @@
 package app.meetacy.types.exception
 
-public class UnauthorizedException : RuntimeException(
-    /* message = */ "Provided token is invalid"
+public class UnauthorizedException : MeetacyException(
+    message = "Provided token is invalid or expired"
 )
