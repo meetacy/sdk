@@ -1,4 +1,4 @@
-package app.meetacy.types.state
+package app.meetacy.types.update
 
 import kotlin.jvm.JvmInline
 
@@ -6,4 +6,4 @@ import kotlin.jvm.JvmInline
  * Represents identifier of entity state. Used to properly retrieve updates.
  */
 @JvmInline
-public value class StateId(public val string: String)
+public value class UpdateId(public val string: String)

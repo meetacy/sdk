@@ -1,7 +1,7 @@
 package app.meetacy.api.engine.updates
 
-import app.meetacy.types.state.StateId
+import app.meetacy.types.update.UpdateId
 
 public sealed interface MeetacyUpdate {
-    public val id: StateId
+    public val id: UpdateId
 }

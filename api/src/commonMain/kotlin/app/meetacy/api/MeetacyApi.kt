@@ -9,7 +9,7 @@ import app.meetacy.api.friends.FriendsApi
 import app.meetacy.api.users.UsersApi
 import app.meetacy.types.annotation.UnsafeConstructor
 import app.meetacy.types.auth.Token
-import app.meetacy.types.state.StateId
+import app.meetacy.types.update.UpdateId
 import app.meetacy.types.user.SelfUser
 import kotlinx.coroutines.flow.Flow
 
@@ -25,7 +25,7 @@ public class MeetacyApi(private val engine: MeetacyRequestsEngine) {
     public fun updatesPolling(
         token: Token,
         vararg filters: MeetacyUpdateFilter<*>,
-        lastUpdateId: StateId? = null
+        lastUpdateId: UpdateId? = null
     ): Flow<MeetacyUpdate> = engine.updatesPolling(token, *filters, lastUpdateId = lastUpdateId)
 
     @OptIn(UnsafeConstructor::class)

@@ -6,6 +6,7 @@ import app.meetacy.api.friends.AuthorizedFriendsApi
 import app.meetacy.api.users.AuthorizedUsersApi
 import app.meetacy.types.annotation.UnsafeConstructor
 import app.meetacy.types.auth.Token
+import app.meetacy.types.update.UpdateId
 import app.meetacy.types.user.SelfUser
 
 /**
