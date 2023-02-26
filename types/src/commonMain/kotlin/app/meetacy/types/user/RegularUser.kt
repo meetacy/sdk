@@ -2,8 +2,7 @@ package app.meetacy.types.user
 
 import app.meetacy.types.email.Email
 
-public data class SelfUser(
+public data class RegularUser(
     override val id: UserId,
-    override val email: Email?,
-    val emailVerified: Boolean,
+    override val email: Email?
 ) : User
