@@ -10,9 +10,9 @@ dependencies {
     commonMainImplementation(libs.kotlinSerialization)
     commonMainImplementation(libs.ktorClientLogging)
     commonMainImplementation(libs.ktorClientLogging)
-    commonTestImplementation(libs.ktorClientCio)
     commonMainApi(libs.ktorClient)
     commonMainApi(projects.api)
+    jvmTestImplementation(libs.ktorClientCio)
 }
 
 mokoNetwork {
