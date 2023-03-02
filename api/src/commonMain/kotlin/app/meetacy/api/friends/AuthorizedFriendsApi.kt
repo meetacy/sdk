@@ -2,9 +2,9 @@ package app.meetacy.api.friends
 
 import app.meetacy.types.amount.Amount
 import app.meetacy.types.auth.Token
-import app.meetacy.types.friend.Friend
 import app.meetacy.types.paging.PagingId
 import app.meetacy.types.paging.PagingResponse
+import app.meetacy.types.user.RegularUser
 import app.meetacy.types.user.UserId
 import kotlinx.coroutines.flow.Flow
 
@@ -21,11 +21,11 @@ public class AuthorizedFriendsApi(
     public suspend fun list(
         amount: Amount,
         pagingId: PagingId? = null
-    ): PagingResponse<List<Friend>> = base.list(token, amount, pagingId)
+    ): PagingResponse<List<RegularUser>> = base.list(token, amount, pagingId)
 
     public fun flow(
         chunkSize: Amount,
         startPagingId: PagingId? = null,
         limit: Amount? = null
-    ): Flow<PagingResponse<List<Friend>>> = base.flow(token, chunkSize, startPagingId, limit)
+    ): Flow<List<RegularUser>> = base.flow(token, chunkSize, startPagingId, limit)
 }

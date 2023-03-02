@@ -20,7 +20,8 @@ includeBuild("build-logic")
 include(
     ":api",
     ":sdk",
-    ":types"
+    ":types",
+    ":api:api-ktor"
 )
 
 rootProject.name = "meetacy-sdk"

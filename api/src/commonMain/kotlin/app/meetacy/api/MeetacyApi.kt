@@ -32,4 +32,6 @@ public class MeetacyApi(private val engine: MeetacyRequestsEngine) {
     public fun authorized(token: Token): AuthorizedMeetacyApi {
         return AuthorizedMeetacyApi(token, base = this)
     }
+
+    public companion object
 }
