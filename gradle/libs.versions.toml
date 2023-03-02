@@ -9,6 +9,8 @@ kotlinxCoroutines = "1.6.4"
 kotlinxSerialization = "1.4.1"
 kotlinxDateTime = "0.4.0"
 
+networkGeneratorVersion = "0.20.0"
+
 [libraries]
 
 # ktor
@@ -31,3 +33,4 @@ kotlinxDateTime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.r
 # gradle plugins
 kotlinSerializationGradle = { module = "org.jetbrains.kotlin:kotlin-serialization", version.ref = "kotlin" }
 kotlinGradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+networkGenerator = { module = "dev.icerock.moko:network-generator", version.ref = "networkGeneratorVersion" }
