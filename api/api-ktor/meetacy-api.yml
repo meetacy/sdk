@@ -4,8 +4,8 @@ info:
   description: "_Version 1.0.1 of the `Meetacy` API documentation_. It is recommended to fill in the request body on your own according to the sample provided below. The `Notifications` section is under development. "
   version: "1.0.1"
 servers:
-- url: "https://api.meetacy.app"
-- url: "http://localhost:8080"
+  - url: "https://api.meetacy.app"
+  - url: "http://localhost:8080"
 tags:
   - name: auth
     description: Authorization and confirmation of mail
@@ -241,7 +241,7 @@ paths:
                   $ref: '#/components/examples/FriendNotFound'
   /friends/list:
     post:
-      summary: Get list friends
+      summary: Get list of friends
       tags:
         - friends
       description: "Getting a list of friends and those you follow"
@@ -250,14 +250,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AccessIdentityRequest'
+              $ref: '#/components/schemas/ListFriendsRequest'
       responses:
         "200":
           description: An example of a successful generated response with an Access Identity
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetFriendsRequest'
+                $ref: '#/components/schemas/ListFriendsResponse'
         "400":
           description: An example of a successful generated response with an Access Identity
           content:
@@ -707,8 +707,7 @@ components:
       properties:
         status:
           type: "boolean"
-          enum:
-            - true
+          example: true
         result:
           type: "string"
       required:
@@ -779,6 +778,19 @@ components:
       required:
         - "accessIdentity"
         - "friendIdentity"
+      additionalProperties: false
+    ListFriendsRequest:
+      type: "object"
+      properties:
+        accessIdentity:
+          type: string
+        pagingId:
+          type: string
+        amount:
+          type: integer
+      required:
+        - "accessIdentity"
+        - "amount"
       additionalProperties: false
     EmailConfirmRequest:
       type: "object"
@@ -882,8 +894,7 @@ components:
       properties:
         status:
           type: boolean
-          enum:
-            - false
+          example: false
         errorCode:
           type: integer
           enum:
@@ -902,8 +913,7 @@ components:
       properties:
         status:
           type: boolean
-          enum:
-            - true
+          example: true
       required:
         - "status"
       additionalProperties: false
@@ -911,7 +921,7 @@ components:
       type: string
       enum:
         - "*image_file*"
-    GetFriendsRequest:
+    ListFriendsResponse:
       type: object
       properties:
         status:
@@ -919,7 +929,16 @@ components:
           example:
             - true
         result:
-          $ref: '#/components/schemas/FriendsAndSubsResponse'
+          type: object
+          properties:
+            nextPagingId:
+              type: string
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/RegularUserResponse'
+          required:
+            - "data"
       required:
         - "status"
         - "result"
@@ -927,6 +946,8 @@ components:
     RegularUserResponse:
       type: object
       properties:
+        isSelf:
+          type: boolean
         identity:
           type: string
           example: "6:ATHK7K8Uppgcrc3jqghkwB9xUVI0M1KeyfmgGdLJvrk0xMmYcpI5x60fIN1SzgPeJAgTUvfoV30YoI0hAl75CbU0retgcFb7RPOovB8LBa3v8wFgYal7RYKg3afZinNru6pLxdiz2BX817D7pTFuiIGS2TlXzZYZCKpQaWGLxImphh6K43BxLrYUluD6zrvEI6DEbcWSBJ7CApWJJdT5GdG7GCxiLQQpeuq3vSMRv1t3aLEAyfXzCCGU8nf53z6K"
@@ -936,20 +957,6 @@ components:
       required:
         - identity
         - nickname
-    FriendsAndSubsResponse:
-      type: object
-      properties:
-        friends:
-          type: array
-          items:
-            $ref: '#/components/schemas/RegularUserResponse'
-        subscriptions:
-          type: array
-          items:
-            $ref: '#/components/schemas/RegularUserResponse'
-      required:
-        - friends
-        - subscriptions
     CreatorMeetingResponse:
       type: object
       properties:
@@ -1004,8 +1011,7 @@ components:
       properties:
         status:
           type: boolean
-          enum:
-            - true
+          example: true
         result:
           $ref: '#/components/schemas/ResultMeetingResponse'
     ListMeetingsResponse:
@@ -1025,23 +1031,28 @@ components:
           type: boolean
           example: true
         result:
-          type: object
-          properties:
-            identity:
-              type: string
-              example: "15:fzK6CgXqQihDqeXpVYqVpOIgH0s5HvBAaR2BN2PkCxsLe63fAwMrV4uDInfYgoKFXY5C18Rnu9I2x5d46qmGNPLTM9uDepdKPKo7ss1tPsMk5AbslGwQCjlBrscOJmxUFSt7iwsmbZdLdjgYecKoXrJBVGwkZC3HYBUCLtgkexYsOk1mmDRxk482k3fCuo2Nxnjy82INdkOTjVsnew6vGhtOOrOWdpR1Ci6v1d06SQ6aFqs5QasWiTEPXNyCjGGd"
-            nickname:
-              type: string
-              example: Dmytro Koriukivka
-            email:
-              type: string
-              example: "*depending on the privacy settings of the user, his mail will be displayed*"
-            emailVerified:
-              type: boolean
-              example: true
-          required:
-            - identity
-            - nickname
+          $ref: '#/components/schemas/User'
+    User:
+      type: object
+      properties:
+        isSelf:
+          type: boolean
+        identity:
+          type: string
+          example: "15:fzK6CgXqQihDqeXpVYqVpOIgH0s5HvBAaR2BN2PkCxsLe63fAwMrV4uDInfYgoKFXY5C18Rnu9I2x5d46qmGNPLTM9uDepdKPKo7ss1tPsMk5AbslGwQCjlBrscOJmxUFSt7iwsmbZdLdjgYecKoXrJBVGwkZC3HYBUCLtgkexYsOk1mmDRxk482k3fCuo2Nxnjy82INdkOTjVsnew6vGhtOOrOWdpR1Ci6v1d06SQ6aFqs5QasWiTEPXNyCjGGd"
+        nickname:
+          type: string
+          example: Dmytro Koriukivka
+        email:
+          type: string
+          example: "*depending on the privacy settings of the user, his mail will be displayed*"
+        emailVerified:
+          type: boolean
+          example: true
+      required:
+        - identity
+        - nickname
+        - isSelf
     GetUserRequest:
       description: Creation access identity based on nickname
       type: object
@@ -1051,5 +1062,5 @@ components:
         accessIdentity:
           type: string
       required:
-        - identity
+        - accessIdentity
       additionalProperties: false

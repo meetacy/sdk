@@ -1,6 +1,5 @@
 package app.meetacy.api.engine.requests
 
-import app.meetacy.types.friend.Friend
 import app.meetacy.types.amount.Amount
 import app.meetacy.types.auth.Token
 import app.meetacy.types.paging.PagingId

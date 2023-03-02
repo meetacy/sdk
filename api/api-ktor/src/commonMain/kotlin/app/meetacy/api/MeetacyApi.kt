@@ -2,6 +2,7 @@ package app.meetacy.api
 
 import app.meetacy.api.engine.ktor.KtorMeetacyEngine
 import io.ktor.client.HttpClient
+import io.ktor.client.plugins.logging.*
 import kotlinx.serialization.json.Json
 
 public fun MeetacyApi(
@@ -18,9 +19,23 @@ public fun MeetacyApi(
 
 public fun MeetacyApi.Companion.production(
     httpClient: HttpClient = HttpClient(),
+    enableLogging: Boolean = false,
     json: Json = Json
-): MeetacyApi = MeetacyApi(
-    httpClient = httpClient,
-    json = json,
-    baseUrl = "https://api.meetacy.app"
-)
+): MeetacyApi {
+    val configuredClient = if (enableLogging) {
+        httpClient.config {
+            Logging {
+                logger = object : Logger {
+                    override fun log(message: String) = println(message)
+                }
+                level = LogLevel.ALL
+            }
+        }
+    } else httpClient
+
+    return MeetacyApi(
+        httpClient = configuredClient,
+        json = json,
+        baseUrl = "https://api.meetacy.app"
+    )
+}

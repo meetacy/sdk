@@ -12,7 +12,7 @@ internal inline fun <T> pagingFlow(
     startPagingId: PagingId? = null,
     limit: Amount? = null,
     crossinline block: suspend (pagingId: PagingId?, chunkSize: Amount) -> PagingResponse<T>
-): Flow<PagingResponse<T>> = flow {
+): Flow<T> = flow {
     var currentPageId = startPagingId
     var currentLimit = limit
 
@@ -20,6 +20,7 @@ internal inline fun <T> pagingFlow(
         val currentChunkSize = currentLimit?.int?.coerceAtMost(chunkSize.int)?.amount ?: chunkSize
 
         val response = block(currentPageId, currentChunkSize)
+        emit(response.data)
         currentPageId = response.nextPagingId ?: break
 
         if (currentLimit == null) continue
