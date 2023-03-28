@@ -1,12 +1,12 @@
-@file:OptIn(UnsafeConstructor::class)
-
 package app.meetacy.api.engine.ktor.requests.users
 
+import app.meetacy.api.engine.ktor.mapToUser
 import app.meetacy.api.engine.requests.GetMeRequest
 import app.meetacy.api.engine.requests.GetUserRequest
 import app.meetacy.types.annotation.UnsafeConstructor
 import app.meetacy.types.email.Email
 import app.meetacy.types.exception.meetacyApiError
+import app.meetacy.types.file.FileId
 import app.meetacy.types.user.RegularUser
 import app.meetacy.types.user.SelfUser
 import app.meetacy.types.user.User
@@ -48,20 +48,6 @@ internal class UsersEngine(
 
         return GetUserRequest.Response(
             response.result?.mapToUser() ?: meetacyApiError("'result' should present")
-        )
-    }
-
-    private fun GeneratedUser.mapToUser(): User = if (isSelf) {
-        SelfUser(
-            id = UserId(identity),
-            nickname = nickname,
-            email = email?.let(::Email),
-            emailVerified = emailVerified ?: error("Self user must always return emailVerified parameter")
-        )
-    } else {
-        RegularUser(
-            id = UserId(identity),
-            nickname = nickname
         )
     }
 }

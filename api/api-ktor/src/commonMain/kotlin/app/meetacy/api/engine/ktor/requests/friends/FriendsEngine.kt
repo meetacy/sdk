@@ -6,6 +6,7 @@ import app.meetacy.api.engine.requests.AddFriendRequest
 import app.meetacy.api.engine.requests.DeleteFriendRequest
 import app.meetacy.api.engine.requests.ListFriendsRequest
 import app.meetacy.types.annotation.UnsafeConstructor
+import app.meetacy.types.file.FileId
 import app.meetacy.types.paging.PagingId
 import app.meetacy.types.paging.PagingResponse
 import app.meetacy.types.user.RegularUser
@@ -56,7 +57,8 @@ internal class FriendsEngine(
             data = response.result.data.map { user ->
                 RegularUser(
                     id = UserId(user.identity),
-                    nickname = user.nickname
+                    nickname = user.nickname,
+                    avatarId = user.avatarIdentity?.let(::FileId)
                 )
             }
         )

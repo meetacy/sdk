@@ -1,20 +1,12 @@
-@file:OptIn(UnsafeConstructor::class)
-
 package app.meetacy.api.engine.ktor
 
 import app.meetacy.api.engine.MeetacyRequestsEngine
 import app.meetacy.api.engine.ktor.requests.auth.AuthEngine
 import app.meetacy.api.engine.ktor.requests.friends.FriendsEngine
+import app.meetacy.api.engine.ktor.requests.meetings.MeetingsEngine
 import app.meetacy.api.engine.ktor.requests.users.UsersEngine
 import app.meetacy.api.engine.requests.*
-import app.meetacy.api.engine.updates.MeetacyUpdate
-import app.meetacy.api.engine.updates.filter.MeetacyUpdateFilter
-import app.meetacy.types.annotation.UnsafeConstructor
-import app.meetacy.types.auth.Token
-import app.meetacy.types.update.UpdateId
 import io.ktor.client.*
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.serialization.json.Json
 
 public class KtorMeetacyEngine(
@@ -26,12 +18,7 @@ public class KtorMeetacyEngine(
     private val auth = AuthEngine(baseUrl, httpClient, json)
     private val users = UsersEngine(baseUrl, httpClient, json)
     private val friends = FriendsEngine(baseUrl, httpClient, json)
-
-    override fun updatesPolling(
-        token: Token,
-        vararg filters: MeetacyUpdateFilter<*>,
-        lastUpdateId: UpdateId?,
-    ): Flow<MeetacyUpdate> = emptyFlow() // TODO: create updates from socket
+    private val meetings = MeetingsEngine(baseUrl, httpClient, json)
 
     @Suppress("UNCHECKED_CAST")
     override suspend fun <T> execute(request: MeetacyRequest<T>): T {
@@ -45,6 +32,10 @@ public class KtorMeetacyEngine(
             // users
             is GetMeRequest -> users.getMe(request) as T
             is GetUserRequest -> users.getUser(request) as T
+            // meetings
+            is ListMeetingsHistoryRequest -> meetings.listMeetingsHistory(request) as T
+            is CreateMeetingRequest -> meetings.createMeeting(request) as T
+            is ParticipateMeetingRequest -> meetings.participateMeeting(request) as T
             // not yet supported
             is LinkEmailRequest -> notSupported()
             is ConfirmEmailRequest -> notSupported()

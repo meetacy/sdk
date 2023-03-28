@@ -7,7 +7,9 @@ plugins {
 }
 
 kotlin {
-    jvm()
+    jvm {
+        jvmToolchain(8)
+    }
     js(IR) {
         browser()
         nodejs()

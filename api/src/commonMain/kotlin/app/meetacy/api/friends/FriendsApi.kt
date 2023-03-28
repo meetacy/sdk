@@ -39,10 +39,6 @@ public class FriendsApi(private val engine: MeetacyRequestsEngine) {
         startPagingId: PagingId? = null,
         limit: Amount? = null
     ): Flow<List<RegularUser>> = pagingFlow(chunkSize, startPagingId, limit) { pagingId, amount ->
-        list(
-            token = token,
-            amount = amount,
-            pagingId = pagingId
-        )
+        list(token, amount, pagingId)
     }
 }
