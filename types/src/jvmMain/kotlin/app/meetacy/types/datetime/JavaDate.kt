@@ -12,7 +12,7 @@ public val Date.javaDate: JavaDate get() =
     iso8601DateFormat.parse(iso8601)
 
 public val JavaDate.meetacyDateTime: DateTime
-    get() = DateTime(iso8601 = iso8601DateTimeFormat.format(this))
+    get() = DateTime(iso8601DateTimeFormat.format(this))
 
 public val DateTime.javaDate: JavaDate get() =
     iso8601DateTimeFormat.parse(iso8601)
