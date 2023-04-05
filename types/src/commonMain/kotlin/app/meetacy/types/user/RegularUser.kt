@@ -4,7 +4,7 @@ import app.meetacy.types.file.FileId
 
 /**
  * When modifying this class, corresponding classes should be altered:
- * - [app.meetacy.api.users.RegularUserRepository]
+ * - [app.meetacy.sdk.users.RegularUserRepository]
  */
 public data class RegularUser(
     override val id: UserId,

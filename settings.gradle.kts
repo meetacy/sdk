@@ -19,7 +19,6 @@ includeBuild("build-logic")
 
 include(
     ":api",
-    ":sdk",
     ":types",
     ":api:api-ktor"
 )

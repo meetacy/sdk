@@ -7,8 +7,8 @@ import app.meetacy.types.user.User
 
 /**
  * When modifying this class, corresponding classes should be altered:
- * - [app.meetacy.api.meetings.MeetingRepository]
- * - [app.meetacy.api.meetings.AuthorizedMeetingRepository]
+ * - [app.meetacy.sdk.meetings.MeetingRepository]
+ * - [app.meetacy.sdk.meetings.AuthorizedMeetingRepository]
  */
 public data class Meeting(
     val id: MeetingId,
@@ -21,5 +21,4 @@ public data class Meeting(
     val previewParticipants: List<User>,
     val isParticipating: Boolean,
     val avatarId: FileId?
-) {
-}
+)
