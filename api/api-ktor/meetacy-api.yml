@@ -416,7 +416,7 @@ paths:
                   $ref: '#/components/examples/InvalidAccessIdentity'
                 MeetingNotFound:
                   $ref: '#/components/examples/InvalidMeetingIdentity'
-  /meetings/list:
+  /meetings/history/list:
     post:
       summary: Getting a list of meetings
       tags:
@@ -427,7 +427,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AccessIdentityRequest'
+              $ref: '#/components/schemas/ListMeetingsRequest'
       responses:
         "200":
           description: An example of a successful generated response with an Access Identity
@@ -437,6 +437,33 @@ paths:
                 $ref: '#/components/schemas/ListMeetingsResponse'
         "400":
           description: An example of a successful generated response with an Access Identity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidResponse'
+              examples:
+                InvalidAccessIdentity:
+                  $ref: '#/components/examples/InvalidAccessIdentity'
+  /meetings/map/list:
+    post:
+      summary: "Meetings on Map"
+      tags:
+        - meetings
+      description: "Get a list of meetings that should be displayed on the map"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListMapMeetingsRequest'
+      responses:
+        "200":
+          description: "An example of successful returned meetings for map"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListMapMeetingsResponse'
+        "400":
+          description: "An example of failed authorization"
           content:
             application/json:
               schema:
@@ -719,16 +746,35 @@ components:
       properties:
         accessIdentity:
           type: string
-          enum:
-            - "14:BtEpi2o77Uia9NvwQqbumtNggJzjlEVS5gTS1Z8SDs9BmXk7E8lGxji5MBHxcor0j9X1tMgTjiYwbVvuqjdhkdDTr4XtZY6lFhURbKYG17LlfgqPVi6xJpoAdwQyxLz6wILAaiJdBy3wK1PZ3t0Zg3oBGeyeKJtfestgJylmEMCBjH7eXkBP9Bi93xkV4u68kB4OBKPesxJrTpUHlQjwuP8bCpj8Q591BUdUm9t9dXR4xSksMKWWWe4t4Y4ZrAfA"
+          example: "14:BtEpi2o77Uia9NvwQqbumtNggJzjlEVS5gTS1Z8SDs9BmXk7E8lGxji5MBHxcor0j9X1tMgTjiYwbVvuqjdhkdDTr4XtZY6lFhURbKYG17LlfgqPVi6xJpoAdwQyxLz6wILAaiJdBy3wK1PZ3t0Zg3oBGeyeKJtfestgJylmEMCBjH7eXkBP9Bi93xkV4u68kB4OBKPesxJrTpUHlQjwuP8bCpj8Q591BUdUm9t9dXR4xSksMKWWWe4t4Y4ZrAfA"
         meetingIdentity:
           type: string
-          enum:
-            - "8:wtzbOPJqX8SVCDQj4UMavNoKJId5UylyL4GRZAkacc2PcGnyu8TCqZCLYvFnG4kb75HOVz6TIeRxXbarsdQZBdrB1rDbHSGD7yCW0EOTbRhxs5qRGncOjG5DmTrAULbWlWMiUkt2RiDRNTkoGJunQgtP63FEZ1MrYJPPdyX1Qn3xpIW6joZZ5p2XahuGGAE13UceQYz6bWO5ZWSJiWjwrA0xOvqf6ad0FHuEXcQaWbJBbBfEA9oGm4KsDHfnkvCT"
+          example: "8:wtzbOPJqX8SVCDQj4UMavNoKJId5UylyL4GRZAkacc2PcGnyu8TCqZCLYvFnG4kb75HOVz6TIeRxXbarsdQZBdrB1rDbHSGD7yCW0EOTbRhxs5qRGncOjG5DmTrAULbWlWMiUkt2RiDRNTkoGJunQgtP63FEZ1MrYJPPdyX1Qn3xpIW6joZZ5p2XahuGGAE13UceQYz6bWO5ZWSJiWjwrA0xOvqf6ad0FHuEXcQaWbJBbBfEA9oGm4KsDHfnkvCT"
       required:
         - "accessIdentity"
         - "meetingIdentity"
       additionalProperties: false
+    ListMapMeetingsRequest:
+      type: object
+      properties:
+        token:
+          type: string
+          example:
+            - "14:BtEpi2o77Uia9NvwQqbumtNggJzjlEVS5gTS1Z8SDs9BmXk7E8lGxji5MBHxcor0j9X1tMgTjiYwbVvuqjdhkdDTr4XtZY6lFhURbKYG17LlfgqPVi6xJpoAdwQyxLz6wILAaiJdBy3wK1PZ3t0Zg3oBGeyeKJtfestgJylmEMCBjH7eXkBP9Bi93xkV4u68kB4OBKPesxJrTpUHlQjwuP8bCpj8Q591BUdUm9t9dXR4xSksMKWWWe4t4Y4ZrAfA"
+        location:
+          $ref: '#/components/schemas/Location'
+      required:
+        - "token"
+        - "location"
+    TokenRequest:
+      type: object
+      properties:
+        token:
+          type: string
+          example:
+            - "14:BtEpi2o77Uia9NvwQqbumtNggJzjlEVS5gTS1Z8SDs9BmXk7E8lGxji5MBHxcor0j9X1tMgTjiYwbVvuqjdhkdDTr4XtZY6lFhURbKYG17LlfgqPVi6xJpoAdwQyxLz6wILAaiJdBy3wK1PZ3t0Zg3oBGeyeKJtfestgJylmEMCBjH7eXkBP9Bi93xkV4u68kB4OBKPesxJrTpUHlQjwuP8bCpj8Q591BUdUm9t9dXR4xSksMKWWWe4t4Y4ZrAfA"
+      required:
+        - "properties"
     AccessIdentityRequest:
       type: "object"
       properties:
@@ -791,7 +837,18 @@ components:
       required:
         - "accessIdentity"
         - "amount"
-      additionalProperties: false
+    ListMeetingsRequest:
+      type: "object"
+      properties:
+        accessIdentity:
+          type: string
+        pagingId:
+          type: string
+        amount:
+          type: integer
+      required:
+        - "accessIdentity"
+        - "amount"
     EmailConfirmRequest:
       type: "object"
       properties:
@@ -838,37 +895,33 @@ components:
       properties:
         "accessIdentity":
           type: string
-          enum:
+          example:
             - "14:BtEpi2o77Uia9NvwQqbumtNggJzjlEVS5gTS1Z8SDs9BmXk7E8lGxji5MBHxcor0j9X1tMgTjiYwbVvuqjdhkdDTr4XtZY6lFhURbKYG17LlfgqPVi6xJpoAdwQyxLz6wILAaiJdBy3wK1PZ3t0Zg3oBGeyeKJtfestgJylmEMCBjH7eXkBP9Bi93xkV4u68kB4OBKPesxJrTpUHlQjwuP8bCpj8Q591BUdUm9t9dXR4xSksMKWWWe4t4Y4ZrAfA"
         "title":
           type: string
-          enum:
+          example:
             - "Meet on the Elbe"
         "description":
           type: string
-          enum:
+          example:
             - "Thematic meeting of like-minded people on the Elbe"
         "date":
           type: string
-          enum:
+          example:
             - 20232402T100000+0300
         "location":
-          type: object
-          properties:
-            latitude:
-              type: string
-              enum:
-                - 46.87365231658636
-            longitude:
-              type: string
-              enum:
-                - 8.256473253864916
+          $ref: '#/components/schemas/Location'
+        "visibility":
+          type: string
+          enum:
+            - "public"
+            - "private"
       required:
         - "accessIdentity"
         - "title"
-        - "description"
         - "date"
         - "location"
+        - "visibility"
       additionalProperties: false
     MeetingAvatarAddRequest:
       type: "object"
@@ -944,19 +997,8 @@ components:
         - "result"
       additionalProperties: true
     RegularUserResponse:
-      type: object
-      properties:
-        isSelf:
-          type: boolean
-        identity:
-          type: string
-          example: "6:ATHK7K8Uppgcrc3jqghkwB9xUVI0M1KeyfmgGdLJvrk0xMmYcpI5x60fIN1SzgPeJAgTUvfoV30YoI0hAl75CbU0retgcFb7RPOovB8LBa3v8wFgYal7RYKg3afZinNru6pLxdiz2BX817D7pTFuiIGS2TlXzZYZCKpQaWGLxImphh6K43BxLrYUluD6zrvEI6DEbcWSBJ7CApWJJdT5GdG7GCxiLQQpeuq3vSMRv1t3aLEAyfXzCCGU8nf53z6K"
-        nickname:
-          type: string
-          example: Kirillov Vadim
-      required:
-        - identity
-        - nickname
+      allOf:
+        - $ref: '#/components/schemas/User'
     CreatorMeetingResponse:
       type: object
       properties:
@@ -972,7 +1014,7 @@ components:
         emailVerified:
           type: boolean
           example: false
-    LocationMeetingResponse:
+    Location:
       type: object
       properties:
         latitude:
@@ -981,19 +1023,22 @@ components:
         longitude:
           type: number
           example: 8.256473253864916
-    ResultMeetingResponse:
+      required:
+        - "latitude"
+        - "longitude"
+    Meeting:
       type: object
       properties:
         identity:
           type: string
           example: "6:EBnp2woyRmY4snRvZaiEtuOIfk4eEXgWdzy8psVPL60Mz92Ts8qIdaoAHVTpvl9hTygMpfUYjNHJpjwpK0txBKRWl7EqCgmnZjm57pIWnlRIo2WoH856AibK8xmCdgOlENPUsmBGLPa7EVOtd43rnGVdeC3wUfHSNV9PT3S0Q3mXCpHF0tOfssQTnKKbBSy9V19Euo7VzpjS4WXI82ILzPVfLqTaRGEUabXw9issiVZhK97zZhBXrV3CFO26pAZa"
         creator:
-          $ref: '#/components/schemas/CreatorMeetingResponse'
+          $ref: '#/components/schemas/User'
         date:
           type: string
           example: "20230705T100000+0300"
         location:
-          $ref: '#/components/schemas/LocationMeetingResponse'
+          $ref: '#/components/schemas/Location'
         title:
           type: string
           example: Meet on the Elbe
@@ -1003,9 +1048,30 @@ components:
         participantsCount:
           type: integer
           example: 13
+        previewParticipants:
+          type: array
+          items:
+            $ref: "#/components/schemas/User"
         isParticipating:
           type: boolean
           example: true
+        avatarIdentity:
+          type: string
+        visibility:
+          type: string
+          enum:
+            - "public"
+            - "private"
+      required:
+        - "identity"
+        - "title"
+        - "creator"
+        - "date"
+        - "location"
+        - "participantsCount"
+        - "isParticipating"
+        - "previewParticipants"
+        - "visibility"
     CreateMeetingResponse:
       type: object
       properties:
@@ -1013,8 +1079,11 @@ components:
           type: boolean
           example: true
         result:
-          $ref: '#/components/schemas/ResultMeetingResponse'
-    ListMeetingsResponse:
+          $ref: '#/components/schemas/Meeting'
+      required:
+        - "status"
+        - "result"
+    ListMapMeetingsResponse:
       type: object
       properties:
         status:
@@ -1023,7 +1092,28 @@ components:
         result:
           type: array
           items:
-            $ref: '#/components/schemas/ResultMeetingResponse'
+            $ref: '#/components/schemas/Meeting'
+      required:
+        - "result"
+    ListMeetingsResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+          example: true
+        result:
+          type: object
+          properties:
+            nextPagingId:
+              type: string
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/Meeting'
+          required:
+            - "data"
+      required:
+        - "result"
     GetUserResponse:
       type: object
       properties:
@@ -1049,6 +1139,8 @@ components:
         emailVerified:
           type: boolean
           example: true
+        avatarIdentity:
+          type: string
       required:
         - identity
         - nickname
