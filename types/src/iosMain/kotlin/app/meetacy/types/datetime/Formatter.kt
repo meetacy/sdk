@@ -6,7 +6,7 @@ import platform.Foundation.NSTimeZone
 import platform.Foundation.timeZoneForSecondsFromGMT
 import platform.Foundation.NSDate as IosDate
 
-private val multiplatformDateFormatter: NSDateFormatter by lazy {
+internal val multiplatformDateFormatter: NSDateFormatter by lazy {
     NSDateFormatter().apply {
         dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
         locale = NSLocale(localeIdentifier = "en_US_POSIX")

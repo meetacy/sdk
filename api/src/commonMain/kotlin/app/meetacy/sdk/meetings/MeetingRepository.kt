@@ -27,6 +27,7 @@ public class MeetingRepository(
     public val previewParticipants: List<User> get() = data.previewParticipants
     public val isParticipating: Boolean get() = data.isParticipating
     public val avatar: FileRepository? get() = FileRepository(data.avatarId, api)
+    public val visibility: Meeting.Visibility get() = data.visibility
 
     public suspend fun participate(token: Token) {
         api.meetings.participate(token, id)

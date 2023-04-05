@@ -3,21 +3,12 @@
 package app.meetacy.types.datetime
 
 import app.meetacy.types.annotation.UnsafeConstructor
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.ZoneId
+import java.time.*
+import java.util.Date as JavaDate
 
-public val LocalDate.meetacyDate: Date get() = atStartOfDay().meetacyDate
+public val LocalDate.meetacyDate: Date get() = Date(iso8601 = "$this")
 
-public val LocalDateTime.meetacyDate: Date
-    get() = Date(iso8601DateFormat.format(atZone(ZoneId.systemDefault())))
-
-public val Date.javaLocalDate: LocalDate get() =
-    iso8601DateFormat
-        .parse(iso8601)
-        .toInstant()
-        .atZone(ZoneId.systemDefault())
-        .toLocalDate()
+public val Date.javaLocalDate: LocalDate get() = LocalDate.parse(iso8601)
 
 public val LocalDateTime.meetacyDateTime: DateTime
     get() = DateTime(iso8601DateTimeFormat.format(atZone(ZoneId.systemDefault())))

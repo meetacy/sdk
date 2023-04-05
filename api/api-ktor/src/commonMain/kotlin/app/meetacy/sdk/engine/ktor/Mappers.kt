@@ -58,5 +58,9 @@ internal fun GeneratedMeeting.mapToMeeting(): Meeting = Meeting(
     participantsCount = participantsCount,
     isParticipating = isParticipating,
     previewParticipants = previewParticipants.map(GeneratedUser::mapToUser),
-    avatarId = avatarIdentity?.let(::FileId)
+    avatarId = avatarIdentity?.let(::FileId),
+    visibility = when (visibility) {
+        GeneratedMeeting.Visibility.PUBLIC -> Meeting.Visibility.Public
+        GeneratedMeeting.Visibility.PRIVATE -> Meeting.Visibility.Private
+    }
 )

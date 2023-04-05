@@ -11,8 +11,6 @@ public val JsDate.meetacyDate: Date
         return Date(toISOString().take(10))
     }
 
-public val Date.jsDate: JsDate get() = JsDate(iso8601)
-
 
 public val JsDate.meetacyDateTime: DateTime
     get() {

@@ -454,7 +454,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TokenRequest'
+              $ref: '#/components/schemas/ListMapMeetingsRequest'
       responses:
         "200":
           description: "An example of successful returned meetings for map"
@@ -754,6 +754,18 @@ components:
         - "accessIdentity"
         - "meetingIdentity"
       additionalProperties: false
+    ListMapMeetingsRequest:
+      type: object
+      properties:
+        token:
+          type: string
+          example:
+            - "14:BtEpi2o77Uia9NvwQqbumtNggJzjlEVS5gTS1Z8SDs9BmXk7E8lGxji5MBHxcor0j9X1tMgTjiYwbVvuqjdhkdDTr4XtZY6lFhURbKYG17LlfgqPVi6xJpoAdwQyxLz6wILAaiJdBy3wK1PZ3t0Zg3oBGeyeKJtfestgJylmEMCBjH7eXkBP9Bi93xkV4u68kB4OBKPesxJrTpUHlQjwuP8bCpj8Q591BUdUm9t9dXR4xSksMKWWWe4t4Y4ZrAfA"
+        location:
+          $ref: '#/components/schemas/Location'
+      required:
+        - "token"
+        - "location"
     TokenRequest:
       type: object
       properties:
@@ -899,11 +911,17 @@ components:
             - 20232402T100000+0300
         "location":
           $ref: '#/components/schemas/Location'
+        "visibility":
+          type: string
+          enum:
+            - "public"
+            - "private"
       required:
         - "accessIdentity"
         - "title"
         - "date"
         - "location"
+        - "visibility"
       additionalProperties: false
     MeetingAvatarAddRequest:
       type: "object"
@@ -1039,6 +1057,11 @@ components:
           example: true
         avatarIdentity:
           type: string
+        visibility:
+          type: string
+          enum:
+            - "public"
+            - "private"
       required:
         - "identity"
         - "title"
@@ -1048,6 +1071,7 @@ components:
         - "participantsCount"
         - "isParticipating"
         - "previewParticipants"
+        - "visibility"
     CreateMeetingResponse:
       type: object
       properties:

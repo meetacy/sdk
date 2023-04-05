@@ -26,3 +26,5 @@ internal actual fun DateTime.extractDate(): Date = jsDate.meetacyDate
 internal actual fun todayDate(): Date = JsDate().meetacyDate
 
 internal actual fun nowDateTime(): DateTime = JsDate().meetacyDateTime
+
+internal actual fun Date.extractAtStartOfDay(): DateTime = JsDate(iso8601).meetacyDateTime

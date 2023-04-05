@@ -20,5 +20,10 @@ public data class Meeting(
     val participantsCount: Int,
     val previewParticipants: List<User>,
     val isParticipating: Boolean,
-    val avatarId: FileId?
-)
+    val avatarId: FileId?,
+    val visibility: Visibility
+) {
+    public enum class Visibility {
+        Public, Private
+    }
+}

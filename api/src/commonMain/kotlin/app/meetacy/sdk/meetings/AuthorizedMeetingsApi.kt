@@ -7,6 +7,7 @@ import app.meetacy.types.datetime.Date
 import app.meetacy.types.location.Location
 import app.meetacy.types.datetime.DateOrTime
 import app.meetacy.types.datetime.DateTime
+import app.meetacy.types.meeting.Meeting
 import app.meetacy.types.meeting.MeetingId
 
 /**
@@ -25,28 +26,32 @@ public class AuthorizedMeetingsApi(
         title: String,
         date: Date,
         location: Location,
-        description: String? = null
-    ): AuthorizedMeetingRepository = create(title, DateOrTime.Date(date), location, description)
+        description: String? = null,
+        visibility: Meeting.Visibility = Meeting.Visibility.Private
+    ): AuthorizedMeetingRepository = create(title, DateOrTime.Date(date), location, description, visibility)
 
     public suspend fun create(
         title: String,
         date: DateTime,
         location: Location,
-        description: String? = null
-    ): AuthorizedMeetingRepository = create(title, DateOrTime.DateTime(date), location, description)
+        description: String? = null,
+        visibility: Meeting.Visibility = Meeting.Visibility.Private
+    ): AuthorizedMeetingRepository = create(title, DateOrTime.DateTime(date), location, description, visibility)
 
     public suspend fun create(
         title: String,
         date: DateOrTime,
         location: Location,
-        description: String? = null
+        description: String? = null,
+        visibility: Meeting.Visibility = Meeting.Visibility.Private
     ): AuthorizedMeetingRepository {
         val repository = base.create(
             token = api.token,
             title = title,
             date = date,
             location = location,
-            description = description
+            description = description,
+            visibility = visibility
         )
 
         return AuthorizedMeetingRepository(repository.data, api)

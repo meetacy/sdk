@@ -26,3 +26,5 @@ internal actual fun DateTime.extractDate(): Date = iosDate.meetacyDate
 internal actual fun todayDate(): Date = IosDate().meetacyDate
 
 internal actual fun nowDateTime(): DateTime = IosDate().meetacyDateTime
+
+internal actual fun Date.extractAtStartOfDay(): DateTime = IosDate(iso8601).meetacyDateTime

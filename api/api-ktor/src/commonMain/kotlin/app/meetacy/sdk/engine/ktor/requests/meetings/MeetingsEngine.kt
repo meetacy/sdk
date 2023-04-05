@@ -5,6 +5,7 @@ import app.meetacy.sdk.engine.requests.CreateMeetingRequest
 import app.meetacy.sdk.engine.requests.ListMeetingsHistoryRequest
 import app.meetacy.sdk.engine.requests.ListMeetingsMapRequest
 import app.meetacy.sdk.engine.requests.ParticipateMeetingRequest
+import app.meetacy.types.meeting.Meeting
 import app.meetacy.types.paging.PagingId
 import app.meetacy.types.paging.PagingResponse
 import dev.icerock.moko.network.generated.apis.MeetingsApiImpl
@@ -12,7 +13,6 @@ import dev.icerock.moko.network.generated.models.*
 import dev.icerock.moko.network.generated.models.AccessMeetingIdentityRequest
 import dev.icerock.moko.network.generated.models.ListMeetingsRequest
 import dev.icerock.moko.network.generated.models.Location
-import dev.icerock.moko.network.generated.models.TokenRequest
 import io.ktor.client.*
 import kotlinx.serialization.json.Json
 import dev.icerock.moko.network.generated.models.CreateMeetingRequest as GeneratedCreateMeetingRequest
@@ -48,8 +48,12 @@ internal class MeetingsEngine(
         request: ListMeetingsMapRequest
     ): ListMeetingsMapRequest.Response = with (request) {
         val response = base.meetingsMapListPost(
-            tokenRequest = TokenRequest(
-                token = request.token.string
+            listMapMeetingsRequest = ListMapMeetingsRequest(
+                token = token.string,
+                location = Location(
+                    latitude = location.latitude,
+                    longitude = location.longitude
+                )
             )
         )
 
@@ -70,7 +74,11 @@ internal class MeetingsEngine(
                     latitude = request.location.latitude,
                     longitude = request.location.longitude
                 ),
-                description = request.description
+                description = request.description,
+                visibility = when (request.visibility) {
+                    Meeting.Visibility.Public -> GeneratedCreateMeetingRequest.Visibility.PUBLIC
+                    Meeting.Visibility.Private -> GeneratedCreateMeetingRequest.Visibility.PRIVATE
+                }
             )
         ).result
 

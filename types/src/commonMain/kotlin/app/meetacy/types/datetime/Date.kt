@@ -5,10 +5,12 @@ import kotlin.jvm.JvmInline
 
 /**
  * When modifying this class, corresponding classes should be altered:
- * - [app.meetacy.types.meeting.Meeting.DateTimeInfo.Date]
+ * - [app.meetacy.types.datetime.DateOrTime.Date]
  */
 @JvmInline
 public value class Date @UnsafeConstructor constructor(public val iso8601: String) {
+    public val atStartOfDay: DateTime get() = extractAtStartOfDay()
+
     @OptIn(UnsafeConstructor::class)
     public companion object {
         public fun today(): Date = todayDate()
@@ -42,3 +44,5 @@ internal sealed interface CheckDateResult {
 internal expect fun checkDate(iso8601: String): CheckDateResult
 
 internal expect fun todayDate(): Date
+
+internal expect fun Date.extractAtStartOfDay(): DateTime

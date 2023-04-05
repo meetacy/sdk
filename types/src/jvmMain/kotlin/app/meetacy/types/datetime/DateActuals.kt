@@ -30,8 +30,10 @@ internal actual fun checkDateTime(iso8601: String): CheckDateTimeResult = try {
     }
 }
 
-internal actual fun DateTime.extractDate(): Date = javaLocalDateTime.meetacyDate
+internal actual fun DateTime.extractDate(): Date = javaDate.meetacyDate
 
 internal actual fun todayDate(): Date = JavaDate().meetacyDate
 
 internal actual fun nowDateTime(): DateTime = JavaDate().meetacyDateTime
+
+internal actual fun Date.extractAtStartOfDay(): DateTime = iso8601DateFormat.parse(iso8601).meetacyDateTime

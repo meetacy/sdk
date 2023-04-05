@@ -16,8 +16,6 @@ internal fun IosDate(iso8601: String): IosDate =
 internal fun IosDate.toISOString(): String =
     NSDateFormatter.isoStringFromDate(this)
 
-public val Date.iosDate: IosDate get() = IosDate(iso8601)
-
 public val DateTime.iosDate: IosDate get() = IosDate(iso8601)
 
 public val IosDate.meetacyDateTime: DateTime
