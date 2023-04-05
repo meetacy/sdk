@@ -3,13 +3,16 @@ package app.meetacy.api.engine.ktor.requests.meetings
 import app.meetacy.api.engine.ktor.mapToMeeting
 import app.meetacy.api.engine.requests.CreateMeetingRequest
 import app.meetacy.api.engine.requests.ListMeetingsHistoryRequest
+import app.meetacy.api.engine.requests.ListMeetingsMapRequest
 import app.meetacy.api.engine.requests.ParticipateMeetingRequest
 import app.meetacy.types.paging.PagingId
 import app.meetacy.types.paging.PagingResponse
 import dev.icerock.moko.network.generated.apis.MeetingsApiImpl
+import dev.icerock.moko.network.generated.models.*
 import dev.icerock.moko.network.generated.models.AccessMeetingIdentityRequest
 import dev.icerock.moko.network.generated.models.ListMeetingsRequest
 import dev.icerock.moko.network.generated.models.Location
+import dev.icerock.moko.network.generated.models.TokenRequest
 import io.ktor.client.*
 import kotlinx.serialization.json.Json
 import dev.icerock.moko.network.generated.models.CreateMeetingRequest as GeneratedCreateMeetingRequest
@@ -39,6 +42,20 @@ internal class MeetingsEngine(
         )
 
         return ListMeetingsHistoryRequest.Response(paging)
+    }
+
+    suspend fun listMeetingsMap(
+        request: ListMeetingsMapRequest
+    ): ListMeetingsMapRequest.Response = with (request) {
+        val response = base.meetingsMapListPost(
+            tokenRequest = TokenRequest(
+                token = request.token.string
+            )
+        )
+
+        val data = response.result.map(GeneratedMeeting::mapToMeeting)
+
+        return ListMeetingsMapRequest.Response(data)
     }
 
     suspend fun createMeeting(

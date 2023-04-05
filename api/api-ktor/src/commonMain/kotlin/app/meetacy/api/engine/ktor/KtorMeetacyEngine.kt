@@ -6,11 +6,16 @@ import app.meetacy.api.engine.ktor.requests.friends.FriendsEngine
 import app.meetacy.api.engine.ktor.requests.meetings.MeetingsEngine
 import app.meetacy.api.engine.ktor.requests.users.UsersEngine
 import app.meetacy.api.engine.requests.*
+import app.meetacy.types.file.FileId
+import app.meetacy.types.url.Url
+import app.meetacy.types.url.buildParameters
+import app.meetacy.types.url.parametersOf
 import io.ktor.client.*
+import io.ktor.http.*
 import kotlinx.serialization.json.Json
 
 public class KtorMeetacyEngine(
-    baseUrl: String,
+    private val baseUrl: String,
     httpClient: HttpClient = HttpClient(),
     json: Json = Json,
 ) : MeetacyRequestsEngine {
@@ -19,6 +24,10 @@ public class KtorMeetacyEngine(
     private val users = UsersEngine(baseUrl, httpClient, json)
     private val friends = FriendsEngine(baseUrl, httpClient, json)
     private val meetings = MeetingsEngine(baseUrl, httpClient, json)
+
+    override fun getFileUrl(
+        id: FileId
+    ): Url = Url(baseUrl) / "files" / "download" + parametersOf("fileIdentity" to id.string)
 
     @Suppress("UNCHECKED_CAST")
     override suspend fun <T> execute(request: MeetacyRequest<T>): T {
@@ -34,6 +43,7 @@ public class KtorMeetacyEngine(
             is GetUserRequest -> users.getUser(request) as T
             // meetings
             is ListMeetingsHistoryRequest -> meetings.listMeetingsHistory(request) as T
+            is ListMeetingsMapRequest -> meetings.listMeetingsMap(request) as T
             is CreateMeetingRequest -> meetings.createMeeting(request) as T
             is ParticipateMeetingRequest -> meetings.participateMeeting(request) as T
             // not yet supported

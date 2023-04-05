@@ -3,10 +3,10 @@
 package app.meetacy.api.engine.ktor
 
 import app.meetacy.types.annotation.UnsafeConstructor
-import app.meetacy.types.datetime.Date
 import app.meetacy.types.email.Email
 import app.meetacy.types.file.FileId
 import app.meetacy.types.location.Location
+import app.meetacy.types.datetime.DateOrTime
 import app.meetacy.types.meeting.Meeting
 import app.meetacy.types.meeting.MeetingId
 import app.meetacy.types.user.RegularUser
@@ -48,7 +48,7 @@ internal fun GeneratedMeeting.mapToMeeting(): Meeting = Meeting(
             avatarId = creator.avatarIdentity?.let(::FileId)
         )
     },
-    date = Meeting.DateTimeInfo.parse(date),
+    date = DateOrTime.parse(date),
     location = Location(
         location.latitude,
         location.longitude
@@ -57,5 +57,6 @@ internal fun GeneratedMeeting.mapToMeeting(): Meeting = Meeting(
     description = description,
     participantsCount = participantsCount,
     isParticipating = isParticipating,
-    avatarIdentity = avatarIdentity?.let(::FileId)
+    previewParticipants = previewParticipants.map(GeneratedUser::mapToUser),
+    avatarId = avatarIdentity?.let(::FileId)
 )

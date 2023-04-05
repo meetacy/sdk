@@ -444,6 +444,33 @@ paths:
               examples:
                 InvalidAccessIdentity:
                   $ref: '#/components/examples/InvalidAccessIdentity'
+  /meetings/map/list:
+    post:
+      summary: "Meetings on Map"
+      tags:
+        - meetings
+      description: "Get a list of meetings that should be displayed on the map"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRequest'
+      responses:
+        "200":
+          description: "An example of successful returned meetings for map"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListMapMeetingsResponse'
+        "400":
+          description: "An example of failed authorization"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidResponse'
+              examples:
+                InvalidAccessIdentity:
+                  $ref: '#/components/examples/InvalidAccessIdentity'
   /meetings/participate:
     post:
       summary: Participate meeting
@@ -727,6 +754,15 @@ components:
         - "accessIdentity"
         - "meetingIdentity"
       additionalProperties: false
+    TokenRequest:
+      type: object
+      properties:
+        token:
+          type: string
+          example:
+            - "14:BtEpi2o77Uia9NvwQqbumtNggJzjlEVS5gTS1Z8SDs9BmXk7E8lGxji5MBHxcor0j9X1tMgTjiYwbVvuqjdhkdDTr4XtZY6lFhURbKYG17LlfgqPVi6xJpoAdwQyxLz6wILAaiJdBy3wK1PZ3t0Zg3oBGeyeKJtfestgJylmEMCBjH7eXkBP9Bi93xkV4u68kB4OBKPesxJrTpUHlQjwuP8bCpj8Q591BUdUm9t9dXR4xSksMKWWWe4t4Y4ZrAfA"
+      required:
+        - "properties"
     AccessIdentityRequest:
       type: "object"
       properties:
@@ -994,6 +1030,10 @@ components:
         participantsCount:
           type: integer
           example: 13
+        previewParticipants:
+          type: array
+          items:
+            $ref: "#/components/schemas/User"
         isParticipating:
           type: boolean
           example: true
@@ -1007,6 +1047,7 @@ components:
         - "location"
         - "participantsCount"
         - "isParticipating"
+        - "previewParticipants"
     CreateMeetingResponse:
       type: object
       properties:
@@ -1017,6 +1058,18 @@ components:
           $ref: '#/components/schemas/Meeting'
       required:
         - "status"
+        - "result"
+    ListMapMeetingsResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+          example: true
+        result:
+          type: array
+          items:
+            $ref: '#/components/schemas/Meeting'
+      required:
         - "result"
     ListMeetingsResponse:
       type: object

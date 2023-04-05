@@ -1,5 +1,6 @@
 package app.meetacy.api.friends
 
+import app.meetacy.api.MeetacyApi
 import app.meetacy.api.engine.MeetacyRequestsEngine
 import app.meetacy.api.engine.requests.AddFriendRequest
 import app.meetacy.api.engine.requests.DeleteFriendRequest
@@ -13,19 +14,23 @@ import app.meetacy.types.user.RegularUser
 import app.meetacy.types.user.UserId
 import kotlinx.coroutines.flow.Flow
 
-public class FriendsApi(private val engine: MeetacyRequestsEngine) {
+/**
+ * When modifying this class, corresponding classes should be altered:
+ * - [app.meetacy.api.users.RegularUserRepository]
+ */
+public class FriendsApi(private val api: MeetacyApi) {
     public suspend fun add(token: Token, friendId: UserId) {
-        engine.execute(AddFriendRequest(token, friendId))
+        api.engine.execute(AddFriendRequest(token, friendId))
     }
     public suspend fun delete(token: Token, friendId: UserId) {
-        engine.execute(DeleteFriendRequest(token, friendId))
+        api.engine.execute(DeleteFriendRequest(token, friendId))
     }
 
     public suspend fun list(
         token: Token,
         amount: Amount,
         pagingId: PagingId? = null
-    ): PagingResponse<List<RegularUser>> = engine.execute(
+    ): PagingResponse<List<RegularUser>> = api.engine.execute(
         request = ListFriendsRequest(
             token = token,
             amount = amount,

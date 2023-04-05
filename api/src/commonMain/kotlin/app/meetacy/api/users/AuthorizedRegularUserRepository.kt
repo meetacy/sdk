@@ -1,0 +1,21 @@
+package app.meetacy.api.users
+
+import app.meetacy.api.AuthorizedMeetacyApi
+import app.meetacy.api.files.FileRepository
+import app.meetacy.types.user.RegularUser
+import app.meetacy.types.user.UserId
+
+public class AuthorizedRegularUserRepository(
+    public val data: RegularUser,
+    private val api: AuthorizedMeetacyApi
+) : AuthorizedUserRepository {
+    override val base: RegularUserRepository get() = RegularUserRepository(data, api.base)
+
+    public val id: UserId get() = data.id
+    public val nickname: String get() = data.nickname
+    public val avatar: FileRepository? get() = FileRepository(data.avatarId, api)
+
+    public suspend fun addFriend() {
+        api.friends.add(data.id)
+    }
+}
