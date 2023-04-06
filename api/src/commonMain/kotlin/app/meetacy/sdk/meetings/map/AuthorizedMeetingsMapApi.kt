@@ -2,8 +2,8 @@ package app.meetacy.sdk.meetings.map
 
 import app.meetacy.sdk.AuthorizedMeetacyApi
 import app.meetacy.sdk.meetings.AuthorizedMeetingRepository
-import app.meetacy.types.auth.Token
-import app.meetacy.types.location.Location
+import app.meetacy.sdk.types.auth.Token
+import app.meetacy.sdk.types.location.Location
 
 public class AuthorizedMeetingsMapApi(
     private val api: AuthorizedMeetacyApi

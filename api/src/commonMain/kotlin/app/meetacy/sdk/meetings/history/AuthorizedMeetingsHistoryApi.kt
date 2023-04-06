@@ -2,10 +2,10 @@ package app.meetacy.sdk.meetings.history
 
 import app.meetacy.sdk.AuthorizedMeetacyApi
 import app.meetacy.sdk.meetings.AuthorizedMeetingRepository
-import app.meetacy.types.amount.Amount
-import app.meetacy.types.auth.Token
-import app.meetacy.types.paging.PagingId
-import app.meetacy.types.paging.PagingResponse
+import app.meetacy.sdk.types.amount.Amount
+import app.meetacy.sdk.types.auth.Token
+import app.meetacy.sdk.types.paging.PagingId
+import app.meetacy.sdk.types.paging.PagingResponse
 import kotlinx.coroutines.flow.Flow
 
 public class AuthorizedMeetingsHistoryApi(private val api: AuthorizedMeetacyApi) {

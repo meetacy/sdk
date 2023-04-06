@@ -5,13 +5,13 @@ import app.meetacy.sdk.engine.requests.CreateMeetingRequest
 import app.meetacy.sdk.engine.requests.ParticipateMeetingRequest
 import app.meetacy.sdk.meetings.history.MeetingsHistoryApi
 import app.meetacy.sdk.meetings.map.MeetingsMapApi
-import app.meetacy.types.auth.Token
-import app.meetacy.types.datetime.Date
-import app.meetacy.types.location.Location
-import app.meetacy.types.datetime.DateOrTime
-import app.meetacy.types.datetime.DateTime
-import app.meetacy.types.meeting.Meeting
-import app.meetacy.types.meeting.MeetingId
+import app.meetacy.sdk.types.auth.Token
+import app.meetacy.sdk.types.datetime.Date
+import app.meetacy.sdk.types.location.Location
+import app.meetacy.sdk.types.datetime.DateOrTime
+import app.meetacy.sdk.types.datetime.DateTime
+import app.meetacy.sdk.types.meeting.Meeting
+import app.meetacy.sdk.types.meeting.MeetingId
 
 /**
  * When modifying this class, corresponding classes should be altered:

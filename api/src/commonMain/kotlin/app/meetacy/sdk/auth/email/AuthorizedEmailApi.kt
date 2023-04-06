@@ -1,8 +1,8 @@
 package app.meetacy.sdk.auth.email
 
 import app.meetacy.sdk.AuthorizedMeetacyApi
-import app.meetacy.types.auth.Token
-import app.meetacy.types.email.Email
+import app.meetacy.sdk.types.auth.Token
+import app.meetacy.sdk.types.email.Email
 
 public class AuthorizedEmailApi(private val api: AuthorizedMeetacyApi) {
     public val token: Token get() = api.token

@@ -5,8 +5,8 @@ import app.meetacy.sdk.friends.AuthorizedFriendsApi
 import app.meetacy.sdk.meetings.AuthorizedMeetingsApi
 import app.meetacy.sdk.users.AuthorizedSelfUserRepository
 import app.meetacy.sdk.users.AuthorizedUsersApi
-import app.meetacy.types.annotation.UnsafeConstructor
-import app.meetacy.types.auth.Token
+import app.meetacy.sdk.types.annotation.UnsafeConstructor
+import app.meetacy.sdk.types.auth.Token
 
 /**
  * Even though this class *seems* to be safe,

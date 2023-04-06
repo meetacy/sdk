@@ -2,8 +2,8 @@ package app.meetacy.sdk.files
 
 import app.meetacy.sdk.AuthorizedMeetacyApi
 import app.meetacy.sdk.MeetacyApi
-import app.meetacy.types.file.FileId
-import app.meetacy.types.url.Url
+import app.meetacy.sdk.types.file.FileId
+import app.meetacy.sdk.types.url.Url
 
 public fun FileRepository(id: FileId?, api: AuthorizedMeetacyApi): FileRepository? {
     id ?: return null

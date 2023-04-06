@@ -1,9 +1,9 @@
 package app.meetacy.sdk.users
 
 import app.meetacy.sdk.AuthorizedMeetacyApi
-import app.meetacy.types.user.RegularUser
-import app.meetacy.types.user.SelfUser
-import app.meetacy.types.user.User
+import app.meetacy.sdk.types.user.RegularUser
+import app.meetacy.sdk.types.user.SelfUser
+import app.meetacy.sdk.types.user.User
 
 public sealed interface AuthorizedUserRepository {
     public val base: UserRepository

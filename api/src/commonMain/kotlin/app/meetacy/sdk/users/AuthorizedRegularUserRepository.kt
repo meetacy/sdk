@@ -2,8 +2,8 @@ package app.meetacy.sdk.users
 
 import app.meetacy.sdk.AuthorizedMeetacyApi
 import app.meetacy.sdk.files.FileRepository
-import app.meetacy.types.user.RegularUser
-import app.meetacy.types.user.UserId
+import app.meetacy.sdk.types.user.RegularUser
+import app.meetacy.sdk.types.user.UserId
 
 public class AuthorizedRegularUserRepository(
     public val data: RegularUser,
@@ -17,5 +17,9 @@ public class AuthorizedRegularUserRepository(
 
     public suspend fun addFriend() {
         api.friends.add(data.id)
+    }
+
+    public suspend fun deleteFriend() {
+        api.friends.delete(data.id)
     }
 }

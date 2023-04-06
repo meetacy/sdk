@@ -5,9 +5,9 @@ import app.meetacy.sdk.engine.requests.CreateMeetingRequest
 import app.meetacy.sdk.engine.requests.ListMeetingsHistoryRequest
 import app.meetacy.sdk.engine.requests.ListMeetingsMapRequest
 import app.meetacy.sdk.engine.requests.ParticipateMeetingRequest
-import app.meetacy.types.meeting.Meeting
-import app.meetacy.types.paging.PagingId
-import app.meetacy.types.paging.PagingResponse
+import app.meetacy.sdk.types.meeting.Meeting
+import app.meetacy.sdk.types.paging.PagingId
+import app.meetacy.sdk.types.paging.PagingResponse
 import dev.icerock.moko.network.generated.apis.MeetingsApiImpl
 import dev.icerock.moko.network.generated.models.*
 import dev.icerock.moko.network.generated.models.AccessMeetingIdentityRequest

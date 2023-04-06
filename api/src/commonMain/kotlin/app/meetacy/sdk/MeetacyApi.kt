@@ -7,9 +7,9 @@ import app.meetacy.sdk.files.FilesApi
 import app.meetacy.sdk.friends.FriendsApi
 import app.meetacy.sdk.meetings.MeetingsApi
 import app.meetacy.sdk.users.UsersApi
-import app.meetacy.types.annotation.UnsafeConstructor
-import app.meetacy.types.auth.Token
-import app.meetacy.types.user.SelfUser
+import app.meetacy.sdk.types.annotation.UnsafeConstructor
+import app.meetacy.sdk.types.auth.Token
+import app.meetacy.sdk.types.user.SelfUser
 
 public class MeetacyApi(
     public val engine: MeetacyRequestsEngine
