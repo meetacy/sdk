@@ -1,6 +1,7 @@
 package app.meetacy.sdk.friends
 
 import app.meetacy.sdk.AuthorizedMeetacyApi
+import app.meetacy.sdk.users.RegularUserRepository
 import app.meetacy.types.amount.Amount
 import app.meetacy.types.auth.Token
 import app.meetacy.types.paging.PagingId
@@ -26,11 +27,11 @@ public class AuthorizedFriendsApi(private val api: AuthorizedMeetacyApi) {
     public suspend fun list(
         amount: Amount,
         pagingId: PagingId? = null
-    ): PagingResponse<List<RegularUser>> = base.list(token, amount, pagingId)
+    ): PagingResponse<List<RegularUserRepository>> = base.list(token, amount, pagingId)
 
     public fun flow(
         chunkSize: Amount,
         startPagingId: PagingId? = null,
         limit: Amount? = null
-    ): Flow<List<RegularUser>> = base.flow(token, chunkSize, startPagingId, limit)
+    ): Flow<List<RegularUserRepository>> = base.flow(token, chunkSize, startPagingId, limit)
 }
