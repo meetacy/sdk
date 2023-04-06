@@ -1,4 +1,4 @@
-package app.meetacy.types.datetime
+package app.meetacy.sdk.types.datetime
 
 import java.text.SimpleDateFormat
 import java.util.*

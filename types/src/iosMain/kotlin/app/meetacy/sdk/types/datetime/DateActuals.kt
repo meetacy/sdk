@@ -1,4 +1,4 @@
-package app.meetacy.types.datetime
+package app.meetacy.sdk.types.datetime
 
 import app.meetacy.sdk.types.datetime.CheckDateResult
 import app.meetacy.sdk.types.datetime.CheckDateTimeResult
