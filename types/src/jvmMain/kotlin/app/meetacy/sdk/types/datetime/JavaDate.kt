@@ -1,6 +1,6 @@
 @file:OptIn(UnsafeConstructor::class)
 
-package app.meetacy.types.datetime
+package app.meetacy.sdk.types.datetime
 
 import app.meetacy.sdk.types.datetime.DateTime
 import app.meetacy.sdk.types.annotation.UnsafeConstructor
