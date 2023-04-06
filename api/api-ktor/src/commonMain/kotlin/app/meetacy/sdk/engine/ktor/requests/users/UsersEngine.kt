@@ -3,8 +3,8 @@ package app.meetacy.sdk.engine.ktor.requests.users
 import app.meetacy.sdk.engine.ktor.mapToUser
 import app.meetacy.sdk.engine.requests.GetMeRequest
 import app.meetacy.sdk.engine.requests.GetUserRequest
-import app.meetacy.types.exception.meetacyApiError
-import app.meetacy.types.user.SelfUser
+import app.meetacy.sdk.types.exception.meetacyApiError
+import app.meetacy.sdk.types.user.SelfUser
 import dev.icerock.moko.network.generated.apis.UserApi
 import dev.icerock.moko.network.generated.apis.UserApiImpl
 import io.ktor.client.*

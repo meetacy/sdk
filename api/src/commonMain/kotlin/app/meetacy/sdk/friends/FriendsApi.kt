@@ -6,13 +6,12 @@ import app.meetacy.sdk.engine.requests.DeleteFriendRequest
 import app.meetacy.sdk.engine.requests.ListFriendsRequest
 import app.meetacy.sdk.internal.paging.pagingFlow
 import app.meetacy.sdk.users.RegularUserRepository
-import app.meetacy.types.amount.Amount
-import app.meetacy.types.auth.Token
-import app.meetacy.types.paging.PagingId
-import app.meetacy.types.paging.PagingResponse
-import app.meetacy.types.paging.mapItems
-import app.meetacy.types.user.RegularUser
-import app.meetacy.types.user.UserId
+import app.meetacy.sdk.types.amount.Amount
+import app.meetacy.sdk.types.auth.Token
+import app.meetacy.sdk.types.paging.PagingId
+import app.meetacy.sdk.types.paging.PagingResponse
+import app.meetacy.sdk.types.paging.mapItems
+import app.meetacy.sdk.types.user.UserId
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -32,15 +31,13 @@ public class FriendsApi(private val api: MeetacyApi) {
         amount: Amount,
         pagingId: PagingId? = null
     ): PagingResponse<List<RegularUserRepository>> {
-        val result = api.engine.execute(
+        return api.engine.execute(
             request = ListFriendsRequest(
                 token = token,
                 amount = amount,
                 pagingId = pagingId
             )
-        ).paging
-
-        return result.mapItems { regularUser ->
+        ).paging.mapItems { regularUser ->
             RegularUserRepository(regularUser, api)
         }
     }

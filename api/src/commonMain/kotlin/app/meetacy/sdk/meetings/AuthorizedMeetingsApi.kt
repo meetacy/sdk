@@ -3,12 +3,12 @@ package app.meetacy.sdk.meetings
 import app.meetacy.sdk.AuthorizedMeetacyApi
 import app.meetacy.sdk.meetings.history.AuthorizedMeetingsHistoryApi
 import app.meetacy.sdk.meetings.map.AuthorizedMeetingsMapApi
-import app.meetacy.types.datetime.Date
-import app.meetacy.types.location.Location
-import app.meetacy.types.datetime.DateOrTime
-import app.meetacy.types.datetime.DateTime
-import app.meetacy.types.meeting.Meeting
-import app.meetacy.types.meeting.MeetingId
+import app.meetacy.sdk.types.datetime.Date
+import app.meetacy.sdk.types.location.Location
+import app.meetacy.sdk.types.datetime.DateOrTime
+import app.meetacy.sdk.types.datetime.DateTime
+import app.meetacy.sdk.types.meeting.Meeting
+import app.meetacy.sdk.types.meeting.MeetingId
 
 /**
  * When modifying this class, corresponding classes should be altered:

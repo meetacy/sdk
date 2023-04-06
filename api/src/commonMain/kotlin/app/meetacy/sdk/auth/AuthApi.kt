@@ -4,7 +4,7 @@ import app.meetacy.sdk.AuthorizedMeetacyApi
 import app.meetacy.sdk.MeetacyApi
 import app.meetacy.sdk.auth.email.EmailApi
 import app.meetacy.sdk.engine.requests.GenerateAuthRequest
-import app.meetacy.types.auth.Token
+import app.meetacy.sdk.types.auth.Token
 
 public class AuthApi(private val api: MeetacyApi) {
     public val email: EmailApi = EmailApi(api)

@@ -3,8 +3,8 @@
 package app.meetacy.sdk.engine.ktor.requests.auth
 
 import app.meetacy.sdk.engine.requests.GenerateAuthRequest
-import app.meetacy.types.annotation.UnsafeConstructor
-import app.meetacy.types.auth.Token
+import app.meetacy.sdk.types.annotation.UnsafeConstructor
+import app.meetacy.sdk.types.auth.Token
 import dev.icerock.moko.network.generated.apis.AuthApi
 import dev.icerock.moko.network.generated.apis.AuthApiImpl
 import dev.icerock.moko.network.generated.models.GenerateIdentityRequest

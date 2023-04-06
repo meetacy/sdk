@@ -2,17 +2,17 @@
 
 package app.meetacy.sdk.engine.ktor
 
-import app.meetacy.types.annotation.UnsafeConstructor
-import app.meetacy.types.email.Email
-import app.meetacy.types.file.FileId
-import app.meetacy.types.location.Location
-import app.meetacy.types.datetime.DateOrTime
-import app.meetacy.types.meeting.Meeting
-import app.meetacy.types.meeting.MeetingId
-import app.meetacy.types.user.RegularUser
-import app.meetacy.types.user.SelfUser
-import app.meetacy.types.user.User
-import app.meetacy.types.user.UserId
+import app.meetacy.sdk.types.annotation.UnsafeConstructor
+import app.meetacy.sdk.types.email.Email
+import app.meetacy.sdk.types.file.FileId
+import app.meetacy.sdk.types.location.Location
+import app.meetacy.sdk.types.datetime.DateOrTime
+import app.meetacy.sdk.types.meeting.Meeting
+import app.meetacy.sdk.types.meeting.MeetingId
+import app.meetacy.sdk.types.user.RegularUser
+import app.meetacy.sdk.types.user.SelfUser
+import app.meetacy.sdk.types.user.User
+import app.meetacy.sdk.types.user.UserId
 import dev.icerock.moko.network.generated.models.Meeting as GeneratedMeeting
 import dev.icerock.moko.network.generated.models.User as GeneratedUser
 

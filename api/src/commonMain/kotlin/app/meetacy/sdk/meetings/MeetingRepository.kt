@@ -2,12 +2,12 @@ package app.meetacy.sdk.meetings
 
 import app.meetacy.sdk.MeetacyApi
 import app.meetacy.sdk.files.FileRepository
-import app.meetacy.types.auth.Token
-import app.meetacy.types.location.Location
-import app.meetacy.types.datetime.DateOrTime
-import app.meetacy.types.meeting.Meeting
-import app.meetacy.types.meeting.MeetingId
-import app.meetacy.types.user.User
+import app.meetacy.sdk.types.auth.Token
+import app.meetacy.sdk.types.location.Location
+import app.meetacy.sdk.types.datetime.DateOrTime
+import app.meetacy.sdk.types.meeting.Meeting
+import app.meetacy.sdk.types.meeting.MeetingId
+import app.meetacy.sdk.types.user.User
 
 /**
  * When modifying this class, corresponding classes should be altered:

@@ -6,10 +6,10 @@ import app.meetacy.sdk.files.AuthorizedFilesApi
 import app.meetacy.sdk.files.FileRepository
 import app.meetacy.sdk.friends.AuthorizedFriendsApi
 import app.meetacy.sdk.meetings.AuthorizedMeetingsApi
-import app.meetacy.types.auth.Token
-import app.meetacy.types.email.Email
-import app.meetacy.types.user.SelfUser
-import app.meetacy.types.user.UserId
+import app.meetacy.sdk.types.auth.Token
+import app.meetacy.sdk.types.email.Email
+import app.meetacy.sdk.types.user.SelfUser
+import app.meetacy.sdk.types.user.UserId
 
 public class AuthorizedSelfUserRepository(
     public val data: SelfUser,

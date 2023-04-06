@@ -2,9 +2,9 @@ package app.meetacy.sdk.users
 
 import app.meetacy.sdk.MeetacyApi
 import app.meetacy.sdk.files.FileRepository
-import app.meetacy.types.auth.Token
-import app.meetacy.types.user.RegularUser
-import app.meetacy.types.user.UserId
+import app.meetacy.sdk.types.auth.Token
+import app.meetacy.sdk.types.user.RegularUser
+import app.meetacy.sdk.types.user.UserId
 
 public class RegularUserRepository(
     public val data: RegularUser,
@@ -16,5 +16,9 @@ public class RegularUserRepository(
 
     public suspend fun addFriend(token: Token) {
         api.friends.add(token, data.id)
+    }
+
+    public suspend fun deleteFriend(token: Token) {
+        api.friends.delete(token, data.id)
     }
 }

@@ -2,9 +2,10 @@
 
 package app.meetacy.types.datetime
 
-import app.meetacy.types.annotation.UnsafeConstructor
+import app.meetacy.sdk.types.datetime.DateTime
+import app.meetacy.sdk.types.annotation.UnsafeConstructor
+import app.meetacy.sdk.types.datetime.Date
 import java.time.*
-import java.util.Date as JavaDate
 
 public val LocalDate.meetacyDate: Date get() = Date(iso8601 = "$this")
 

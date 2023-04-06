@@ -1,9 +1,9 @@
 package app.meetacy.sdk.internal.paging
 
-import app.meetacy.types.amount.Amount
-import app.meetacy.types.amount.amount
-import app.meetacy.types.paging.PagingId
-import app.meetacy.types.paging.PagingResponse
+import app.meetacy.sdk.types.amount.Amount
+import app.meetacy.sdk.types.amount.amount
+import app.meetacy.sdk.types.paging.PagingId
+import app.meetacy.sdk.types.paging.PagingResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 

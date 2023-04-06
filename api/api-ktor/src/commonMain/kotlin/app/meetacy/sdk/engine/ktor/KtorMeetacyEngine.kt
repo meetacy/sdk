@@ -6,9 +6,9 @@ import app.meetacy.sdk.engine.ktor.requests.friends.FriendsEngine
 import app.meetacy.sdk.engine.ktor.requests.meetings.MeetingsEngine
 import app.meetacy.sdk.engine.ktor.requests.users.UsersEngine
 import app.meetacy.sdk.engine.requests.*
-import app.meetacy.types.file.FileId
-import app.meetacy.types.url.Url
-import app.meetacy.types.url.parametersOf
+import app.meetacy.sdk.types.file.FileId
+import app.meetacy.sdk.types.url.Url
+import app.meetacy.sdk.types.url.parametersOf
 import io.ktor.client.*
 import kotlinx.serialization.json.Json
 

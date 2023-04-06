@@ -2,12 +2,11 @@ package app.meetacy.sdk.friends
 
 import app.meetacy.sdk.AuthorizedMeetacyApi
 import app.meetacy.sdk.users.RegularUserRepository
-import app.meetacy.types.amount.Amount
-import app.meetacy.types.auth.Token
-import app.meetacy.types.paging.PagingId
-import app.meetacy.types.paging.PagingResponse
-import app.meetacy.types.user.RegularUser
-import app.meetacy.types.user.UserId
+import app.meetacy.sdk.types.amount.Amount
+import app.meetacy.sdk.types.auth.Token
+import app.meetacy.sdk.types.paging.PagingId
+import app.meetacy.sdk.types.paging.PagingResponse
+import app.meetacy.sdk.types.user.UserId
 import kotlinx.coroutines.flow.Flow
 
 /**

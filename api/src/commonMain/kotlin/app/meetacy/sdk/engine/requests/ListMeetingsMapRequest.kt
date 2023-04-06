@@ -1,8 +1,8 @@
 package app.meetacy.sdk.engine.requests
 
-import app.meetacy.types.auth.Token
-import app.meetacy.types.location.Location
-import app.meetacy.types.meeting.Meeting
+import app.meetacy.sdk.types.auth.Token
+import app.meetacy.sdk.types.location.Location
+import app.meetacy.sdk.types.meeting.Meeting
 
 public data class ListMeetingsMapRequest(
     val token: Token,
