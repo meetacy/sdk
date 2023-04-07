@@ -29,24 +29,6 @@ public class MeetingsApi(private val api: MeetacyApi) {
         location: Location,
         description: String? = null,
         visibility: Meeting.Visibility = Meeting.Visibility.Private
-    ): MeetingRepository = create(token, title, DateOrTime.Date(date), location, description, visibility)
-
-    public suspend fun create(
-        token: Token,
-        title: String,
-        date: DateTime,
-        location: Location,
-        description: String? = null,
-        visibility: Meeting.Visibility = Meeting.Visibility.Private
-    ): MeetingRepository = create(token, title, DateOrTime.DateTime(date), location, description, visibility)
-
-    public suspend fun create(
-        token: Token,
-        title: String,
-        date: DateOrTime,
-        location: Location,
-        description: String? = null,
-        visibility: Meeting.Visibility = Meeting.Visibility.Private
     ): MeetingRepository {
         val meeting = api.engine.execute(
             request = CreateMeetingRequest(
