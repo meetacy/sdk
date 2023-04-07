@@ -5,11 +5,19 @@ import app.meetacy.sdk.engine.ktor.requests.auth.AuthEngine
 import app.meetacy.sdk.engine.ktor.requests.friends.FriendsEngine
 import app.meetacy.sdk.engine.ktor.requests.meetings.MeetingsEngine
 import app.meetacy.sdk.engine.ktor.requests.users.UsersEngine
+import app.meetacy.sdk.engine.ktor.response.ErrorResponse
 import app.meetacy.sdk.engine.requests.*
+import app.meetacy.sdk.exception.MeetacyUnauthorizedException
+import app.meetacy.sdk.exception.MeetacyConnectionException
+import app.meetacy.sdk.exception.MeetacyInternalException
 import app.meetacy.sdk.types.file.FileId
 import app.meetacy.sdk.types.url.Url
 import app.meetacy.sdk.types.url.parametersOf
 import io.ktor.client.*
+import io.ktor.client.call.*
+import io.ktor.client.plugins.*
+import io.ktor.utils.io.errors.*
+import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
 public class KtorMeetacyEngine(
@@ -18,17 +26,21 @@ public class KtorMeetacyEngine(
     json: Json = Json,
 ) : MeetacyRequestsEngine {
 
-    private val auth = AuthEngine(baseUrl, httpClient, json)
-    private val users = UsersEngine(baseUrl, httpClient, json)
-    private val friends = FriendsEngine(baseUrl, httpClient, json)
-    private val meetings = MeetingsEngine(baseUrl, httpClient, json)
+    private val httpClient = httpClient.config {
+        expectSuccess = true
+    }
+
+    private val auth = AuthEngine(baseUrl, this.httpClient, json)
+    private val users = UsersEngine(baseUrl, this.httpClient, json)
+    private val friends = FriendsEngine(baseUrl, this.httpClient, json)
+    private val meetings = MeetingsEngine(baseUrl, this.httpClient, json)
 
     override fun getFileUrl(
         id: FileId
     ): Url = Url(baseUrl) / "files" / "download" + parametersOf("fileIdentity" to id.string)
 
     @Suppress("UNCHECKED_CAST")
-    override suspend fun <T> execute(request: MeetacyRequest<T>): T {
+    override suspend fun <T> execute(request: MeetacyRequest<T>): T = handleMeetacyExceptions {
         return when (request) {
             // auth
             is GenerateAuthRequest -> auth.generate(request) as T
@@ -48,6 +60,32 @@ public class KtorMeetacyEngine(
             is LinkEmailRequest -> notSupported()
             is ConfirmEmailRequest -> notSupported()
         }
+    }
+
+    private suspend inline fun <T> handleMeetacyExceptions(block: () -> T): T {
+        return try {
+            block()
+        } catch (exception: ResponseException) {
+            val response = try {
+                Json.decodeFromString<ErrorResponse>(exception.response.body<String>())
+            } catch (exception: Throwable) {
+                throw MeetacyInternalException(cause = exception)
+            }
+            throw getException(response.errorCode, response.errorMessage, cause = exception)
+        } catch (exception: IOException) {
+            throw MeetacyConnectionException(cause = exception)
+        } catch (throwable: Throwable) {
+            throw MeetacyInternalException(cause = throwable)
+        }
+    }
+
+    private fun getException(
+        code: Int,
+        message: String,
+        cause: Throwable
+    ): Throwable = when (code) {
+        MeetacyUnauthorizedException.CODE -> MeetacyUnauthorizedException(message, cause)
+        else -> MeetacyInternalException(cause = cause)
     }
 
     private fun notSupported(): Nothing = TODO("This request is not supported yet!")

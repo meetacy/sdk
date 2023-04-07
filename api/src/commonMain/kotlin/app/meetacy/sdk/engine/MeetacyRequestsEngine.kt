@@ -6,5 +6,11 @@ import app.meetacy.sdk.types.url.Url
 
 public interface MeetacyRequestsEngine {
     public fun getFileUrl(id: FileId): Url
+
+    /**
+     * The only possible exception to throw is
+     * [app.meetacy.sdk.exception.MeetacyException]
+     * and its inheritors
+     */
     public suspend fun <T> execute(request: MeetacyRequest<T>): T
 }
