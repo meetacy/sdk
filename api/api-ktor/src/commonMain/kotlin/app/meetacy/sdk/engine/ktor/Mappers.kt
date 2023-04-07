@@ -3,6 +3,7 @@
 package app.meetacy.sdk.engine.ktor
 
 import app.meetacy.sdk.types.annotation.UnsafeConstructor
+import app.meetacy.sdk.types.datetime.Date
 import app.meetacy.sdk.types.email.Email
 import app.meetacy.sdk.types.file.FileId
 import app.meetacy.sdk.types.location.Location
@@ -48,7 +49,7 @@ internal fun GeneratedMeeting.mapToMeeting(): Meeting = Meeting(
             avatarId = creator.avatarIdentity?.let(::FileId)
         )
     },
-    date = DateOrTime.parse(date),
+    date = Date(date),
     location = Location(
         location.latitude,
         location.longitude

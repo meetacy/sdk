@@ -28,22 +28,6 @@ public class AuthorizedMeetingsApi(
         location: Location,
         description: String? = null,
         visibility: Meeting.Visibility = Meeting.Visibility.Private
-    ): AuthorizedMeetingRepository = create(title, DateOrTime.Date(date), location, description, visibility)
-
-    public suspend fun create(
-        title: String,
-        date: DateTime,
-        location: Location,
-        description: String? = null,
-        visibility: Meeting.Visibility = Meeting.Visibility.Private
-    ): AuthorizedMeetingRepository = create(title, DateOrTime.DateTime(date), location, description, visibility)
-
-    public suspend fun create(
-        title: String,
-        date: DateOrTime,
-        location: Location,
-        description: String? = null,
-        visibility: Meeting.Visibility = Meeting.Visibility.Private
     ): AuthorizedMeetingRepository {
         val repository = base.create(
             token = api.token,

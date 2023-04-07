@@ -2,6 +2,7 @@ package app.meetacy.sdk.meetings
 
 import app.meetacy.sdk.AuthorizedMeetacyApi
 import app.meetacy.sdk.files.FileRepository
+import app.meetacy.sdk.types.datetime.Date
 import app.meetacy.sdk.types.location.Location
 import app.meetacy.sdk.types.datetime.DateOrTime
 import app.meetacy.sdk.types.meeting.Meeting
@@ -16,7 +17,7 @@ public class AuthorizedMeetingRepository(
 
     public val id: MeetingId get() = data.id
     public val creator: User get() = data.creator
-    public val date: DateOrTime get() = data.date
+    public val date: Date get() = data.date
     public val location: Location get() = data.location
     public val title: String get() = data.title
     public val description: String? get() = data.description
