@@ -6,7 +6,7 @@ import kotlin.test.assertFailsWith
 class DateTests {
 
     @Test
-    fun foo() {
+    fun dateTest() {
         assertFailsWith<IllegalStateException>("Given string '2000-01-30' doesn't contain any time, consider to use 'Date' class instead.") {
             DateTime.parse("2000-01-30")
         }
