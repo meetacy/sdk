@@ -1,13 +1,9 @@
 package app.meetacy.sdk.types.datetime
 
-import app.meetacy.sdk.types.datetime.CheckDateResult
-import app.meetacy.sdk.types.datetime.CheckDateTimeResult
-import app.meetacy.sdk.types.datetime.Date
-import app.meetacy.sdk.types.datetime.DateTime
 import kotlin.js.Date as JsDate
 
 private val dateRegex = Regex("""\d{4}-\d{2}-\d{2}""")
-private val dateTimeRegex = Regex("""\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z""")
+private val dateTimeRegex = Regex("""\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}}Z""")
 
 internal actual fun checkDate(iso8601: String): CheckDateResult =
     when {

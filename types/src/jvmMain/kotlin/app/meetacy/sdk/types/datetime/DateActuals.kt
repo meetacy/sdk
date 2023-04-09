@@ -1,21 +1,22 @@
 package app.meetacy.sdk.types.datetime
 
-import app.meetacy.sdk.types.datetime.CheckDateResult
-import app.meetacy.sdk.types.datetime.CheckDateTimeResult
-import app.meetacy.sdk.types.datetime.Date
-import app.meetacy.sdk.types.datetime.DateTime
 import java.text.ParseException
+import java.time.Instant
+import java.time.LocalDate
 import java.util.Date as JavaDate
+
+private val dateTimeRegex = Regex("""\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}}Z""")
 
 /**
  * Check whether a given string is iso8601 and doesn't specify time
  */
 internal actual fun checkDate(iso8601: String): CheckDateResult = try {
-    iso8601DateFormat.parse(iso8601)
+    LocalDate.parse(iso8601)
     CheckDateResult.Success
-} catch (_: ParseException) {
+} catch (_: Throwable) {
     try {
-        iso8601DateTimeFormat.parse(iso8601)
+        Instant.parse(iso8601)
+        iso8601.matches(dateTimeRegex) || throw IllegalStateException()
         CheckDateResult.ContainsTime
     } catch (_: ParseException) {
         CheckDateResult.NotISO
@@ -23,11 +24,12 @@ internal actual fun checkDate(iso8601: String): CheckDateResult = try {
 }
 
 internal actual fun checkDateTime(iso8601: String): CheckDateTimeResult = try {
-    iso8601DateTimeFormat.parse(iso8601)
+    Instant.parse(iso8601)
+    iso8601.matches(dateTimeRegex) || throw IllegalStateException()
     CheckDateTimeResult.Success
 } catch (_: ParseException) {
     try {
-        iso8601DateFormat.parse(iso8601)
+        LocalDate.parse(iso8601)
         CheckDateTimeResult.HasNoTime
     } catch (_: ParseException) {
         CheckDateTimeResult.NotISO
