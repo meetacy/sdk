@@ -1,7 +1,5 @@
 package app.meetacy.sdk.types.datetime
 
-import app.meetacy.sdk.types.datetime.Date
-import app.meetacy.sdk.types.datetime.DateTime
 import java.time.Instant
 import java.util.Date as JavaDate
 
