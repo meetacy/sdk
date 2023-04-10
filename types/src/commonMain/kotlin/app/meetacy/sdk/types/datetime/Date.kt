@@ -5,7 +5,7 @@ import kotlin.jvm.JvmInline
 
 /**
  * When modifying this class, corresponding classes should be altered:
- * - [app.meetacy.types.datetime.DateOrTime.Date]
+ * - [app.meetacy.sdk.types.datetime.DateOrTime.Date]
  */
 @JvmInline
 public value class Date @UnsafeConstructor constructor(public val iso8601: String) {
@@ -19,7 +19,7 @@ public value class Date @UnsafeConstructor constructor(public val iso8601: Strin
             CheckDateResult.ContainsTime ->
                 error("Given string '$iso8601' contains time, consider to use 'DateTime' class instead")
             CheckDateResult.NotISO ->
-                error("Given string '$iso8601' is not in iso8601 format")
+                error("Given string '$iso8601' is not in the iso8601 format (yyyy-mm-dd, e.g. 2000-01-31)")
             CheckDateResult.Success -> Date(iso8601)
         }
 

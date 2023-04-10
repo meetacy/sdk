@@ -2,7 +2,6 @@
 
 package app.meetacy.sdk.types.datetime
 
-import app.meetacy.sdk.types.datetime.DateTime
 import app.meetacy.sdk.types.annotation.UnsafeConstructor
 import app.meetacy.sdk.types.datetime.Date
 import java.util.Date as JavaDate

@@ -908,7 +908,7 @@ components:
         "date":
           type: string
           example:
-            - 20232402T100000+0300
+            - 2023-01-30
         "location":
           $ref: '#/components/schemas/Location'
         "visibility":
