@@ -2,14 +2,13 @@ package app.meetacy.sdk.meetings
 
 import app.meetacy.sdk.MeetacyApi
 import app.meetacy.sdk.engine.requests.CreateMeetingRequest
+import app.meetacy.sdk.engine.requests.GetMeetingRequest
 import app.meetacy.sdk.engine.requests.ParticipateMeetingRequest
 import app.meetacy.sdk.meetings.history.MeetingsHistoryApi
 import app.meetacy.sdk.meetings.map.MeetingsMapApi
 import app.meetacy.sdk.types.auth.Token
 import app.meetacy.sdk.types.datetime.Date
 import app.meetacy.sdk.types.location.Location
-import app.meetacy.sdk.types.datetime.DateOrTime
-import app.meetacy.sdk.types.datetime.DateTime
 import app.meetacy.sdk.types.meeting.Meeting
 import app.meetacy.sdk.types.meeting.MeetingId
 
@@ -46,5 +45,11 @@ public class MeetingsApi(private val api: MeetacyApi) {
 
     public suspend fun participate(token: Token, meetingId: MeetingId) {
         api.engine.execute(ParticipateMeetingRequest(token, meetingId))
+    }
+
+    public suspend fun get(token: Token, meetingId: MeetingId): MeetingRepository {
+        val meeting = api.engine.execute(GetMeetingRequest(token, meetingId)).meeting
+
+        return MeetingRepository(meeting, api)
     }
 }
