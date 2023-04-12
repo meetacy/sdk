@@ -11,7 +11,7 @@ import app.meetacy.sdk.types.paging.PagingId
 import app.meetacy.sdk.types.paging.PagingResponse
 import dev.icerock.moko.network.generated.apis.MeetingsApiImpl
 import dev.icerock.moko.network.generated.models.*
-import dev.icerock.moko.network.generated.models.AccessMeetingIdentityRequest
+import dev.icerock.moko.network.generated.models.AccessMeetingIdRequest
 import dev.icerock.moko.network.generated.models.ListMeetingsRequest
 import dev.icerock.moko.network.generated.models.Location
 import io.ktor.client.*
@@ -31,7 +31,7 @@ internal class MeetingsEngine(
     ): ListMeetingsHistoryRequest.Response = with(request) {
         val response = base.meetingsHistoryListPost(
             listMeetingsRequest = ListMeetingsRequest(
-                accessIdentity = token.string,
+                token = token.string,
                 amount = amount.int,
                 pagingId = pagingId?.string
             )
@@ -68,7 +68,7 @@ internal class MeetingsEngine(
     ): CreateMeetingRequest.Response {
         val response = base.meetingsCreatePost(
             createMeetingRequest = GeneratedCreateMeetingRequest(
-                accessIdentity = request.token.string,
+                token = request.token.string,
                 title = request.title,
                 date = request.date.iso8601,
                 location = Location(
@@ -90,9 +90,9 @@ internal class MeetingsEngine(
 
     suspend fun participateMeeting(request: ParticipateMeetingRequest) {
         base.meetingsParticipatePost(
-            accessMeetingIdentityRequest = AccessMeetingIdentityRequest(
-                accessIdentity = request.token.string,
-                meetingIdentity = request.meetingId.string
+            accessMeetingIdRequest = AccessMeetingIdRequest(
+                token = request.token.string,
+                meetingId = request.meetingId.string
             )
         )
     }

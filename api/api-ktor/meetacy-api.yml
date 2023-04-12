@@ -28,20 +28,20 @@ paths:
       summary: Email confirmation
       description: "Email confirmation [via gmail, not implemented yet]"
       requestBody:
-        description: Creation access identity based on nickname
+        description: response with an token
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/EmailConfirmRequest'
       responses:
         "200":
-          description: An example of a successful generated response with an Access Identity
+          description: An example of a successful generated response with an token
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/StatusTrueResponse'
         "400":
-          description: An example of a successful generated response with an Access Identity
+          description: An example of a successful generated response with an token
           content:
             application/json:
               schema:
@@ -60,20 +60,20 @@ paths:
       summary: Email linking
       description: "Linking email to account"
       requestBody:
-        description: Creation access identity based on nickname
+        description: response with an token
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/EmailLinkRequest'
       responses:
         "200":
-          description: An example of a successful generated response with an Access Identity
+          description: An example of a successful generated response with an token
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/StatusTrueResponse'
         "400":
-          description: An example of a successful generated response with an Access Identity
+          description: An example of a successful generated response with an token
           content:
             application/json:
               schema:
@@ -82,23 +82,23 @@ paths:
     post:
       tags:
         - auth
-      summary: Access Identity creation
-      description: Created access identity for user
+      summary: token creation
+      description: Created token for user
       requestBody:
-        description: Creation access identity based on nickname
+        description: Creation token based on nickname
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/GenerateIdentityRequest'
       responses:
         "200":
-          description: An example of a successful generated response with an Access Identity
+          description: An example of a successful generated response with an token
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/GenerateIdentityResponse'
         "400":
-          description: An example of a successful generated response with an Access Identity
+          description: An example of a successful generated response with an token
           content:
             application/json:
               schema:
@@ -112,22 +112,22 @@ paths:
       summary: Download file from server
       tags:
         - files
-      description: "Getting streaming data from the server by File Identity"
+      description: "Getting streaming data from the server by fileId"
       parameters:
-        - name: "fileIdentity"
+        - name: "fileId"
           in: "query"
           required: true
           schema:
             type: string
       responses:
         "200":
-          description: An example of a successful generated response with an Access Identity
+          description: An example of a successful generated response with an token
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/DownloadFileSuccessfulResponse'
         "400":
-          description: An example of a successful generated response with an Access Identity
+          description: An example of a successful generated response with an token
           content:
             application/json:
               schema:
@@ -135,7 +135,7 @@ paths:
               example:
                 status: false
                 errorCode: 1
-                errorMessage: "Please provide a valid fileIdentity"
+                errorMessage: "Please provide a valid fileId"
   /files/upload:
     post:
       summary: Uploading a file to the server
@@ -148,33 +148,33 @@ paths:
             schema:
               type: object
               properties: # Request parts
-                accessIdentity:
+                token:
                   type: string
                 file:
                   type: string
                   format: binary
               required:
-                - "accessIdentity"
+                - "token"
                 - "file"
             encoding: # The same level as schema
               profileImage: # Property name (see above)
                 contentType: image/png, image/jpeg
       responses:
         "200":
-          description: An example of a successful generated response with an Access Identity
+          description: An example of a successful generated response with an token
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/GenerateIdentityResponse'
         "400":
-          description: An example of a successful generated response with an Access Identity
+          description: An example of a successful generated response with an token
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/InvalidResponse'
               examples:
                 InvalidIdentity:
-                  $ref: '#/components/examples/InvalidAccessIdentity'
+                  $ref: '#/components/examples/InvalidToken'
                 LimitSize:
                   $ref: '#/components/examples/FileSizeLimit'
   /friends/add:
@@ -184,27 +184,27 @@ paths:
       summary: "Add friend"
       description: "User subscription. With a mutual subscription, he becomes a friend"
       requestBody:
-        description: Creation access identity based on nickname
+        description: response with an token
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/AccessFriendRequest'
       responses:
         "200":
-          description: An example of a successful generated response with an Access Identity
+          description: An example of a successful generated response with an token
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/StatusTrueResponse'
         "400":
-          description: An example of a successful generated response with an Access Identity
+          description: An example of a successful generated response with an token
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/InvalidResponse'
               examples:
                 InvalidIdentity:
-                  $ref: '#/components/examples/InvalidAccessIdentity'
+                  $ref: '#/components/examples/InvalidToken'
                 FriendNotFound:
                   $ref: '#/components/examples/FriendNotFound'
                 FriendAlreadyAdded:
@@ -216,27 +216,27 @@ paths:
         - friends
       description: "Unsubscribing from a user, as a result of which he ceases to be your friend"
       requestBody:
-        description: Creation access identity based on nickname
+        description: Creation token based on nickname
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/AccessFriendRequest'
       responses:
         "200":
-          description: An example of a successful generated response with an Access Identity
+          description: An example of a successful generated response with an token
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/StatusTrueResponse'
         "400":
-          description: An example of a successful generated response with an Access Identity
+          description: An example of a successful generated response with an token
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/InvalidResponse'
               examples:
                 InvalidIdentity:
-                  $ref: '#/components/examples/InvalidAccessIdentity'
+                  $ref: '#/components/examples/InvalidToken'
                 FriendNotFound:
                   $ref: '#/components/examples/FriendNotFound'
   /friends/list:
@@ -246,20 +246,20 @@ paths:
         - friends
       description: "Getting a list of friends and those you follow"
       requestBody:
-        description: Creation access identity based on nickname
+        description: Creation token based on nickname
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/ListFriendsRequest'
       responses:
         "200":
-          description: An example of a successful generated response with an Access Identity
+          description: An example of a successful generated response with an token
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ListFriendsResponse'
         "400":
-          description: An example of a successful generated response with an Access Identity
+          description: An example of a successful generated response with an token
           content:
             application/json:
               schema:
@@ -269,91 +269,91 @@ paths:
       summary: Adding meetings avatar
       tags:
         - meetings
-      description: "Adding a meeting avatar via an File Identity and Meeting Identity"
+      description: "Adding a meeting avatar via an fileId and meetingId"
       requestBody:
-        description: Creation access identity based on nickname
+        description: response with an token
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/MeetingAvatarAddRequest'
       responses:
         "200":
-          description: An example of a successful generated response with an Access Identity
+          description: An example of a successful generated response with an token
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/StatusTrueResponse'
         "400":
-          description: An example of a successful generated response with an Access Identity
+          description: An example of a successful generated response with an token
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/InvalidResponse'
               examples:
                 InvalidIdentity:
-                  $ref: '#/components/examples/InvalidAccessIdentity'
+                  $ref: '#/components/examples/InvalidToken'
                 MeetingNotFound:
-                  $ref: '#/components/examples/InvalidMeetingIdentity'
-                InvalidMeetingFileIdentity:
-                  $ref: '#/components/examples/InvalidFileIdentity'
+                  $ref: '#/components/examples/InvalidMeetingId'
+                InvalidMeetingFileId:
+                  $ref: '#/components/examples/InvalidFileId'
   /meetings/avatar/delete:
     post:
       summary: Removal meetings avatar
       tags:
         - meetings
-      description: "Removal a meeting avatar via an File Identity and Meeting Identity"
+      description: "Removal a meeting avatar via an fileId and meetingId"
       requestBody:
-        description: Creation access identity based on nickname
+        description: response with an token
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AccessMeetingIdentityRequest'
+              $ref: '#/components/schemas/AccessMeetingIdRequest'
       responses:
         "200":
-          description: An example of a successful generated response with an Access Identity
+          description: An example of a successful generated response with an token
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/StatusTrueResponse'
         "400":
-          description: An example of a successful generated response with an Access Identity
+          description: An example of a successful generated response with an token
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/InvalidResponse'
               examples:
                 InvalidAccessIdentity:
-                  $ref: '#/components/examples/InvalidAccessIdentity'
+                  $ref: '#/components/examples/InvalidToken'
                 MeetingNotFound:
-                  $ref: '#/components/examples/InvalidMeetingIdentity'
+                  $ref: '#/components/examples/InvalidMeetingId'
   /meetings/create:
     post:
       summary: Creating a meeting
       tags:
         - meetings
-      description: "Creating a meeting with an identity, name, description, date and location"
+      description: "Creating a meeting with an token, name, description, date and location"
       requestBody:
-        description: Creation access identity based on nickname
+        description: response with an token
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/CreateMeetingRequest'
       responses:
         "200":
-          description: An example of a successful generated response with an Access Identity
+          description: An example of a successful generated response with an token
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/CreateMeetingResponse'
         "400":
-          description: An example of a successful generated response with an Access Identity
+          description: An example of a successful generated response with an token
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/InvalidResponse'
               examples:
                 InvalidAccessIdentity:
-                  $ref: '#/components/examples/InvalidAccessIdentity'
+                  $ref: '#/components/examples/InvalidToken'
                 InvalidUtf8String:
                   $ref: '#/components/examples/InvalidNickname'
   /meetings/delete:
@@ -363,29 +363,29 @@ paths:
         - meetings
       description: "Removing a meeting from the database"
       requestBody:
-        description: Creation access identity based on nickname
+        description: response with an token
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AccessMeetingIdentityRequest'
+              $ref: '#/components/schemas/AccessMeetingIdRequest'
       responses:
         "200":
-          description: An example of a successful generated response with an Access Identity
+          description: An example of a successful generated response with an token
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/StatusTrueResponse'
         "400":
-          description: An example of a successful generated response with an Access Identity
+          description: An example of a successful generated response with an token
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/InvalidResponse'
               examples:
                 InvalidAccessIdentity:
-                  $ref: '#/components/examples/InvalidAccessIdentity'
+                  $ref: '#/components/examples/InvalidToken'
                 MeetingNotFound:
-                  $ref: '#/components/examples/InvalidMeetingIdentity'
+                  $ref: '#/components/examples/InvalidMeetingId'
   /meetings/get:
     post:
       summary: Getting meeting information
@@ -393,57 +393,57 @@ paths:
         - meetings
       description: "Getting information about a meeting object"
       requestBody:
-        description: Creation access identity based on nickname
+        description: response with an token
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AccessMeetingIdentityRequest'
+              $ref: '#/components/schemas/AccessMeetingIdRequest'
       responses:
         "200":
-          description: An example of a successful generated response with an Access Identity
+          description: An example of a successful generated response with an token
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/CreateMeetingResponse'
         "400":
-          description: An example of a successful generated response with an Access Identity
+          description: An example of a successful generated response with an token
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/InvalidResponse'
               examples:
                 InvalidAccessIdentity:
-                  $ref: '#/components/examples/InvalidAccessIdentity'
+                  $ref: '#/components/examples/InvalidToken'
                 MeetingNotFound:
-                  $ref: '#/components/examples/InvalidMeetingIdentity'
+                  $ref: '#/components/examples/InvalidMeetingId'
   /meetings/history/list:
     post:
       summary: Getting a list of meetings
       tags:
         - meetings
-      description: "Getting a list of meetings by accessIdentity"
+      description: "Getting a list of meetings by token"
       requestBody:
-        description: Creation access identity based on nickname
+        description: response with an token
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/ListMeetingsRequest'
       responses:
         "200":
-          description: An example of a successful generated response with an Access Identity
+          description: An example of a successful generated response with an token
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ListMeetingsResponse'
         "400":
-          description: An example of a successful generated response with an Access Identity
+          description: An example of a successful generated response with an token
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/InvalidResponse'
               examples:
                 InvalidAccessIdentity:
-                  $ref: '#/components/examples/InvalidAccessIdentity'
+                  $ref: '#/components/examples/InvalidToken'
   /meetings/map/list:
     post:
       summary: "Meetings on Map"
@@ -470,7 +470,7 @@ paths:
                 $ref: '#/components/schemas/InvalidResponse'
               examples:
                 InvalidAccessIdentity:
-                  $ref: '#/components/examples/InvalidAccessIdentity'
+                  $ref: '#/components/examples/InvalidToken'
   /meetings/participate:
     post:
       summary: Participate meeting
@@ -478,29 +478,29 @@ paths:
         - meetings
       description: "Taking part in a meeting"
       requestBody:
-        description: Creation access identity based on nickname
+        description: response with an token
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AccessMeetingIdentityRequest'
+              $ref: '#/components/schemas/AccessMeetingIdRequest'
       responses:
         "200":
-          description: An example of a successful generated response with an Access Identity
+          description: An example of a successful generated response with an token
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/StatusTrueResponse'
         "400":
-          description: An example of a successful generated response with an Access Identity
+          description: An example of a successful generated response with an token
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/InvalidResponse'
               examples:
                 InvalidAccessIdentity:
-                  $ref: '#/components/examples/InvalidAccessIdentity'
+                  $ref: '#/components/examples/InvalidToken'
                 MeetingNotFound:
-                  $ref: '#/components/examples/InvalidMeetingIdentity'
+                  $ref: '#/components/examples/InvalidMeetingId'
                 MeetingAlreadyParticipate:
                   $ref: '#/components/examples/MeetingAlreadyParticipate'
   /notifications/get:
@@ -516,14 +516,14 @@ paths:
               schema:
                 type: "object"
         "400":
-          description: An example of a successful generated response with an Access Identity
+          description: An example of a successful generated response with an token
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/InvalidResponse'
               examples:
                 InvalidAccessIdentity:
-                  $ref: '#/components/examples/InvalidAccessIdentity'
+                  $ref: '#/components/examples/InvalidToken'
   /notifications/read:
     post:
       tags:
@@ -537,14 +537,14 @@ paths:
               schema:
                 type: "object"
         "400":
-          description: An example of a successful generated response with an Access Identity
+          description: An example of a successful generated response with an token
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/InvalidResponse'
               examples:
                 InvalidAccessIdentity:
-                  $ref: '#/components/examples/InvalidAccessIdentity'
+                  $ref: '#/components/examples/InvalidToken'
                 LastNotificationIdInvalid:
                   $ref: '#/components/examples/LastNotificationIdInvalid'
   /users/avatar/add:
@@ -552,65 +552,65 @@ paths:
       summary: Adding user avatar
       tags:
         - user
-      description: "Adding a user avatar via an File Identity and Access Identity"
+      description: "Adding a user avatar via an fileId and token"
       requestBody:
-        description: Creation access identity based on nickname
+        description: response with an token
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/AccessAvatarRequest'
       responses:
         "200":
-          description: An example of a successful generated response with an Access Identity
+          description: An example of a successful generated response with an token
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/StatusTrueResponse'
         "400":
-          description: An example of a successful generated response with an Access Identity
+          description: An example of a successful generated response with an token
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/InvalidResponse'
               examples:
                 InvalidAccessIdentity:
-                  $ref: '#/components/examples/InvalidAccessIdentity'
+                  $ref: '#/components/examples/InvalidToken'
                 InvalidUserAvatarIdentity:
-                  $ref: '#/components/examples/InvalidFileIdentity'
+                  $ref: '#/components/examples/InvalidFileId'
   /users/avatar/delete:
     post:
       summary: Deleting user avatar
       tags:
         - user
-      description: "Deleting a user avatar via an File Identity and Access Identity"
+      description: "Deleting a user avatar via an fileId and token"
       requestBody:
-        description: Creation access identity based on nickname
+        description: response with an token
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/AccessIdentityRequest'
       responses:
         "200":
-          description: An example of a successful generated response with an Access Identity
+          description: An example of a successful generated response with an token
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/StatusTrueResponse'
         "400":
-          description: An example of a successful generated response with an Access Identity
+          description: An example of a successful generated response with an token
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/InvalidResponse'
               examples:
                 InvalidAccessIdentity:
-                  $ref: '#/components/examples/InvalidAccessIdentity'
+                  $ref: '#/components/examples/InvalidToken'
   /users/get:
     post:
       summary: Getting user object
       tags:
         - user
-      description: "Getting user data. Nickname, Identity [not to be confused with accessIdentity] and email verification status"
+      description: "Getting user data. Nickname, Id [not to be confused with token] and email verification status"
       requestBody:
         description: Body for get user or me
         content:
@@ -619,33 +619,33 @@ paths:
               $ref: '#/components/schemas/GetUserRequest'
       responses:
         "200":
-          description: An example of a successful generated response with an Access Identity
+          description: An example of a successful generated response with an token
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetUserResponse'
               examples:
-                Identity:
+                id:
                   value:
-                    identity: "15:fzK6CgXqQihDqeXpVYqVpOIgH0s5HvBAaR2BN2PkCxsLe63fAwMrV4uDInfYgoKFXY5C18Rnu9I2x5d46qmGNPLTM9uDepdKPKo7ss1tPsMk5AbslGwQCjlBrscOJmxUFSt7iwsmbZdLdjgYecKoXrJBVGwkZC3HYBUCLtgkexYsOk1mmDRxk482k3fCuo2Nxnjy82INdkOTjVsnew6vGhtOOrOWdpR1Ci6v1d06SQ6aFqs5QasWiTEPXNyCjGGd"
+                    id: "15:fzK6CgXqQihDqeXpVYqVpOIgH0s5HvBAaR2BN2PkCxsLe63fAwMrV4uDInfYgoKFXY5C18Rnu9I2x5d46qmGNPLTM9uDepdKPKo7ss1tPsMk5AbslGwQCjlBrscOJmxUFSt7iwsmbZdLdjgYecKoXrJBVGwkZC3HYBUCLtgkexYsOk1mmDRxk482k3fCuo2Nxnjy82INdkOTjVsnew6vGhtOOrOWdpR1Ci6v1d06SQ6aFqs5QasWiTEPXNyCjGGd"
                     nickname: Dmytro Koriukivka
                     email: null
                     emailVerified: null
-                AccessIdentity:
+                token:
                   value:
-                    identity: "15:fzK6CgXqQihDqeXpVYqVpOIgH0s5HvBAaR2BN2PkCxsLe63fAwMrV4uDInfYgoKFXY5C18Rnu9I2x5d46qmGNPLTM9uDepdKPKo7ss1tPsMk5AbslGwQCjlBrscOJmxUFSt7iwsmbZdLdjgYecKoXrJBVGwkZC3HYBUCLtgkexYsOk1mmDRxk482k3fCuo2Nxnjy82INdkOTjVsnew6vGhtOOrOWdpR1Ci6v1d06SQ6aFqs5QasWiTEPXNyCjGGd"
+                    token: "15:fzK6CgXqQihDqeXpVYqVpOIgH0s5HvBAaR2BN2PkCxsLe63fAwMrV4uDInfYgoKFXY5C18Rnu9I2x5d46qmGNPLTM9uDepdKPKo7ss1tPsMk5AbslGwQCjlBrscOJmxUFSt7iwsmbZdLdjgYecKoXrJBVGwkZC3HYBUCLtgkexYsOk1mmDRxk482k3fCuo2Nxnjy82INdkOTjVsnew6vGhtOOrOWdpR1Ci6v1d06SQ6aFqs5QasWiTEPXNyCjGGd"
                     nickname: Dmytro Koriukivka
                     email: DmytroKoriukivka@meetacy.app
                     emailVerified: true
         "400":
-          description: An example of a successful generated response with an Access Identity
+          description: An example of a successful generated response with an token
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/InvalidResponse'
               examples:
                 InvalidAccessIdentity:
-                  $ref: '#/components/examples/InvalidAccessIdentity'
+                  $ref: '#/components/examples/InvalidToken'
                 UserNotFound:
                   $ref: '#/components/examples/UserNotFound'
 components:
@@ -665,11 +665,11 @@ components:
         status: false
         errorCode: 13
         errorMessage: "You have reached max attempts for today. Please try again later"
-    InvalidAccessIdentity:
+    InvalidToken:
       value:
         status: false
         errorCode: 1
-        errorMessage: "Please provide a valid accessIdentity"
+        errorMessage: "Please provide a valid token"
     InvalidNickname:
       value:
         status: false
@@ -680,11 +680,11 @@ components:
         status: false
         errorCode: 7
         errorMessage: "Please provide a valid title or description"
-    InvalidFileIdentity:
+    InvalidFileId:
       value:
         status: false
         errorCode: 3
-        errorMessage: "Please provide a valid fileIdentity"
+        errorMessage: "Please provide a valid fileId"
     FileSizeLimit:
       value:
         status: false
@@ -700,11 +700,11 @@ components:
         status: false
         errorCode: 11
         errorMessage: "Friend already added"
-    InvalidMeetingIdentity:
+    InvalidMeetingId:
       value:
         status: false
         errorCode: 2
-        errorMessage: "Please provide a valid meetingIdentity"
+        errorMessage: "Please provide a valid meetingId"
     MeetingAlreadyParticipate:
       value:
         status: false
@@ -741,18 +741,18 @@ components:
         - "status"
         - "result"
       additionalProperties: false
-    AccessMeetingIdentityRequest:
+    AccessMeetingIdRequest:
       type: "object"
       properties:
-        accessIdentity:
+        token:
           type: string
           example: "14:BtEpi2o77Uia9NvwQqbumtNggJzjlEVS5gTS1Z8SDs9BmXk7E8lGxji5MBHxcor0j9X1tMgTjiYwbVvuqjdhkdDTr4XtZY6lFhURbKYG17LlfgqPVi6xJpoAdwQyxLz6wILAaiJdBy3wK1PZ3t0Zg3oBGeyeKJtfestgJylmEMCBjH7eXkBP9Bi93xkV4u68kB4OBKPesxJrTpUHlQjwuP8bCpj8Q591BUdUm9t9dXR4xSksMKWWWe4t4Y4ZrAfA"
-        meetingIdentity:
+        meetingId:
           type: string
           example: "8:wtzbOPJqX8SVCDQj4UMavNoKJId5UylyL4GRZAkacc2PcGnyu8TCqZCLYvFnG4kb75HOVz6TIeRxXbarsdQZBdrB1rDbHSGD7yCW0EOTbRhxs5qRGncOjG5DmTrAULbWlWMiUkt2RiDRNTkoGJunQgtP63FEZ1MrYJPPdyX1Qn3xpIW6joZZ5p2XahuGGAE13UceQYz6bWO5ZWSJiWjwrA0xOvqf6ad0FHuEXcQaWbJBbBfEA9oGm4KsDHfnkvCT"
       required:
-        - "accessIdentity"
-        - "meetingIdentity"
+        - "token"
+        - "meetingId"
       additionalProperties: false
     ListMapMeetingsRequest:
       type: object
@@ -785,69 +785,69 @@ components:
       required:
         - "accessIdentity"
       additionalProperties: false
-    AccessUserIdentityRequest:
+    AccessUserIdRequest:
       type: "object"
       properties:
-        identity:
+        id:
           type: string
           enum:
             - null
-        accessIdentity:
+        token:
           type: string
           enum:
             - "14:BtEpi2o77Uia9NvwQqbumtNggJzjlEVS5gTS1Z8SDs9BmXk7E8lGxji5MBHxcor0j9X1tMgTjiYwbVvuqjdhkdDTr4XtZY6lFhURbKYG17LlfgqPVi6xJpoAdwQyxLz6wILAaiJdBy3wK1PZ3t0Zg3oBGeyeKJtfestgJylmEMCBjH7eXkBP9Bi93xkV4u68kB4OBKPesxJrTpUHlQjwuP8bCpj8Q591BUdUm9t9dXR4xSksMKWWWe4t4Y4ZrAfA"
       required:
-        - "accessIdentity"
+        - "token"
       additionalProperties: false
     IdentityRequest:
       type: object
       properties:
-        identity:
+        id:
           type: string
           enum:
             - "46:QTZepulLdiPsDLNNjinSQ8HJeyidzrdMrYATwD5fmb080VGxzQCUXRubsbxx8DqhojU2y80LiXXBT1N0FQhZZ3rYNTqQZoaDJDYRM31Qd3ugkzBV7QWwtCdAjQ2AxZAAukUCgvwiy2wGmuxSlXhME224gPXRq53WqlFVjMDsAZiIo9HGr0qmclO2EZUPRVlyd5plu83UApbIrOVHeXksq1NbSXxloAhDq6iK9C2Ck8BNoZS8wQWsXdCXBqnPVb85"
-        accessIdentity:
+        token:
           type: string
           enum:
             - "14:BtEpi2o77Uia9NvwQqbumtNggJzjlEVS5gTS1Z8SDs9BmXk7E8lGxji5MBHxcor0j9X1tMgTjiYwbVvuqjdhkdDTr4XtZY6lFhURbKYG17LlfgqPVi6xJpoAdwQyxLz6wILAaiJdBy3wK1PZ3t0Zg3oBGeyeKJtfestgJylmEMCBjH7eXkBP9Bi93xkV4u68kB4OBKPesxJrTpUHlQjwuP8bCpj8Q591BUdUm9t9dXR4xSksMKWWWe4t4Y4ZrAfA"
       required:
-        - "accessIdentity"
-        - "identity"
+        - "token"
+        - "id"
       additionalProperties: false
     AccessFriendRequest:
       type: "object"
       properties:
-        accessIdentity:
+        token:
           type: string
-        friendIdentity:
+        friendId:
           type: string
       required:
-        - "accessIdentity"
-        - "friendIdentity"
+        - "token"
+        - "friendId"
       additionalProperties: false
     ListFriendsRequest:
       type: "object"
       properties:
-        accessIdentity:
+        token:
           type: string
         pagingId:
           type: string
         amount:
           type: integer
       required:
-        - "accessIdentity"
+        - "token"
         - "amount"
     ListMeetingsRequest:
       type: "object"
       properties:
-        accessIdentity:
+        token:
           type: string
         pagingId:
           type: string
         amount:
           type: integer
       required:
-        - "accessIdentity"
+        - "token"
         - "amount"
     EmailConfirmRequest:
       type: "object"
@@ -867,7 +867,7 @@ components:
           type: string
           example:
             - "gerald123@gmail.com"
-        accessIdentity:
+        token:
           type: string
           example:
             - "14:BtEpi2o77Uia9NvwQqbumtNggJzjlEVS5gTS1Z8SDs9BmXk7E8lGxji5MBHxcor0j9X1tMgTjiYwbVvuqjdhkdDTr4XtZY6lFhURbKYG17LlfgqPVi6xJpoAdwQyxLz6wILAaiJdBy3wK1PZ3t0Zg3oBGeyeKJtfestgJylmEMCBjH7eXkBP9Bi93xkV4u68kB4OBKPesxJrTpUHlQjwuP8bCpj8Q591BUdUm9t9dXR4xSksMKWWWe4t4Y4ZrAfA"
@@ -893,7 +893,7 @@ components:
     CreateMeetingRequest:
       type: "object"
       properties:
-        "accessIdentity":
+        "token":
           type: string
           example:
             - "14:BtEpi2o77Uia9NvwQqbumtNggJzjlEVS5gTS1Z8SDs9BmXk7E8lGxji5MBHxcor0j9X1tMgTjiYwbVvuqjdhkdDTr4XtZY6lFhURbKYG17LlfgqPVi6xJpoAdwQyxLz6wILAaiJdBy3wK1PZ3t0Zg3oBGeyeKJtfestgJylmEMCBjH7eXkBP9Bi93xkV4u68kB4OBKPesxJrTpUHlQjwuP8bCpj8Q591BUdUm9t9dXR4xSksMKWWWe4t4Y4ZrAfA"
@@ -908,7 +908,7 @@ components:
         "date":
           type: string
           example:
-            - 2023-01-30
+            - 20232402T100000+0300
         "location":
           $ref: '#/components/schemas/Location'
         "visibility":
@@ -917,7 +917,7 @@ components:
             - "public"
             - "private"
       required:
-        - "accessIdentity"
+        - "token"
         - "title"
         - "date"
         - "location"
@@ -926,21 +926,21 @@ components:
     MeetingAvatarAddRequest:
       type: "object"
       properties:
-        accessIdentity:
+        token:
           type: string
           enum:
             - "14:BtEpi2o77Uia9NvwQqbumtNggJzjlEVS5gTS1Z8SDs9BmXk7E8lGxji5MBHxcor0j9X1tMgTjiYwbVvuqjdhkdDTr4XtZY6lFhURbKYG17LlfgqPVi6xJpoAdwQyxLz6wILAaiJdBy3wK1PZ3t0Zg3oBGeyeKJtfestgJylmEMCBjH7eXkBP9Bi93xkV4u68kB4OBKPesxJrTpUHlQjwuP8bCpj8Q591BUdUm9t9dXR4xSksMKWWWe4t4Y4ZrAfA"
-        meetingIdentity:
+        meetingId:
           type: string
           enum:
             - "8:wtzbOPJqX8SVCDQj4UMavNoKJId5UylyL4GRZAkacc2PcGnyu8TCqZCLYvFnG4kb75HOVz6TIeRxXbarsdQZBdrB1rDbHSGD7yCW0EOTbRhxs5qRGncOjG5DmTrAULbWlWMiUkt2RiDRNTkoGJunQgtP63FEZ1MrYJPPdyX1Qn3xpIW6joZZ5p2XahuGGAE13UceQYz6bWO5ZWSJiWjwrA0xOvqf6ad0FHuEXcQaWbJBbBfEA9oGm4KsDHfnkvCT"
-        fileIdentity:
+        fileId:
           type: string
           enum:
             - "6:27nUexdZbK0BEn9M48Db9SFP6XTd2O6sjQeX5wsfECftnkVDZ0pP0jYGev23GBGHlQu7RsNk9t8SrO3jOZaiQXbVN22IU5o3TeChCZ2qjgZlOT9owypOBbusAJu16TN0YzIsMtzlgspjOyd5lZzV4LL47QLwcc6b7Z6Uuw0Pkz8IMaCCNdlBBvDaRwsQLqQBLkomRjFOye5owLalAguUHxnjJVSquzDjsljqLwprTPfFGSCGQuqh4JUtWtjUsaWi"
       required:
-        - "accessIdentity"
-        - "fileIdentity"
+        - "token"
+        - "fileId"
       additionalProperties: false
     InvalidResponse:
       type: object
@@ -955,7 +955,7 @@ components:
         errorMessage:
           type: string
           enum:
-            - Please provide a valid accessIdentity
+            - Please provide a valid token
       required:
         - "status"
         - "errorCode"
@@ -1002,7 +1002,7 @@ components:
     CreatorMeetingResponse:
       type: object
       properties:
-        identity:
+        id:
           type: string
           example: "12:eKAouJLbWqDmtwQOWuAhi9MYiBYHxKw4LTZBD39nAhtMDiV73QBPDVjE3HRNYm4xwtRJta3FdNdua90evNSgvuvqfyUjdwhXlSlDiEpPE1DJGTzuuAdm5WDowDNJOTdHDpYAGzztJMaKwXiFlguVwO88AZhoByf4SaP9HLXftFs5XVIwNWf4mntyJ48GLaWchngpjvgJW5vABjwwRJiCkCYvMiFpCvwSrzdjwzuvDxM3egDzg15U63yTBSJv0dSo"
         nickname:
@@ -1029,7 +1029,7 @@ components:
     Meeting:
       type: object
       properties:
-        identity:
+        id:
           type: string
           example: "6:EBnp2woyRmY4snRvZaiEtuOIfk4eEXgWdzy8psVPL60Mz92Ts8qIdaoAHVTpvl9hTygMpfUYjNHJpjwpK0txBKRWl7EqCgmnZjm57pIWnlRIo2WoH856AibK8xmCdgOlENPUsmBGLPa7EVOtd43rnGVdeC3wUfHSNV9PT3S0Q3mXCpHF0tOfssQTnKKbBSy9V19Euo7VzpjS4WXI82ILzPVfLqTaRGEUabXw9issiVZhK97zZhBXrV3CFO26pAZa"
         creator:
@@ -1055,7 +1055,7 @@ components:
         isParticipating:
           type: boolean
           example: true
-        avatarIdentity:
+        avatarId:
           type: string
         visibility:
           type: string
@@ -1063,7 +1063,7 @@ components:
             - "public"
             - "private"
       required:
-        - "identity"
+        - "id"
         - "title"
         - "creator"
         - "date"
@@ -1127,7 +1127,7 @@ components:
       properties:
         isSelf:
           type: boolean
-        identity:
+        id:
           type: string
           example: "15:fzK6CgXqQihDqeXpVYqVpOIgH0s5HvBAaR2BN2PkCxsLe63fAwMrV4uDInfYgoKFXY5C18Rnu9I2x5d46qmGNPLTM9uDepdKPKo7ss1tPsMk5AbslGwQCjlBrscOJmxUFSt7iwsmbZdLdjgYecKoXrJBVGwkZC3HYBUCLtgkexYsOk1mmDRxk482k3fCuo2Nxnjy82INdkOTjVsnew6vGhtOOrOWdpR1Ci6v1d06SQ6aFqs5QasWiTEPXNyCjGGd"
         nickname:
@@ -1142,17 +1142,17 @@ components:
         avatarIdentity:
           type: string
       required:
-        - identity
+        - id
         - nickname
         - isSelf
     GetUserRequest:
-      description: Creation access identity based on nickname
+      description: response with an token
       type: object
       properties:
-        identity:
+        id:
           type: string
-        accessIdentity:
+        token:
           type: string
       required:
-        - accessIdentity
+        - token
       additionalProperties: false

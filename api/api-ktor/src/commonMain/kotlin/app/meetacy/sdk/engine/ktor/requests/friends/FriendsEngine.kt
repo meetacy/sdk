@@ -28,8 +28,8 @@ internal class FriendsEngine(
     suspend fun add(request: AddFriendRequest) {
         base.friendsAddPost(
             accessFriendRequest = AccessFriendRequest(
-                accessIdentity = request.token.string,
-                friendIdentity = request.friendId.string
+                token = request.token.string,
+                friendId = request.friendId.string
             )
         )
     }
@@ -37,8 +37,8 @@ internal class FriendsEngine(
     suspend fun delete(request: DeleteFriendRequest) {
         base.friendsDeletePost(
             accessFriendRequest = AccessFriendRequest(
-                accessIdentity = request.token.string,
-                friendIdentity = request.friendId.string
+                token = request.token.string,
+                friendId = request.friendId.string
             )
         )
     }
@@ -46,7 +46,7 @@ internal class FriendsEngine(
     suspend fun list(request: ListFriendsRequest): ListFriendsRequest.Response {
         val response = base.friendsListPost(
             listFriendsRequest = GeneratedListFriendsRequest(
-                accessIdentity = request.token.string,
+                token = request.token.string,
                 amount = request.amount.int,
                 pagingId = request.pagingId?.string
             )
@@ -56,7 +56,7 @@ internal class FriendsEngine(
             nextPagingId = response.result.nextPagingId?.let(::PagingId),
             data = response.result.data.map { user ->
                 RegularUser(
-                    id = UserId(user.identity),
+                    id = UserId(user.id),
                     nickname = user.nickname,
                     avatarId = user.avatarIdentity?.let(::FileId)
                 )
