@@ -5,8 +5,6 @@ import app.meetacy.sdk.meetings.history.AuthorizedMeetingsHistoryApi
 import app.meetacy.sdk.meetings.map.AuthorizedMeetingsMapApi
 import app.meetacy.sdk.types.datetime.Date
 import app.meetacy.sdk.types.location.Location
-import app.meetacy.sdk.types.datetime.DateOrTime
-import app.meetacy.sdk.types.datetime.DateTime
 import app.meetacy.sdk.types.meeting.Meeting
 import app.meetacy.sdk.types.meeting.MeetingId
 
@@ -43,5 +41,11 @@ public class AuthorizedMeetingsApi(
 
     public suspend fun participate(meetingId: MeetingId) {
         base.participate(api.token, meetingId)
+    }
+
+    public suspend fun get(meetingId: MeetingId): AuthorizedMeetingRepository {
+        val repository = base.get(api.token, meetingId)
+
+        return AuthorizedMeetingRepository(repository.data, api)
     }
 }

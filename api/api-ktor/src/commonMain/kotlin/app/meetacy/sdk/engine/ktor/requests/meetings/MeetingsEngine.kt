@@ -2,6 +2,7 @@ package app.meetacy.sdk.engine.ktor.requests.meetings
 
 import app.meetacy.sdk.engine.ktor.mapToMeeting
 import app.meetacy.sdk.engine.requests.CreateMeetingRequest
+import app.meetacy.sdk.engine.requests.GetMeetingRequest
 import app.meetacy.sdk.engine.requests.ListMeetingsHistoryRequest
 import app.meetacy.sdk.engine.requests.ListMeetingsMapRequest
 import app.meetacy.sdk.engine.requests.ParticipateMeetingRequest
@@ -89,6 +90,15 @@ internal class MeetingsEngine(
 
     suspend fun participateMeeting(request: ParticipateMeetingRequest) {
         base.meetingsParticipatePost(
+            accessMeetingIdentityRequest = AccessMeetingIdentityRequest(
+                accessIdentity = request.token.string,
+                meetingIdentity = request.meetingId.string
+            )
+        )
+    }
+
+    suspend fun getMeeting(request: GetMeetingRequest) {
+        base.meetingsGetPost(
             accessMeetingIdentityRequest = AccessMeetingIdentityRequest(
                 accessIdentity = request.token.string,
                 meetingIdentity = request.meetingId.string
