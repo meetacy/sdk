@@ -99,9 +99,9 @@ internal class MeetingsEngine(
 
     suspend fun getMeeting(request: GetMeetingRequest) {
         base.meetingsGetPost(
-            accessMeetingIdentityRequest = AccessMeetingIdentityRequest(
-                accessIdentity = request.token.string,
-                meetingIdentity = request.meetingId.string
+            accessMeetingIdRequest = AccessMeetingIdRequest(
+                token = request.token.string,
+                meetingId = request.meetingId.string
             )
         )
     }
