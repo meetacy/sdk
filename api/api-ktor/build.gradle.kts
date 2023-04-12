@@ -1,3 +1,5 @@
+import org.gradle.api.tasks.bundling.Jar
+
 plugins {
     id("network-generator-convention")
     id("kmp-library-convention")
