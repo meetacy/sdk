@@ -7,7 +7,6 @@ import app.meetacy.sdk.types.datetime.Date
 import app.meetacy.sdk.types.email.Email
 import app.meetacy.sdk.types.file.FileId
 import app.meetacy.sdk.types.location.Location
-import app.meetacy.sdk.types.datetime.DateOrTime
 import app.meetacy.sdk.types.meeting.Meeting
 import app.meetacy.sdk.types.meeting.MeetingId
 import app.meetacy.sdk.types.user.RegularUser
@@ -19,7 +18,7 @@ import dev.icerock.moko.network.generated.models.User as GeneratedUser
 
 internal fun GeneratedUser.mapToUser(): User = if (isSelf) {
     SelfUser(
-        id = UserId(identity),
+        id = UserId(id),
         nickname = nickname,
         email = email?.let(::Email),
         emailVerified = emailVerified ?: error("Self user must always return emailVerified parameter"),
@@ -27,28 +26,15 @@ internal fun GeneratedUser.mapToUser(): User = if (isSelf) {
     )
 } else {
     RegularUser(
-        id = UserId(identity),
+        id = UserId(id),
         nickname = nickname,
         avatarId = avatarIdentity?.let(::FileId)
     )
 }
 
 internal fun GeneratedMeeting.mapToMeeting(): Meeting = Meeting(
-    id = MeetingId(identity),
-    creator = when (creator.isSelf) {
-        true -> SelfUser(
-            id = UserId(creator.identity),
-            email = creator.email?.let(::Email),
-            nickname = creator.nickname,
-            emailVerified = creator.emailVerified!!,
-            avatarId = creator.avatarIdentity?.let(::FileId)
-        )
-        false -> RegularUser(
-            id = UserId(creator.identity),
-            nickname = creator.nickname,
-            avatarId = creator.avatarIdentity?.let(::FileId)
-        )
-    },
+    id = MeetingId(id),
+    creator = creator.mapToUser(),
     date = Date(date),
     location = Location(
         location.latitude,
@@ -59,7 +45,7 @@ internal fun GeneratedMeeting.mapToMeeting(): Meeting = Meeting(
     participantsCount = participantsCount,
     isParticipating = isParticipating,
     previewParticipants = previewParticipants.map(GeneratedUser::mapToUser),
-    avatarId = avatarIdentity?.let(::FileId),
+    avatarId = avatarId?.let(::FileId),
     visibility = when (visibility) {
         GeneratedMeeting.Visibility.PUBLIC -> Meeting.Visibility.Public
         GeneratedMeeting.Visibility.PRIVATE -> Meeting.Visibility.Private

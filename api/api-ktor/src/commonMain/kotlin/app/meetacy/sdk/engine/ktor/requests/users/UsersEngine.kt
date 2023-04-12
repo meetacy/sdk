@@ -21,7 +21,7 @@ internal class UsersEngine(
     suspend fun getMe(request: GetMeRequest): GetMeRequest.Response {
         val response = base.usersGetPost(
             getUserRequest = GeneratedGetUserRequest(
-                accessIdentity = request.token.string
+                token = request.token.string
             )
         )
 
@@ -34,8 +34,8 @@ internal class UsersEngine(
     suspend fun getUser(request: GetUserRequest): GetUserRequest.Response {
         val response = base.usersGetPost(
             getUserRequest = GeneratedGetUserRequest(
-                accessIdentity = request.token.string,
-                identity = request.userId.string,
+                token = request.token.string,
+                id = request.userId.string,
             )
         )
 
