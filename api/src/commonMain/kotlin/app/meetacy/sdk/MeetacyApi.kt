@@ -10,9 +10,11 @@ import app.meetacy.sdk.users.UsersApi
 import app.meetacy.sdk.types.annotation.UnsafeConstructor
 import app.meetacy.sdk.types.auth.Token
 import app.meetacy.sdk.types.user.SelfUser
+import app.meetacy.sdk.version.ApiVersion
 
 public class MeetacyApi(
-    public val engine: MeetacyRequestsEngine
+    public val engine: MeetacyRequestsEngine,
+    public val version: ApiVersion
 ) {
     public val files: FilesApi = FilesApi(api = this)
     public val auth: AuthApi = AuthApi(api = this)
