@@ -1,27 +1,30 @@
 package app.meetacy.sdk.engine.ktor.requests.meetings
 
 import app.meetacy.sdk.engine.ktor.mapToMeeting
-import app.meetacy.sdk.engine.requests.CreateMeetingRequest
-import app.meetacy.sdk.engine.requests.GetMeetingRequest
-import app.meetacy.sdk.engine.requests.ListMeetingsHistoryRequest
-import app.meetacy.sdk.engine.requests.ListMeetingsMapRequest
-import app.meetacy.sdk.engine.requests.ParticipateMeetingRequest
+import app.meetacy.sdk.engine.requests.*
 import app.meetacy.sdk.types.meeting.Meeting
+import app.meetacy.sdk.types.optional.ifPresent
 import app.meetacy.sdk.types.paging.PagingId
 import app.meetacy.sdk.types.paging.PagingResponse
+import app.meetacy.sdk.types.url.Url
 import dev.icerock.moko.network.generated.apis.MeetingsApiImpl
 import dev.icerock.moko.network.generated.models.*
 import dev.icerock.moko.network.generated.models.AccessMeetingIdRequest
 import dev.icerock.moko.network.generated.models.ListMeetingsRequest
 import dev.icerock.moko.network.generated.models.Location
 import io.ktor.client.*
+import io.ktor.client.call.*
+import io.ktor.client.request.*
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.put
+import kotlinx.serialization.json.putJsonObject
 import dev.icerock.moko.network.generated.models.CreateMeetingRequest as GeneratedCreateMeetingRequest
 import dev.icerock.moko.network.generated.models.Meeting as GeneratedMeeting
 
 internal class MeetingsEngine(
-    baseUrl: String,
-    httpClient: HttpClient,
+    private val baseUrl: String,
+    private val httpClient: HttpClient,
     json: Json
 ) {
     private val base = MeetingsApiImpl(baseUrl, httpClient, json)
@@ -86,6 +89,44 @@ internal class MeetingsEngine(
         val meeting = response.mapToMeeting()
 
         return CreateMeetingRequest.Response(meeting)
+    }
+
+    suspend fun editMeeting(request: EditMeetingRequest): EditMeetingRequest.Response = with(request) {
+        val url = Url(baseUrl) / "meetings" / "edit"
+
+        val meeting = httpClient.post(url.string) {
+            setBody(
+                buildJsonObject {
+                    put("token", token.string)
+                    put("meetingId", meetingId.string)
+
+                    title.ifPresent { title ->
+                        put("title", title)
+                    }
+                    description.ifPresent { description ->
+                        put("description", description)
+                    }
+                    location.ifPresent { location ->
+                        putJsonObject("location") {
+                            put("latitude", location.latitude)
+                            put("longitude", location.longitude)
+                        }
+                    }
+                    date.ifPresent { date ->
+                        put("date", date.iso8601)
+                    }
+                    avatarId.ifPresent { avatarId ->
+                        put("avatarId", avatarId?.string)
+                    }
+                    visibility.ifPresent { visibility ->
+                        put("visibility", visibility.name.lowercase())
+                    }
+                }
+            )
+
+        }.body<Meeting>()
+
+        return EditMeetingRequest.Response(meeting)
     }
 
     suspend fun participateMeeting(request: ParticipateMeetingRequest) {

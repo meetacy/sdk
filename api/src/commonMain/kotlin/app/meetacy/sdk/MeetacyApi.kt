@@ -6,10 +6,10 @@ import app.meetacy.sdk.engine.requests.GetMeRequest
 import app.meetacy.sdk.files.FilesApi
 import app.meetacy.sdk.friends.FriendsApi
 import app.meetacy.sdk.meetings.MeetingsApi
-import app.meetacy.sdk.users.UsersApi
 import app.meetacy.sdk.types.annotation.UnsafeConstructor
 import app.meetacy.sdk.types.auth.Token
 import app.meetacy.sdk.types.user.SelfUser
+import app.meetacy.sdk.users.UsersApi
 
 public class MeetacyApi(
     public val engine: MeetacyRequestsEngine
