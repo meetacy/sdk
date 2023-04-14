@@ -23,7 +23,7 @@ internal class AuthEngine(
             generateIdentityRequest = GenerateIdentityRequest(
                 nickname = request.nickname
             ),
-            apiVersion = request.apiVersion.int
+            apiVersion = request.apiVersion.int.toString()
         )
 
         return GenerateAuthRequest.Response(token = Token(response.result))

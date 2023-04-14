@@ -29,7 +29,7 @@ paths:
           description: The version of API to invoke request with
           required: true
           schema:
-            type: integer
+            type: string
       tags:
         - auth
       summary: Email confirmation
@@ -67,7 +67,7 @@ paths:
         description: The version of API to invoke request with
         required: true
         schema:
-          type: integer
+          type: string
     post:
       tags:
         - auth
@@ -99,7 +99,7 @@ paths:
         description: The version of API to invoke request with
         required: true
         schema:
-          type: integer
+          type: string
     post:
       tags:
         - auth
@@ -135,7 +135,7 @@ paths:
         description: The version of API to invoke request with
         required: true
         schema:
-          type: integer
+          type: string
     get:
       summary: Download file from server
       tags:
@@ -171,7 +171,7 @@ paths:
         description: The version of API to invoke request with
         required: true
         schema:
-          type: integer
+          type: string
     post:
       summary: Uploading a file to the server
       tags:
@@ -219,7 +219,7 @@ paths:
         description: The version of API to invoke request with
         required: true
         schema:
-          type: integer
+          type: string
     post:
       tags:
         - friends
@@ -258,7 +258,7 @@ paths:
         description: The version of API to invoke request with
         required: true
         schema:
-          type: integer
+          type: string
     post:
       summary: Delete friend
       tags:
@@ -295,7 +295,7 @@ paths:
         description: The version of API to invoke request with
         required: true
         schema:
-          type: integer
+          type: string
     post:
       summary: Get list of friends
       tags:
@@ -327,7 +327,7 @@ paths:
         description: The version of API to invoke request with
         required: true
         schema:
-          type: integer
+          type: string
     post:
       summary: Adding meetings avatar
       tags:
@@ -366,7 +366,7 @@ paths:
         description: The version of API to invoke request with
         required: true
         schema:
-          type: integer
+          type: string
     post:
       summary: Removal meetings avatar
       tags:
@@ -403,7 +403,7 @@ paths:
         description: The version of API to invoke request with
         required: true
         schema:
-          type: integer
+          type: string
     post:
       summary: Creating a meeting
       tags:
@@ -440,7 +440,7 @@ paths:
         description: The version of API to invoke request with
         required: true
         schema:
-          type: integer
+          type: string
     post:
       summary: Deleting a meeting
       tags:
@@ -477,7 +477,7 @@ paths:
         description: The version of API to invoke request with
         required: true
         schema:
-          type: integer
+          type: string
     post:
       summary: Getting meeting information
       tags:
@@ -514,7 +514,7 @@ paths:
         description: The version of API to invoke request with
         required: true
         schema:
-          type: integer
+          type: string
     post:
       summary: Getting a list of meetings
       tags:
@@ -549,7 +549,7 @@ paths:
         description: The version of API to invoke request with
         required: true
         schema:
-          type: integer
+          type: string
     post:
       summary: "Meetings on Map"
       tags:
@@ -583,7 +583,7 @@ paths:
         description: The version of API to invoke request with
         required: true
         schema:
-          type: integer
+          type: string
     post:
       summary: Participate meeting
       tags:
@@ -622,7 +622,7 @@ paths:
         description: The version of API to invoke request with
         required: true
         schema:
-          type: integer
+          type: string
     post:
       tags:
         - notifications
@@ -650,7 +650,7 @@ paths:
         description: The version of API to invoke request with
         required: true
         schema:
-          type: integer
+          type: string
     post:
       tags:
         - notifications
@@ -680,7 +680,7 @@ paths:
         description: The version of API to invoke request with
         required: true
         schema:
-          type: integer
+          type: string
     post:
       summary: Adding user avatar
       tags:
@@ -717,7 +717,7 @@ paths:
         description: The version of API to invoke request with
         required: true
         schema:
-          type: integer
+          type: string
     post:
       summary: Deleting user avatar
       tags:
@@ -752,7 +752,7 @@ paths:
         description: The version of API to invoke request with
         required: true
         schema:
-          type: integer
+          type: string
     post:
       summary: Getting user object
       tags:
