@@ -22,7 +22,8 @@ internal class AuthEngine(
         val response = base.authGeneratePost(
             generateIdentityRequest = GenerateIdentityRequest(
                 nickname = request.nickname
-            )
+            ),
+            apiVersion = request.apiVersion.int
         )
 
         return GenerateAuthRequest.Response(token = Token(response.result))

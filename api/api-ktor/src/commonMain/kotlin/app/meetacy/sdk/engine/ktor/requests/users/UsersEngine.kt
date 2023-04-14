@@ -22,7 +22,8 @@ internal class UsersEngine(
         val response = base.usersGetPost(
             getUserRequest = GeneratedGetUserRequest(
                 token = request.token.string
-            )
+            ),
+            apiVersion = request.apiVersion.int
         )
 
         return GetMeRequest.Response(
@@ -36,7 +37,8 @@ internal class UsersEngine(
             getUserRequest = GeneratedGetUserRequest(
                 token = request.token.string,
                 id = request.userId.string,
-            )
+            ),
+            apiVersion = request.apiVersion.int
         )
 
         return GetUserRequest.Response(

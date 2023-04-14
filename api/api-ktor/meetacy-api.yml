@@ -23,6 +23,13 @@ tags:
 paths:
   /auth/email/confirm:
     post:
+      parameters:
+        - name: Api-Version
+          in: header
+          description: The version of API to invoke request with
+          required: true
+          schema:
+            type: integer
       tags:
         - auth
       summary: Email confirmation
@@ -54,6 +61,13 @@ paths:
                 LinkMaxAttemptsReached:
                   $ref: '#/components/examples/LinkMaxAttemptsReached'
   /auth/email/link:
+    parameters:
+      - name: Api-Version
+        in: header
+        description: The version of API to invoke request with
+        required: true
+        schema:
+          type: integer
     post:
       tags:
         - auth
@@ -79,6 +93,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/InvalidResponse'
   /auth/generate:
+    parameters:
+      - name: Api-Version
+        in: header
+        description: The version of API to invoke request with
+        required: true
+        schema:
+          type: integer
     post:
       tags:
         - auth
@@ -108,6 +129,13 @@ paths:
                 errorCode: 1
                 errorMessage: "Please provide a valid nickname"
   /files/download:
+    parameters:
+      - name: Api-Version
+        in: header
+        description: The version of API to invoke request with
+        required: true
+        schema:
+          type: integer
     get:
       summary: Download file from server
       tags:
@@ -137,6 +165,13 @@ paths:
                 errorCode: 1
                 errorMessage: "Please provide a valid fileId"
   /files/upload:
+    parameters:
+      - name: Api-Version
+        in: header
+        description: The version of API to invoke request with
+        required: true
+        schema:
+          type: integer
     post:
       summary: Uploading a file to the server
       tags:
@@ -178,6 +213,13 @@ paths:
                 LimitSize:
                   $ref: '#/components/examples/FileSizeLimit'
   /friends/add:
+    parameters:
+      - name: Api-Version
+        in: header
+        description: The version of API to invoke request with
+        required: true
+        schema:
+          type: integer
     post:
       tags:
         - friends
@@ -210,6 +252,13 @@ paths:
                 FriendAlreadyAdded:
                   $ref: '#/components/examples/FriendAlreadyAdded'
   /friends/delete:
+    parameters:
+      - name: Api-Version
+        in: header
+        description: The version of API to invoke request with
+        required: true
+        schema:
+          type: integer
     post:
       summary: Delete friend
       tags:
@@ -240,6 +289,13 @@ paths:
                 FriendNotFound:
                   $ref: '#/components/examples/FriendNotFound'
   /friends/list:
+    parameters:
+      - name: Api-Version
+        in: header
+        description: The version of API to invoke request with
+        required: true
+        schema:
+          type: integer
     post:
       summary: Get list of friends
       tags:
@@ -265,6 +321,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/InvalidResponse'
   /meetings/avatar/add:
+    parameters:
+      - name: Api-Version
+        in: header
+        description: The version of API to invoke request with
+        required: true
+        schema:
+          type: integer
     post:
       summary: Adding meetings avatar
       tags:
@@ -297,6 +360,13 @@ paths:
                 InvalidMeetingFileId:
                   $ref: '#/components/examples/InvalidFileId'
   /meetings/avatar/delete:
+    parameters:
+      - name: Api-Version
+        in: header
+        description: The version of API to invoke request with
+        required: true
+        schema:
+          type: integer
     post:
       summary: Removal meetings avatar
       tags:
@@ -327,6 +397,13 @@ paths:
                 MeetingNotFound:
                   $ref: '#/components/examples/InvalidMeetingId'
   /meetings/create:
+    parameters:
+      - name: Api-Version
+        in: header
+        description: The version of API to invoke request with
+        required: true
+        schema:
+          type: integer
     post:
       summary: Creating a meeting
       tags:
@@ -357,6 +434,13 @@ paths:
                 InvalidUtf8String:
                   $ref: '#/components/examples/InvalidNickname'
   /meetings/delete:
+    parameters:
+      - name: Api-Version
+        in: header
+        description: The version of API to invoke request with
+        required: true
+        schema:
+          type: integer
     post:
       summary: Deleting a meeting
       tags:
@@ -387,6 +471,13 @@ paths:
                 MeetingNotFound:
                   $ref: '#/components/examples/InvalidMeetingId'
   /meetings/get:
+    parameters:
+      - name: Api-Version
+        in: header
+        description: The version of API to invoke request with
+        required: true
+        schema:
+          type: integer
     post:
       summary: Getting meeting information
       tags:
@@ -417,6 +508,13 @@ paths:
                 MeetingNotFound:
                   $ref: '#/components/examples/InvalidMeetingId'
   /meetings/history/list:
+    parameters:
+      - name: Api-Version
+        in: header
+        description: The version of API to invoke request with
+        required: true
+        schema:
+          type: integer
     post:
       summary: Getting a list of meetings
       tags:
@@ -445,6 +543,13 @@ paths:
                 InvalidAccessIdentity:
                   $ref: '#/components/examples/InvalidToken'
   /meetings/map/list:
+    parameters:
+      - name: Api-Version
+        in: header
+        description: The version of API to invoke request with
+        required: true
+        schema:
+          type: integer
     post:
       summary: "Meetings on Map"
       tags:
@@ -472,6 +577,13 @@ paths:
                 InvalidAccessIdentity:
                   $ref: '#/components/examples/InvalidToken'
   /meetings/participate:
+    parameters:
+      - name: Api-Version
+        in: header
+        description: The version of API to invoke request with
+        required: true
+        schema:
+          type: integer
     post:
       summary: Participate meeting
       tags:
@@ -504,6 +616,13 @@ paths:
                 MeetingAlreadyParticipate:
                   $ref: '#/components/examples/MeetingAlreadyParticipate'
   /notifications/get:
+    parameters:
+      - name: Api-Version
+        in: header
+        description: The version of API to invoke request with
+        required: true
+        schema:
+          type: integer
     post:
       tags:
         - notifications
@@ -525,6 +644,13 @@ paths:
                 InvalidAccessIdentity:
                   $ref: '#/components/examples/InvalidToken'
   /notifications/read:
+    parameters:
+      - name: Api-Version
+        in: header
+        description: The version of API to invoke request with
+        required: true
+        schema:
+          type: integer
     post:
       tags:
         - notifications
@@ -548,6 +674,13 @@ paths:
                 LastNotificationIdInvalid:
                   $ref: '#/components/examples/LastNotificationIdInvalid'
   /users/avatar/add:
+    parameters:
+      - name: Api-Version
+        in: header
+        description: The version of API to invoke request with
+        required: true
+        schema:
+          type: integer
     post:
       summary: Adding user avatar
       tags:
@@ -578,6 +711,13 @@ paths:
                 InvalidUserAvatarIdentity:
                   $ref: '#/components/examples/InvalidFileId'
   /users/avatar/delete:
+    parameters:
+      - name: Api-Version
+        in: header
+        description: The version of API to invoke request with
+        required: true
+        schema:
+          type: integer
     post:
       summary: Deleting user avatar
       tags:
@@ -606,6 +746,13 @@ paths:
                 InvalidAccessIdentity:
                   $ref: '#/components/examples/InvalidToken'
   /users/get:
+    parameters:
+      - name: Api-Version
+        in: header
+        description: The version of API to invoke request with
+        required: true
+        schema:
+          type: integer
     post:
       summary: Getting user object
       tags:
