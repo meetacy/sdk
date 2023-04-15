@@ -56,10 +56,10 @@ public class KtorMeetacyEngine(
             is ListMeetingsMapRequest -> meetings.listMeetingsMap(request) as T
             is CreateMeetingRequest -> meetings.createMeeting(request) as T
             is ParticipateMeetingRequest -> meetings.participateMeeting(request) as T
+            is GetMeetingRequest -> meetings.getMeeting(request) as T
             // not yet supported
             is LinkEmailRequest -> notSupported()
             is ConfirmEmailRequest -> notSupported()
-            is GetMeetingRequest -> meetings.getMeeting(request) as T
         }
     }
 

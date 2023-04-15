@@ -30,7 +30,8 @@ internal class FriendsEngine(
             accessFriendRequest = AccessFriendRequest(
                 token = request.token.string,
                 friendId = request.friendId.string
-            )
+            ),
+            apiVersion = request.apiVersion.int.toString()
         )
     }
 
@@ -39,7 +40,8 @@ internal class FriendsEngine(
             accessFriendRequest = AccessFriendRequest(
                 token = request.token.string,
                 friendId = request.friendId.string
-            )
+            ),
+            apiVersion = request.apiVersion.int.toString()
         )
     }
 
@@ -49,7 +51,8 @@ internal class FriendsEngine(
                 token = request.token.string,
                 amount = request.amount.int,
                 pagingId = request.pagingId?.string
-            )
+            ),
+            apiVersion = request.apiVersion.int.toString()
         )
 
         val paging = PagingResponse(

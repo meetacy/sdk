@@ -10,6 +10,7 @@ import app.meetacy.sdk.users.UsersApi
 import app.meetacy.sdk.types.annotation.UnsafeConstructor
 import app.meetacy.sdk.types.auth.Token
 import app.meetacy.sdk.types.user.SelfUser
+import app.meetacy.sdk.version.ApiVersion
 
 public class MeetacyApi(
     public val engine: MeetacyRequestsEngine
