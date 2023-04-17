@@ -25,7 +25,7 @@ public class UsersApi(private val api: MeetacyApi) {
         token: Token,
         nickname: String,
         avatarId: FileId?
-    ): SelfUser = edit(
+    ): SelfUserRepository = edit(
         token = token,
         nickname = Optional.Present(nickname),
         avatarId = Optional.Present(avatarId)
@@ -35,7 +35,11 @@ public class UsersApi(private val api: MeetacyApi) {
         token: Token,
         nickname: Optional<String> = Optional.Undefined,
         avatarId: Optional<FileId?> = Optional.Undefined
-    ): SelfUser {
-        return api.engine.execute(EditUserRequest(token, nickname, avatarId)).user
+    ): SelfUserRepository {
+        val user = api.engine.execute(EditUserRequest(token, nickname, avatarId)).user
+        return SelfUserRepository(
+            data = user,
+            api = api.authorized(token)
+        )
     }
 }

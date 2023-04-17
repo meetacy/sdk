@@ -2,6 +2,7 @@ package app.meetacy.sdk.meetings
 
 import app.meetacy.sdk.AuthorizedMeetacyApi
 import app.meetacy.sdk.files.FileRepository
+import app.meetacy.sdk.types.auth.Token
 import app.meetacy.sdk.types.datetime.Date
 import app.meetacy.sdk.types.location.Location
 import app.meetacy.sdk.types.file.FileId
@@ -61,6 +62,10 @@ public class AuthorizedMeetingRepository(
             avatarId = avatarId,
             visibility = visibility
         )
+    }
+
+    public suspend fun updated(): AuthorizedMeetingRepository {
+        return api.meetings.get(id)
     }
 
     public suspend fun participate() {

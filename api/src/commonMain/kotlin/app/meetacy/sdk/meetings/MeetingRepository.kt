@@ -74,4 +74,10 @@ public class MeetingRepository(
     public suspend fun participate(token: Token) {
         api.meetings.participate(token, id)
     }
+
+    public suspend fun updated(
+        token: Token
+    ): MeetingRepository {
+        return api.meetings.get(token, id)
+    }
 }
