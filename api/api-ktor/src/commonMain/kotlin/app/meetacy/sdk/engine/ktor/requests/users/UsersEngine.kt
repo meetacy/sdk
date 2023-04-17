@@ -1,19 +1,28 @@
 package app.meetacy.sdk.engine.ktor.requests.users
 
 import app.meetacy.sdk.engine.ktor.mapToUser
+import app.meetacy.sdk.engine.requests.EditUserRequest
 import app.meetacy.sdk.engine.requests.GetMeRequest
 import app.meetacy.sdk.engine.requests.GetUserRequest
 import app.meetacy.sdk.types.exception.meetacyApiError
+import app.meetacy.sdk.types.optional.ifPresent
+import app.meetacy.sdk.types.url.Url
 import app.meetacy.sdk.types.user.SelfUser
+import app.meetacy.sdk.types.user.User
 import dev.icerock.moko.network.generated.apis.UserApi
 import dev.icerock.moko.network.generated.apis.UserApiImpl
 import io.ktor.client.*
+import io.ktor.client.call.*
+import io.ktor.client.request.*
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.put
 import dev.icerock.moko.network.generated.models.GetUserRequest as GeneratedGetUserRequest
+import dev.icerock.moko.network.generated.models.User as GeneratedUser
 
 internal class UsersEngine(
-    baseUrl: String,
-    httpClient: HttpClient,
+    private val baseUrl: String,
+    private val httpClient: HttpClient,
     json: Json
 ) {
     private val base: UserApi = UserApiImpl(baseUrl, httpClient, json)
@@ -44,5 +53,26 @@ internal class UsersEngine(
         return GetUserRequest.Response(
             response.result?.mapToUser() ?: meetacyApiError("'result' should present")
         )
+    }
+
+    suspend fun editUser(request: EditUserRequest): EditUserRequest.Response = with(request) {
+        val url = Url(baseUrl) / "users" / "edit"
+
+        val user = httpClient.post(url.string) {
+            setBody(
+                buildJsonObject {
+                    put("token", token.string)
+
+                    nickname.ifPresent { nickname ->
+                        put("nickname", nickname)
+                    }
+                    avatarId.ifPresent { avatarId ->
+                        put("avatarId", avatarId?.string)
+                    }
+                }
+            )
+        }.body<GeneratedUser>()
+
+        return EditUserRequest.Response(user = user.mapToUser() as SelfUser)
     }
 }
