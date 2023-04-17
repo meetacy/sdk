@@ -1,5 +1,6 @@
 package app.meetacy.sdk.engine.ktor
 
+import app.meetacy.sdk.MeetacyApi
 import app.meetacy.sdk.engine.MeetacyRequestsEngine
 import app.meetacy.sdk.engine.ktor.requests.auth.AuthEngine
 import app.meetacy.sdk.engine.ktor.requests.friends.FriendsEngine
@@ -51,12 +52,14 @@ public class KtorMeetacyEngine(
             // users
             is GetMeRequest -> users.getMe(request) as T
             is GetUserRequest -> users.getUser(request) as T
+            is EditUserRequest -> users.editUser(request) as T
             // meetings
             is ListMeetingsHistoryRequest -> meetings.listMeetingsHistory(request) as T
             is ListMeetingsMapRequest -> meetings.listMeetingsMap(request) as T
             is CreateMeetingRequest -> meetings.createMeeting(request) as T
             is ParticipateMeetingRequest -> meetings.participateMeeting(request) as T
             is GetMeetingRequest -> meetings.getMeeting(request) as T
+            is EditMeetingRequest -> meetings.editMeeting(request) as T
             // not yet supported
             is LinkEmailRequest -> notSupported()
             is ConfirmEmailRequest -> notSupported()

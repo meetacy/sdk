@@ -2,15 +2,18 @@ package app.meetacy.sdk.meetings
 
 import app.meetacy.sdk.MeetacyApi
 import app.meetacy.sdk.engine.requests.CreateMeetingRequest
+import app.meetacy.sdk.engine.requests.EditMeetingRequest
 import app.meetacy.sdk.engine.requests.GetMeetingRequest
 import app.meetacy.sdk.engine.requests.ParticipateMeetingRequest
 import app.meetacy.sdk.meetings.history.MeetingsHistoryApi
 import app.meetacy.sdk.meetings.map.MeetingsMapApi
 import app.meetacy.sdk.types.auth.Token
 import app.meetacy.sdk.types.datetime.Date
+import app.meetacy.sdk.types.file.FileId
 import app.meetacy.sdk.types.location.Location
 import app.meetacy.sdk.types.meeting.Meeting
 import app.meetacy.sdk.types.meeting.MeetingId
+import app.meetacy.sdk.types.optional.Optional
 
 /**
  * When modifying this class, corresponding classes should be altered:
@@ -41,6 +44,55 @@ public class MeetingsApi(private val api: MeetacyApi) {
         ).meeting
 
         return MeetingRepository(meeting, api)
+    }
+
+    public suspend fun edit(
+        token: Token,
+        meetingId: MeetingId,
+        title: String,
+        date: Date,
+        location: Location,
+        description: String?,
+        avatarId: FileId?,
+        visibility: Meeting.Visibility
+    ): MeetingRepository = edit(
+        token = token,
+        meetingId = meetingId,
+        title = Optional.Present(title),
+        date = Optional.Present(date),
+        location = Optional.Present(location),
+        description = Optional.Present(description),
+        avatarId = Optional.Present(avatarId),
+        visibility = Optional.Present(visibility),
+    )
+
+    public suspend fun edit(
+        token: Token,
+        meetingId: MeetingId,
+        title: Optional<String> = Optional.Undefined,
+        date: Optional<Date> = Optional.Undefined,
+        location: Optional<Location> = Optional.Undefined,
+        description: Optional<String?> = Optional.Undefined,
+        avatarId: Optional<FileId?> = Optional.Undefined,
+        visibility: Optional<Meeting.Visibility> = Optional.Undefined
+    ): MeetingRepository {
+        val meeting = api.engine.execute(
+            EditMeetingRequest(
+                token = token,
+                meetingId = meetingId,
+                title = title,
+                date = date,
+                location = location,
+                description = description,
+                avatarId = avatarId,
+                visibility = visibility
+            )
+        ).meeting
+
+        return MeetingRepository(
+            data = meeting,
+            api = api
+        )
     }
 
     public suspend fun participate(token: Token, meetingId: MeetingId) {

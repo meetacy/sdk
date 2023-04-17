@@ -8,6 +8,8 @@ import app.meetacy.sdk.friends.AuthorizedFriendsApi
 import app.meetacy.sdk.meetings.AuthorizedMeetingsApi
 import app.meetacy.sdk.types.auth.Token
 import app.meetacy.sdk.types.email.Email
+import app.meetacy.sdk.types.file.FileId
+import app.meetacy.sdk.types.optional.Optional
 import app.meetacy.sdk.types.user.SelfUser
 import app.meetacy.sdk.types.user.UserId
 
@@ -27,4 +29,14 @@ public class SelfUserRepository(
     public val friends: AuthorizedFriendsApi get() = api.friends
     public val users: AuthorizedUsersApi get() = api.users
     public val meetings: AuthorizedMeetingsApi  get() = api.meetings
+
+    public suspend fun edited(
+        nickname: String,
+        avatarId: FileId?
+    ): SelfUser = api.users.edit(nickname, avatarId)
+
+    public suspend fun edited(
+        nickname: Optional<String> = Optional.Undefined,
+        avatarId: Optional<FileId?> = Optional.Undefined
+    ): SelfUser = api.users.edit(nickname, avatarId)
 }
