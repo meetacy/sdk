@@ -11,9 +11,13 @@ import app.meetacy.sdk.types.user.SelfUser
 import app.meetacy.sdk.types.user.User
 import dev.icerock.moko.network.generated.apis.UserApi
 import dev.icerock.moko.network.generated.apis.UserApiImpl
+import dev.icerock.moko.network.generated.models.EditUserResponse
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
+import io.ktor.content.*
+import io.ktor.http.*
+import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
@@ -58,20 +62,27 @@ internal class UsersEngine(
     suspend fun editUser(request: EditUserRequest): EditUserRequest.Response = with(request) {
         val url = Url(baseUrl) / "users" / "edit"
 
-        val user = httpClient.post(url.string) {
-            setBody(
-                buildJsonObject {
-                    put("token", token.string)
+        val jsonObject = buildJsonObject {
+            put("token", token.string)
 
-                    nickname.ifPresent { nickname ->
-                        put("nickname", nickname)
-                    }
-                    avatarId.ifPresent { avatarId ->
-                        put("avatarId", avatarId?.string)
-                    }
-                }
+            nickname.ifPresent { nickname ->
+                put("nickname", nickname)
+            }
+            avatarId.ifPresent { avatarId ->
+                put("avatarId", avatarId?.string)
+            }
+        }
+
+        val string = httpClient.post(url.string) {
+            setBody(
+                TextContent(
+                    text = jsonObject.toString(),
+                    contentType = ContentType.Application.Json
+                )
             )
-        }.body<GeneratedUser>()
+        }.body<String>()
+
+        val user = Json.decodeFromString<EditUserResponse>(string).result
 
         return EditUserRequest.Response(user = user.mapToUser() as SelfUser)
     }

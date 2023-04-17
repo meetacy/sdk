@@ -11,11 +11,15 @@ import app.meetacy.sdk.types.url.Url
 import dev.icerock.moko.network.generated.apis.MeetingsApiImpl
 import dev.icerock.moko.network.generated.models.*
 import dev.icerock.moko.network.generated.models.AccessMeetingIdRequest
+import dev.icerock.moko.network.generated.models.ListMapMeetingsRequest
 import dev.icerock.moko.network.generated.models.ListMeetingsRequest
 import dev.icerock.moko.network.generated.models.Location
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
+import io.ktor.content.*
+import io.ktor.http.*
+import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
@@ -98,39 +102,45 @@ internal class MeetingsEngine(
     suspend fun editMeeting(request: EditMeetingRequest): EditMeetingRequest.Response = with(request) {
         val url = Url(baseUrl) / "meetings" / "edit"
 
-        val meeting = httpClient.post(url.string) {
-            setBody(
-                buildJsonObject {
-                    put("token", token.string)
-                    put("meetingId", meetingId.string)
+        val jsonObject = buildJsonObject {
+            put("token", token.string)
+            put("meetingId", meetingId.string)
 
-                    title.ifPresent { title ->
-                        put("title", title)
-                    }
-                    description.ifPresent { description ->
-                        put("description", description)
-                    }
-                    location.ifPresent { location ->
-                        putJsonObject("location") {
-                            put("latitude", location.latitude)
-                            put("longitude", location.longitude)
-                        }
-                    }
-                    date.ifPresent { date ->
-                        put("date", date.iso8601)
-                    }
-                    avatarId.ifPresent { avatarId ->
-                        put("avatarId", avatarId?.string)
-                    }
-                    visibility.ifPresent { visibility ->
-                        put("visibility", visibility.name.lowercase())
-                    }
+            title.ifPresent { title ->
+                put("title", title)
+            }
+            description.ifPresent { description ->
+                put("description", description)
+            }
+            location.ifPresent { location ->
+                putJsonObject("location") {
+                    put("latitude", location.latitude)
+                    put("longitude", location.longitude)
                 }
+            }
+            date.ifPresent { date ->
+                put("date", date.iso8601)
+            }
+            avatarId.ifPresent { avatarId ->
+                put("avatarId", avatarId?.string)
+            }
+            visibility.ifPresent { visibility ->
+                put("visibility", visibility.name.lowercase())
+            }
+        }
+
+        val string = httpClient.post(url.string) {
+            setBody(
+                TextContent(
+                    text = jsonObject.toString(),
+                    contentType = ContentType.Application.Json
+                )
             )
+        }.body<String>()
 
-        }.body<Meeting>()
+        val meeting = Json.decodeFromString<EditMeetingResponse>(string).result
 
-        return EditMeetingRequest.Response(meeting)
+        return EditMeetingRequest.Response(meeting.mapToMeeting())
     }
 
     suspend fun participateMeeting(request: ParticipateMeetingRequest) {

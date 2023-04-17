@@ -344,7 +344,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/StatusTrueResponse'
+                $ref: '#/components/schemas/EditMeetingResponse'
         "400":
           description: An example of a successful generated response with an token
           content:
@@ -701,9 +701,7 @@ paths:
       summary: Editing user object
       tags:
         - user
-      description: хуй
       requestBody:
-        description: хуй
         content:
           application/json:
             schema:
@@ -1022,6 +1020,17 @@ components:
         - "location"
         - "visibility"
       additionalProperties: false
+    EditMeetingResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+          example: true
+        result:
+          $ref: '#/components/schemas/Meeting'
+      required:
+        - "status"
+        - "result"
     EditMeetingRequest:
       type: "object"
       properties:
@@ -1248,6 +1257,9 @@ components:
           example: true
         result:
           $ref: '#/components/schemas/User'
+      required:
+        - "status"
+        - "result"
     User:
       type: object
       properties:
@@ -1283,7 +1295,6 @@ components:
         - token
       additionalProperties: false
     EditUserRequest:
-      description: хуй
       type: object
       properties:
         token:
