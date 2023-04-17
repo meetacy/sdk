@@ -3,7 +3,10 @@ package app.meetacy.sdk.users
 import app.meetacy.sdk.MeetacyApi
 import app.meetacy.sdk.files.FileRepository
 import app.meetacy.sdk.types.auth.Token
+import app.meetacy.sdk.types.file.FileId
+import app.meetacy.sdk.types.optional.Optional
 import app.meetacy.sdk.types.user.RegularUser
+import app.meetacy.sdk.types.user.SelfUser
 import app.meetacy.sdk.types.user.UserId
 
 public class RegularUserRepository(
