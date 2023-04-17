@@ -2,6 +2,7 @@ package app.meetacy.sdk.engine.ktor.requests.meetings
 
 import app.meetacy.sdk.engine.ktor.mapToMeeting
 import app.meetacy.sdk.engine.requests.*
+import app.meetacy.sdk.engine.requests.EditMeetingRequest
 import app.meetacy.sdk.types.meeting.Meeting
 import app.meetacy.sdk.types.optional.ifPresent
 import app.meetacy.sdk.types.paging.PagingId
