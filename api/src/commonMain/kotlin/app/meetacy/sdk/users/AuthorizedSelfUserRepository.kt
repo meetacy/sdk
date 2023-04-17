@@ -35,10 +35,12 @@ public class AuthorizedSelfUserRepository(
     public suspend fun edited(
         nickname: String,
         avatarId: FileId?
-    ): SelfUser = api.users.edit(nickname, avatarId)
+    ): AuthorizedSelfUserRepository = api.users.edit(nickname, avatarId)
 
     public suspend fun edited(
         nickname: Optional<String> = Optional.Undefined,
         avatarId: Optional<FileId?> = Optional.Undefined
-    ): SelfUser = api.users.edit(nickname, avatarId)
+    ): AuthorizedSelfUserRepository = api.users.edit(nickname, avatarId)
+
+    public suspend fun updated(): AuthorizedSelfUserRepository = api.getMe()
 }

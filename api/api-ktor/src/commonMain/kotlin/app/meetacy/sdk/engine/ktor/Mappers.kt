@@ -22,13 +22,13 @@ internal fun GeneratedUser.mapToUser(): User = if (isSelf) {
         nickname = nickname,
         email = email?.let(::Email),
         emailVerified = emailVerified ?: error("Self user must always return emailVerified parameter"),
-        avatarId = avatarIdentity?.let(::FileId)
+        avatarId = avatarId?.let(::FileId)
     )
 } else {
     RegularUser(
         id = UserId(id),
         nickname = nickname,
-        avatarId = avatarIdentity?.let(::FileId)
+        avatarId = avatarId?.let(::FileId)
     )
 }
 

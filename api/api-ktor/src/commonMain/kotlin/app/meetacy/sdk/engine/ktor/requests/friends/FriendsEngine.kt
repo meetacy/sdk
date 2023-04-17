@@ -61,7 +61,7 @@ internal class FriendsEngine(
                 RegularUser(
                     id = UserId(user.id),
                     nickname = user.nickname,
-                    avatarId = user.avatarIdentity?.let(::FileId)
+                    avatarId = user.avatarId?.let(::FileId)
                 )
             }
         )

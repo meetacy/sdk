@@ -4,7 +4,6 @@ import app.meetacy.sdk.AuthorizedMeetacyApi
 import app.meetacy.sdk.types.auth.Token
 import app.meetacy.sdk.types.file.FileId
 import app.meetacy.sdk.types.optional.Optional
-import app.meetacy.sdk.types.user.SelfUser
 import app.meetacy.sdk.types.user.User
 import app.meetacy.sdk.types.user.UserId
 
@@ -22,10 +21,19 @@ public class AuthorizedUsersApi(private val api: AuthorizedMeetacyApi) {
     public suspend fun edit(
         nickname: String,
         avatarId: FileId?
-    ): SelfUser = base.edit(token, nickname, avatarId)
+    ): AuthorizedSelfUserRepository = edit(
+        nickname = Optional.Present(nickname),
+        avatarId = Optional.Present(avatarId)
+    )
 
     public suspend fun edit(
         nickname: Optional<String> = Optional.Undefined,
         avatarId: Optional<FileId?> = Optional.Undefined
-    ): SelfUser = base.edit(token, nickname, avatarId)
+    ): AuthorizedSelfUserRepository {
+        val user = base.edit(token, nickname, avatarId)
+        return AuthorizedSelfUserRepository(
+            data = user.data,
+            api = api
+        )
+    }
 }

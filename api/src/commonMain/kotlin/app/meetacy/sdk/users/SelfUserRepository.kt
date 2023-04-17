@@ -33,10 +33,10 @@ public class SelfUserRepository(
     public suspend fun edited(
         nickname: String,
         avatarId: FileId?
-    ): SelfUser = api.users.edit(nickname, avatarId)
+    ): SelfUserRepository = api.base.users.edit(token, nickname, avatarId)
 
     public suspend fun edited(
         nickname: Optional<String> = Optional.Undefined,
         avatarId: Optional<FileId?> = Optional.Undefined
-    ): SelfUser = api.users.edit(nickname, avatarId)
+    ): SelfUserRepository = api.base.users.edit(token, nickname, avatarId)
 }

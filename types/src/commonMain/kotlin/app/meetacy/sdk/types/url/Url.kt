@@ -7,9 +7,9 @@ public value class Url(public val string: String) {
 
     public operator fun div(url: Url): Url {
         return if (string.endsWith(suffix = "/")) {
-            Url(string = string + url)
+            Url(string = string + url.string)
         } else {
-            Url(string = "$string/$url")
+            Url(string = "$string/${url.string}")
         }
     }
 
