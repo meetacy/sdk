@@ -37,7 +37,8 @@ internal class MeetingsEngine(
                 token = token.string,
                 amount = amount.int,
                 pagingId = pagingId?.string
-            )
+            ),
+            apiVersion = request.apiVersion.int.toString()
         )
 
         val paging = PagingResponse(
@@ -58,7 +59,8 @@ internal class MeetingsEngine(
                     latitude = location.latitude,
                     longitude = location.longitude
                 )
-            )
+            ),
+            apiVersion = request.apiVersion.int.toString()
         )
 
         val data = response.result.map(GeneratedMeeting::mapToMeeting)
@@ -83,7 +85,8 @@ internal class MeetingsEngine(
                     Meeting.Visibility.Public -> GeneratedCreateMeetingRequest.Visibility.PUBLIC
                     Meeting.Visibility.Private -> GeneratedCreateMeetingRequest.Visibility.PRIVATE
                 }
-            )
+            ),
+            apiVersion = request.apiVersion.int.toString()
         ).result
 
         val meeting = response.mapToMeeting()
@@ -134,16 +137,22 @@ internal class MeetingsEngine(
             accessMeetingIdRequest = AccessMeetingIdRequest(
                 token = request.token.string,
                 meetingId = request.meetingId.string
-            )
+            ),
+            apiVersion = request.apiVersion.int.toString()
         )
     }
 
-    suspend fun getMeeting(request: GetMeetingRequest) {
-        base.meetingsGetPost(
+    suspend fun getMeeting(request: GetMeetingRequest): GetMeetingRequest.Response {
+        val response = base.meetingsGetPost(
             accessMeetingIdRequest = AccessMeetingIdRequest(
                 token = request.token.string,
                 meetingId = request.meetingId.string
-            )
+            ),
+            apiVersion = request.apiVersion.int.toString()
         )
+
+        val meeting = response.result.mapToMeeting()
+
+        return GetMeetingRequest.Response(meeting)
     }
 }
