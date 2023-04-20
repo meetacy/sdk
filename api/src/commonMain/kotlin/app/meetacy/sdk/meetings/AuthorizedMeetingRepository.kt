@@ -2,6 +2,7 @@ package app.meetacy.sdk.meetings
 
 import app.meetacy.sdk.AuthorizedMeetacyApi
 import app.meetacy.sdk.files.FileRepository
+import app.meetacy.sdk.meetings.participants.AuthorizedMeetingParticipantsRepository
 import app.meetacy.sdk.types.auth.Token
 import app.meetacy.sdk.types.datetime.Date
 import app.meetacy.sdk.types.location.Location
@@ -28,6 +29,9 @@ public class AuthorizedMeetingRepository(
     public val isParticipating: Boolean get() = data.isParticipating
     public val avatar: FileRepository? get() = FileRepository(data.avatarId, api)
     public val visibility: Meeting.Visibility get() = data.visibility
+
+    public val participants: AuthorizedMeetingParticipantsRepository =
+        AuthorizedMeetingParticipantsRepository(data.id, api)
 
     public suspend fun edited(
         title: String,

@@ -1,8 +1,10 @@
 package app.meetacy.sdk.engine.ktor.requests.meetings
 
 import app.meetacy.sdk.engine.ktor.mapToMeeting
+import app.meetacy.sdk.engine.ktor.mapToUser
 import app.meetacy.sdk.engine.requests.*
 import app.meetacy.sdk.engine.requests.EditMeetingRequest
+import app.meetacy.sdk.engine.requests.ListMeetingParticipantsRequest
 import app.meetacy.sdk.types.meeting.Meeting
 import app.meetacy.sdk.types.optional.ifPresent
 import app.meetacy.sdk.types.paging.PagingId
@@ -25,6 +27,7 @@ import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import kotlinx.serialization.json.putJsonObject
 import dev.icerock.moko.network.generated.models.CreateMeetingRequest as GeneratedCreateMeetingRequest
+import dev.icerock.moko.network.generated.models.ListMeetingParticipantsRequest as GeneratedListMeetingParticipantsRequest
 import dev.icerock.moko.network.generated.models.Meeting as GeneratedMeeting
 
 internal class MeetingsEngine(
@@ -141,6 +144,26 @@ internal class MeetingsEngine(
         val meeting = Json.decodeFromString<EditMeetingResponse>(string).result
 
         return EditMeetingRequest.Response(meeting.mapToMeeting())
+    }
+
+    suspend fun listMeetingParticipants(
+        request: ListMeetingParticipantsRequest
+    ): ListMeetingParticipantsRequest.Response {
+        val response = base.meetingsParticipantsListPost(
+            apiVersion = request.apiVersion.int.toString(),
+            listMeetingParticipantsRequest = GeneratedListMeetingParticipantsRequest(
+                amount = request.amount.int,
+                token = request.token.string,
+                meetingId = request.meetingId.string
+            )
+        )
+
+        val paging = PagingResponse(
+            data = response.result.data.map(User::mapToUser),
+            nextPagingId = response.result.nextPagingId?.let(::PagingId)
+        )
+
+        return ListMeetingParticipantsRequest.Response(paging)
     }
 
     suspend fun participateMeeting(request: ParticipateMeetingRequest) {

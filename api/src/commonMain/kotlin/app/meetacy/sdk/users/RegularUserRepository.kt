@@ -10,7 +10,7 @@ import app.meetacy.sdk.types.user.SelfUser
 import app.meetacy.sdk.types.user.UserId
 
 public class RegularUserRepository(
-    public val data: RegularUser,
+    override val data: RegularUser,
     private val api: MeetacyApi
 ) : UserRepository {
     public val id: UserId get() = data.id

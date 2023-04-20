@@ -14,7 +14,7 @@ import app.meetacy.sdk.types.user.SelfUser
 import app.meetacy.sdk.types.user.UserId
 
 public class SelfUserRepository(
-    public val data: SelfUser,
+    override val data: SelfUser,
     public val api: AuthorizedMeetacyApi
 ) : UserRepository {
     public val id: UserId get() = data.id
