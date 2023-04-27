@@ -5,7 +5,7 @@ plugins {
 version = libs.versions.meetacySdk.get()
 
 dependencies {
-    commonMainApi(projects.types)
-    commonMainApi(projects.io.ktorIo)
+    commonMainApi(projects.io)
     commonMainImplementation(libs.kotlinxCoroutines)
+    commonMainImplementation(libs.ktorClient)
 }
