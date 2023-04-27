@@ -7,6 +7,18 @@ plugins {
 
 version = libs.versions.meetacySdk.get()
 
+kotlin {
+    js {
+        browser {
+            webpackTask {
+                outputFileName = "generated-app.js"
+                println(outputFile.absolutePath)
+            }
+        }
+        binaries.executable()
+    }
+}
+
 dependencies {
     commonMainImplementation(libs.kotlinxCoroutines)
     commonMainImplementation(libs.kotlinSerialization)
