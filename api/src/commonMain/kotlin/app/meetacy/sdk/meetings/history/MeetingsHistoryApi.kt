@@ -4,6 +4,7 @@ import app.meetacy.sdk.MeetacyApi
 import app.meetacy.sdk.engine.requests.ListMeetingsHistoryRequest
 import app.meetacy.sdk.internal.paging.pagingFlow
 import app.meetacy.sdk.meetings.AuthorizedMeetingRepository
+import app.meetacy.sdk.meetings.MeetingRepository
 import app.meetacy.sdk.types.amount.Amount
 import app.meetacy.sdk.types.auth.Token
 import app.meetacy.sdk.types.paging.PagingId
@@ -16,11 +17,11 @@ public class MeetingsHistoryApi(private val api: MeetacyApi) {
         token: Token,
         amount: Amount,
         pagingId: PagingId? = null
-    ): PagingResponse<List<AuthorizedMeetingRepository>> = api.engine
+    ): PagingResponse<List<MeetingRepository>> = api.engine
         .execute(
             request = ListMeetingsHistoryRequest(token, amount, pagingId)
         ).paging.mapItems { meeting ->
-            AuthorizedMeetingRepository(meeting, api.authorized(token))
+            MeetingRepository(meeting, api)
         }
 
     public fun flow(
@@ -28,7 +29,7 @@ public class MeetingsHistoryApi(private val api: MeetacyApi) {
         chunkSize: Amount,
         startPagingId: PagingId? = null,
         limit: Amount? = null
-    ): Flow<List<AuthorizedMeetingRepository>> =
+    ): Flow<List<MeetingRepository>> =
         pagingFlow(chunkSize, startPagingId, limit) { pagingId, amount ->
             list(token, amount, pagingId)
         }

@@ -542,6 +542,43 @@ paths:
               examples:
                 InvalidAccessIdentity:
                   $ref: '#/components/examples/InvalidToken'
+  /meetings/participants/list:
+    parameters:
+      - name: Api-Version
+        in: header
+        description: The version of API to invoke request with
+        required: true
+        schema:
+          type: string
+    post:
+      summary: Participate meeting
+      tags:
+        - meetings
+      description: "Taking part in a meeting"
+      requestBody:
+        description: response with an token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListMeetingParticipantsRequest'
+      responses:
+        "200":
+          description: An example of a successful generated response with an token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListMeetingParticipantsResponse'
+        "400":
+          description: An example of a successful generated response with an token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidResponse'
+              examples:
+                InvalidAccessIdentity:
+                  $ref: '#/components/examples/InvalidToken'
+                MeetingNotFound:
+                  $ref: '#/components/examples/InvalidMeetingId'
   /meetings/participate:
     parameters:
       - name: Api-Version
@@ -847,6 +884,44 @@ components:
       required:
         - "token"
         - "meetingId"
+      additionalProperties: false
+    ListMeetingParticipantsRequest:
+      type: "object"
+      properties:
+        token:
+          type: string
+        meetingId:
+          type: string
+        amount:
+          type: integer
+          example: 10
+        pagingId:
+          type: string
+      required:
+        - "token"
+        - "meetingId"
+        - "amount"
+      additionalProperties: false
+    ListMeetingParticipantsResponse:
+      type: "object"
+      properties:
+        status:
+          type: boolean
+          example: true
+        result:
+          type: object
+          properties:
+            nextPagingId:
+              type: string
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/User'
+          required:
+            - "data"
+      required:
+        - "result"
+        - "status"
       additionalProperties: false
     ListMapMeetingsRequest:
       type: object
