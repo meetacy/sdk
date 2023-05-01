@@ -21,7 +21,7 @@ kotlin {
 
 dependencies {
     commonMainImplementation(libs.kotlinxCoroutines)
-    commonMainImplementation(libs.kotlinSerialization)
+    commonMainImplementation(libs.kotlinxSerialization)
     commonMainImplementation(libs.ktorClientLogging)
     commonMainApi(libs.ktorClient)
     commonMainApi(projects.api)
