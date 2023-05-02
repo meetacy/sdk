@@ -10,7 +10,7 @@ repositories {
 }
 
 dependencies {
-    api(libs.kotlinSerializationGradle)
-    api(libs.kotlinGradlePlugin)
-    api(libs.mokoNetworkGenerator)
+    api(libs.kotlinxSerializationPlugin)
+    api(libs.kotlinPlugin)
+    api(libs.mokoNetworkPlugin)
 }

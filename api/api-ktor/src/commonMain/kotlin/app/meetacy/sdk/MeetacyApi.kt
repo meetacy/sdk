@@ -25,9 +25,7 @@ public fun MeetacyApi.Companion.production(
     val configuredClient = if (enableLogging) {
         httpClient.config {
             Logging {
-                logger = object : Logger {
-                    override fun log(message: String) = println(message)
-                }
+                logger = Logger.SIMPLE
                 level = LogLevel.ALL
             }
         }
