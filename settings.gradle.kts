@@ -21,7 +21,9 @@ include(
     ":api",
     ":types",
     ":api:api-ktor",
-    ":kotlinx-datetime"
+    ":kotlinx-datetime",
+    ":io",
+    ":io:ktor-io"
 )
 
 rootProject.name = "meetacy-sdk"
