@@ -186,7 +186,7 @@ paths:
                 token:
                   type: string
                 file:
-                  type: string
+                  type: file
                   format: binary
               required:
                 - "token"
