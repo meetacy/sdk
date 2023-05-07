@@ -14,6 +14,7 @@ import app.meetacy.sdk.exception.MeetacyInternalException
 import app.meetacy.sdk.types.file.FileId
 import app.meetacy.sdk.types.url.Url
 import app.meetacy.sdk.types.url.parametersOf
+import app.meetacy.sdk.types.url.url
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.*
@@ -24,7 +25,7 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
 public class KtorMeetacyEngine(
-    private val baseUrl: String,
+    private val baseUrl: Url,
     httpClient: HttpClient = HttpClient(),
     json: Json = Json,
 ) : MeetacyRequestsEngine {
@@ -44,7 +45,7 @@ public class KtorMeetacyEngine(
 
     override fun getFileUrl(
         id: FileId
-    ): Url = Url(baseUrl) / "files" / "download" + parametersOf("fileIdentity" to id.string)
+    ): Url = baseUrl / "files" / "download" + parametersOf("fileIdentity" to id.string)
 
     @Suppress("UNCHECKED_CAST")
     override suspend fun <T> execute(request: MeetacyRequest<T>): T = handleMeetacyExceptions {

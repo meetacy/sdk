@@ -16,6 +16,7 @@ import app.meetacy.sdk.types.location.Location
 import app.meetacy.sdk.types.paging.PagingId
 import app.meetacy.sdk.types.paging.PagingResponse
 import app.meetacy.sdk.types.url.Url
+import app.meetacy.sdk.types.url.UrlProtocol
 import app.meetacy.sdk.types.user.RegularUser
 import app.meetacy.sdk.types.user.UserId
 import app.meetacy.sdk.types.user.UserOnMap
@@ -23,10 +24,13 @@ import dev.icerock.moko.network.generated.apis.FriendsApi
 import dev.icerock.moko.network.generated.apis.FriendsApiImpl
 import dev.icerock.moko.network.generated.models.AccessFriendRequest
 import io.ktor.client.*
+import io.rsocket.kotlin.PrefetchStrategy
 import io.rsocket.kotlin.ktor.client.rSocket
 import io.rsocket.kotlin.payload.Payload
 import io.rsocket.kotlin.payload.buildPayload
 import io.rsocket.kotlin.payload.data
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
@@ -38,11 +42,11 @@ import dev.icerock.moko.network.generated.models.Location as GeneratedLocation
 import dev.icerock.moko.network.generated.models.User as GeneratedUser
 
 internal class FriendsEngine(
-    private val baseUrl: String,
+    private val baseUrl: Url,
     private val httpClient: HttpClient,
     json: Json
 ) {
-    private val base: FriendsApi = FriendsApiImpl(baseUrl, httpClient, json)
+    private val base: FriendsApi = FriendsApiImpl(baseUrl.string, httpClient, json)
 
     suspend fun add(request: AddFriendRequest) {
         base.friendsAddPost(
@@ -89,9 +93,18 @@ internal class FriendsEngine(
     }
 
     suspend fun streamFriendsLocation(request: EmitFriendsLocationRequest) {
-        val url = Url(baseUrl) / "friends" / "location" / "stream"
+        val newProtocol = when {
+            baseUrl.protocol.isHttp -> UrlProtocol.Ws
+            baseUrl.protocol.isHttps -> UrlProtocol.Wss
+            else -> error("Cannot convert url to websocket protocol")
+        }
 
-        val socket = httpClient.rSocket(urlString = url.string)
+        val url = baseUrl.replaceProtocol(newProtocol) / "friends" / "location" / "stream"
+
+        val socket = httpClient.rSocket(
+            urlString = url.string,
+            secure = newProtocol.isWss
+        )
 
         socket.requestChannel(
             initPayload = request.token.encodeToPayload(),

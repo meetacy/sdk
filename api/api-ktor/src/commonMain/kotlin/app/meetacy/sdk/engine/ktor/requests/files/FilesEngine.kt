@@ -23,10 +23,9 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
 internal class FilesEngine(
-    baseUrl: String,
+    private val baseUrl: Url,
     private val httpClient: HttpClient
 ) {
-    private val baseUrl = Url(baseUrl)
 
     suspend fun get(request: GetFileRequest): GetFileRequest.Response {
         val url = baseUrl / "files" / "download" + parametersOf(
