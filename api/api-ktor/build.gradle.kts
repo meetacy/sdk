@@ -10,9 +10,13 @@ version = libs.versions.meetacySdk.get()
 dependencies {
     commonMainImplementation(libs.kotlinxCoroutines)
     commonMainImplementation(libs.kotlinSerialization)
+    commonMainImplementation(libs.ktorClient)
     commonMainImplementation(libs.ktorClientLogging)
-    commonMainApi(libs.ktorClient)
+    commonMainImplementation(libs.ktorClientWebSockets)
+    commonMainImplementation(libs.rsocketKtorClient)
+
     commonMainApi(projects.api)
+
     jvmTestImplementation(libs.ktorClientCio)
 }
 

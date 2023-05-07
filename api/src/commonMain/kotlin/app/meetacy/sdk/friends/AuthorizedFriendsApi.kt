@@ -1,6 +1,7 @@
 package app.meetacy.sdk.friends
 
 import app.meetacy.sdk.AuthorizedMeetacyApi
+import app.meetacy.sdk.friends.location.AuthorizedFriendsLocationApi
 import app.meetacy.sdk.users.RegularUserRepository
 import app.meetacy.sdk.types.amount.Amount
 import app.meetacy.sdk.types.auth.Token
@@ -19,6 +20,8 @@ import kotlinx.coroutines.flow.map
 public class AuthorizedFriendsApi(private val api: AuthorizedMeetacyApi) {
     public val token: Token get() = api.token
     public val base: FriendsApi get() = api.base.friends
+
+    public val location: AuthorizedFriendsLocationApi = AuthorizedFriendsLocationApi(api)
 
     public suspend fun add(friendId: UserId) {
         base.add(token, friendId)

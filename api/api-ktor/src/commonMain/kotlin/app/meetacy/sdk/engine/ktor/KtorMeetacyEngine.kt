@@ -17,7 +17,9 @@ import app.meetacy.sdk.types.url.parametersOf
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.*
+import io.ktor.client.plugins.websocket.WebSockets
 import io.ktor.utils.io.errors.*
+import io.rsocket.kotlin.ktor.client.RSocketSupport
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
@@ -29,6 +31,9 @@ public class KtorMeetacyEngine(
 
     private val httpClient = httpClient.config {
         expectSuccess = true
+
+        install(WebSockets)
+        install(RSocketSupport)
     }
 
     private val auth = AuthEngine(baseUrl, this.httpClient, json)
@@ -49,6 +54,7 @@ public class KtorMeetacyEngine(
             is AddFriendRequest -> friends.add(request) as T
             is DeleteFriendRequest -> friends.delete(request) as T
             is ListFriendsRequest -> friends.list(request) as T
+            is EmitFriendsLocationRequest -> friends.streamFriendsLocation(request) as T
             // users
             is GetMeRequest -> users.getMe(request) as T
             is GetUserRequest -> users.getUser(request) as T

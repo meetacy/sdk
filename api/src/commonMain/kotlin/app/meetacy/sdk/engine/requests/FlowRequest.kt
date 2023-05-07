@@ -2,6 +2,6 @@ package app.meetacy.sdk.engine.requests
 
 import kotlinx.coroutines.flow.FlowCollector
 
-public interface FlowMeetacyRequest<T> : MeetacyRequest<Unit> {
+public sealed interface FlowMeetacyRequest<T> : SimpleMeetacyRequest {
     public val collector: FlowCollector<T>
 }

@@ -1,7 +1,7 @@
 package app.meetacy.sdk.engine.requests
 
 import app.meetacy.sdk.types.auth.Token
-import app.meetacy.sdk.types.friends.FriendOnMap
+import app.meetacy.sdk.types.user.UserOnMap
 import app.meetacy.sdk.types.location.Location
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
@@ -12,5 +12,5 @@ public data class EmitFriendsLocationRequest(
     override val collector: FlowCollector<Update>
 ) : FlowMeetacyRequest<EmitFriendsLocationRequest.Update> {
 
-    public data class Update(val friend: FriendOnMap)
+    public data class Update(val user: UserOnMap)
 }
