@@ -108,7 +108,7 @@ internal class FriendsEngine(
         )
 
         val flow = socket.requestChannel(
-            initPayload = request.token.encodeToPayload(),
+            initPayload = request.encodeToPayload(),
             payloads = request.selfLocation.map { location -> location.encodeToPayload() }
         ).map { payload ->
             EmitFriendsLocationRequest.Update(
@@ -120,9 +120,10 @@ internal class FriendsEngine(
     }
 }
 
-private fun Token.encodeToPayload(): Payload = buildPayload {
+private fun EmitFriendsLocationRequest.encodeToPayload(): Payload = buildPayload {
     val initString = buildJsonObject {
-        put("token", string)
+        put("token", token.string)
+        put("apiVersion", apiVersion.int)
     }.toString()
 
     data(initString)
