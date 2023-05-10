@@ -4,6 +4,7 @@ import app.meetacy.sdk.MeetacyApi
 import app.meetacy.sdk.engine.requests.AddFriendRequest
 import app.meetacy.sdk.engine.requests.DeleteFriendRequest
 import app.meetacy.sdk.engine.requests.ListFriendsRequest
+import app.meetacy.sdk.friends.location.FriendsLocationApi
 import app.meetacy.sdk.internal.paging.pagingFlow
 import app.meetacy.sdk.users.RegularUserRepository
 import app.meetacy.sdk.types.amount.Amount
@@ -19,6 +20,8 @@ import kotlinx.coroutines.flow.Flow
  * - [app.meetacy.sdk.users.RegularUserRepository]
  */
 public class FriendsApi(private val api: MeetacyApi) {
+    public val location: FriendsLocationApi = FriendsLocationApi(api)
+
     public suspend fun add(token: Token, friendId: UserId) {
         api.engine.execute(AddFriendRequest(token, friendId))
     }

@@ -13,6 +13,7 @@ import app.meetacy.sdk.types.user.RegularUser
 import app.meetacy.sdk.types.user.SelfUser
 import app.meetacy.sdk.types.user.User
 import app.meetacy.sdk.types.user.UserId
+import dev.icerock.moko.network.generated.models.Location as GeneratedLocation
 import dev.icerock.moko.network.generated.models.Meeting as GeneratedMeeting
 import dev.icerock.moko.network.generated.models.User as GeneratedUser
 
@@ -51,3 +52,6 @@ internal fun GeneratedMeeting.mapToMeeting(): Meeting = Meeting(
         GeneratedMeeting.Visibility.PRIVATE -> Meeting.Visibility.Private
     }
 )
+
+internal fun GeneratedLocation.mapToLocation(): Location =
+    Location(latitude, longitude)

@@ -7,24 +7,16 @@ plugins {
 
 version = libs.versions.meetacySdk.get()
 
-kotlin {
-    js {
-        browser {
-            webpackTask {
-                outputFileName = "generated-app.js"
-                println(outputFile.absolutePath)
-            }
-        }
-        binaries.executable()
-    }
-}
-
 dependencies {
     commonMainImplementation(libs.kotlinxCoroutines)
+    commonMainImplementation(libs.ktorClient)
     commonMainImplementation(libs.kotlinxSerialization)
     commonMainImplementation(libs.ktorClientLogging)
-    commonMainApi(libs.ktorClient)
+    commonMainImplementation(libs.ktorClientWebSockets)
+    commonMainImplementation(libs.rsocketKtorClient)
+
     commonMainApi(projects.api)
+
     jvmTestImplementation(libs.ktorClientCio)
 }
 
