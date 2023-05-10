@@ -91,10 +91,10 @@ public class KtorMeetacyEngine(
             throw getException(response.errorCode, response.errorMessage, cause = exception)
         } catch (exception: IOException) {
             throw MeetacyConnectionException(cause = exception)
-        } catch (throwable: Throwable) {
-            throw when (throwable) {
-                is CancellationException -> throwable
-                else -> MeetacyInternalException(cause = throwable)
+        } catch (exception: RuntimeException) {
+            throw when (exception) {
+                is CancellationException -> exception
+                else -> MeetacyInternalException(cause = exception)
             }
         }
     }
