@@ -6,4 +6,4 @@ public class InternalServerException(
     message = description ?: "Internal server exception. Server returned 500"
 )
 
-public fun meetacyApiError(error: String): Nothing = throw InternalServerException(error)
+internal fun meetacyApiError(error: String): Nothing = throw InternalServerException(error)

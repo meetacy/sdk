@@ -31,11 +31,11 @@ import dev.icerock.moko.network.generated.models.ListMeetingParticipantsRequest 
 import dev.icerock.moko.network.generated.models.Meeting as GeneratedMeeting
 
 internal class MeetingsEngine(
-    private val baseUrl: String,
+    private val baseUrl: Url,
     private val httpClient: HttpClient,
     json: Json
 ) {
-    private val base = MeetingsApiImpl(baseUrl, httpClient, json)
+    private val base = MeetingsApiImpl(baseUrl.string, httpClient, json)
 
     suspend fun listMeetingsHistory(
         request: ListMeetingsHistoryRequest
@@ -103,7 +103,7 @@ internal class MeetingsEngine(
     }
 
     suspend fun editMeeting(request: EditMeetingRequest): EditMeetingRequest.Response = with(request) {
-        val url = Url(baseUrl) / "meetings" / "edit"
+        val url = baseUrl / "meetings" / "edit"
 
         val jsonObject = buildJsonObject {
             put("token", token.string)
