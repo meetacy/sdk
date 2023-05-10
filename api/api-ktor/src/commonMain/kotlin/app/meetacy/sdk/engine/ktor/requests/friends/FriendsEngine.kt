@@ -30,6 +30,7 @@ import io.rsocket.kotlin.payload.Payload
 import io.rsocket.kotlin.payload.buildPayload
 import io.rsocket.kotlin.payload.data
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.Serializable
@@ -106,16 +107,16 @@ internal class FriendsEngine(
             secure = newProtocol.isWss
         )
 
-        socket.requestChannel(
+        val flow = socket.requestChannel(
             initPayload = request.token.encodeToPayload(),
             payloads = request.selfLocation.map { location -> location.encodeToPayload() }
-        ).collect { payload ->
-            request.collector.emit(
-                value = EmitFriendsLocationRequest.Update(
-                    user = payload.decodeToUserOnMap()
-                )
+        ).map { payload ->
+            EmitFriendsLocationRequest.Update(
+                user = payload.decodeToUserOnMap()
             )
         }
+
+        request.collector.emitAll(flow)
     }
 }
 

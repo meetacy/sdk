@@ -23,6 +23,7 @@ import io.ktor.utils.io.errors.*
 import io.rsocket.kotlin.ktor.client.RSocketSupport
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
+import kotlin.coroutines.cancellation.CancellationException
 
 public class KtorMeetacyEngine(
     private val baseUrl: Url,
@@ -91,7 +92,10 @@ public class KtorMeetacyEngine(
         } catch (exception: IOException) {
             throw MeetacyConnectionException(cause = exception)
         } catch (throwable: Throwable) {
-            throw MeetacyInternalException(cause = throwable)
+            throw when (throwable) {
+                is CancellationException -> throwable
+                else -> MeetacyInternalException(cause = throwable)
+            }
         }
     }
 
@@ -101,7 +105,7 @@ public class KtorMeetacyEngine(
         cause: Throwable
     ): Throwable = when (code) {
         MeetacyUnauthorizedException.CODE -> MeetacyUnauthorizedException(message, cause)
-        else -> MeetacyInternalException(cause = cause)
+        else -> MeetacyInternalException(message, cause)
     }
 
     private fun notSupported(): Nothing = TODO("This request is not supported yet!")

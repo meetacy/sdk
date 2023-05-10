@@ -13,7 +13,7 @@ public class AuthorizedFriendsLocationApi(
     private val api: AuthorizedMeetacyApi
 ) {
     public val token: Token get() = api.token
-    public val base: FriendsApi get() = api.base.friends
+    public val base: FriendsLocationApi get() = api.base.friends.location
 
     public fun stream(selfLocation: Flow<Location>): Flow<AuthorizedUserOnMapRepository> {
         return api.base.friends.location
