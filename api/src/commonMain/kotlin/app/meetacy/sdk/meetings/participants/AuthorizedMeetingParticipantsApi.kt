@@ -5,6 +5,7 @@ import app.meetacy.sdk.types.amount.Amount
 import app.meetacy.sdk.types.auth.Token
 import app.meetacy.sdk.types.meeting.MeetingId
 import app.meetacy.sdk.types.paging.PagingId
+import app.meetacy.sdk.types.paging.PagingRepository
 import app.meetacy.sdk.types.paging.PagingResponse
 import app.meetacy.sdk.types.paging.mapItems
 import app.meetacy.sdk.users.AuthorizedUserRepository
@@ -28,13 +29,13 @@ public class AuthorizedMeetingParticipantsApi(private val api: AuthorizedMeetacy
             )
         }
 
-    public suspend fun flow(
+    public suspend fun paging(
         meetingId: MeetingId,
         chunkSize: Amount,
         startPagingId: PagingId? = null,
         limit: Amount? = null
-    ): Flow<List<AuthorizedUserRepository>> = base
-        .flow(token, meetingId, chunkSize, startPagingId, limit)
+    ): PagingRepository<List<AuthorizedUserRepository>> = base
+        .paging(token, meetingId, chunkSize, startPagingId, limit)
         .map { users ->
             users.map { user ->
                 AuthorizedUserRepository.of(

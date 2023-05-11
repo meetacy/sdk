@@ -5,6 +5,7 @@ import app.meetacy.sdk.types.amount.Amount
 import app.meetacy.sdk.types.auth.Token
 import app.meetacy.sdk.types.meeting.MeetingId
 import app.meetacy.sdk.types.paging.PagingId
+import app.meetacy.sdk.types.paging.PagingRepository
 import app.meetacy.sdk.types.paging.PagingResponse
 import app.meetacy.sdk.users.UserRepository
 import kotlinx.coroutines.flow.Flow
@@ -21,12 +22,12 @@ public class MeetingParticipantsRepository(
         .participants
         .list(token, meetingId, amount, pagingId)
 
-    public suspend fun flow(
+    public suspend fun paging(
         token: Token,
         chunkSize: Amount,
         startPagingId: PagingId? = null,
         limit: Amount? = null
-    ): Flow<List<UserRepository>> = api.meetings
+    ): PagingRepository<List<UserRepository>> = api.meetings
         .participants
-        .flow(token, meetingId, chunkSize, startPagingId, limit)
+        .paging(token, meetingId, chunkSize, startPagingId, limit)
 }

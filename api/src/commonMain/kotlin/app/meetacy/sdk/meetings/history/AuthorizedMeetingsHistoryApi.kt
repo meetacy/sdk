@@ -5,6 +5,7 @@ import app.meetacy.sdk.meetings.AuthorizedMeetingRepository
 import app.meetacy.sdk.types.amount.Amount
 import app.meetacy.sdk.types.auth.Token
 import app.meetacy.sdk.types.paging.PagingId
+import app.meetacy.sdk.types.paging.PagingRepository
 import app.meetacy.sdk.types.paging.PagingResponse
 import app.meetacy.sdk.types.paging.mapItems
 import kotlinx.coroutines.flow.Flow
@@ -26,12 +27,12 @@ public class AuthorizedMeetingsHistoryApi(private val api: AuthorizedMeetacyApi)
             )
         }
 
-    public fun flow(
+    public fun paging(
         chunkSize: Amount,
         startPagingId: PagingId? = null,
         limit: Amount? = null
-    ): Flow<List<AuthorizedMeetingRepository>> = base
-        .flow(token, chunkSize, startPagingId, limit)
+    ): PagingRepository<List<AuthorizedMeetingRepository>> = base
+        .paging(token, chunkSize, startPagingId, limit)
         .map { meetings ->
             meetings.map { meeting ->
                 AuthorizedMeetingRepository(
