@@ -9,7 +9,6 @@ import app.meetacy.sdk.engine.requests.DeleteFriendRequest
 import app.meetacy.sdk.engine.requests.EmitFriendsLocationRequest
 import app.meetacy.sdk.engine.requests.ListFriendsRequest
 import app.meetacy.sdk.types.annotation.UnsafeConstructor
-import app.meetacy.sdk.types.auth.Token
 import app.meetacy.sdk.types.datetime.DateTime
 import app.meetacy.sdk.types.file.FileId
 import app.meetacy.sdk.types.location.Location
@@ -19,19 +18,16 @@ import app.meetacy.sdk.types.url.Url
 import app.meetacy.sdk.types.url.UrlProtocol
 import app.meetacy.sdk.types.user.RegularUser
 import app.meetacy.sdk.types.user.UserId
-import app.meetacy.sdk.types.user.UserOnMap
+import app.meetacy.sdk.types.user.UserLocationSnapshot
 import dev.icerock.moko.network.generated.apis.FriendsApi
 import dev.icerock.moko.network.generated.apis.FriendsApiImpl
 import dev.icerock.moko.network.generated.models.AccessFriendRequest
 import io.ktor.client.*
-import io.rsocket.kotlin.PrefetchStrategy
 import io.rsocket.kotlin.ktor.client.rSocket
 import io.rsocket.kotlin.payload.Payload
 import io.rsocket.kotlin.payload.buildPayload
 import io.rsocket.kotlin.payload.data
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.emitAll
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
@@ -148,10 +144,10 @@ private data class UserOnMapSerializable(
     val capturedAt: String
 )
 
-private fun Payload.decodeToUserOnMap(): UserOnMap {
+private fun Payload.decodeToUserOnMap(): UserLocationSnapshot {
     val deserialized = Json.decodeFromString<UserOnMapSerializable>(data.readText())
     
-    return UserOnMap(
+    return UserLocationSnapshot(
         user = deserialized.user.mapToUser() as RegularUser,
         location = deserialized.location.mapToLocation(),
         capturedAt = DateTime(deserialized.capturedAt)

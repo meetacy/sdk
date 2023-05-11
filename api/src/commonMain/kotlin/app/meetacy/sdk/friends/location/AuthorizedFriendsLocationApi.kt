@@ -1,10 +1,8 @@
 package app.meetacy.sdk.friends.location
 
 import app.meetacy.sdk.AuthorizedMeetacyApi
-import app.meetacy.sdk.friends.FriendsApi
 import app.meetacy.sdk.types.auth.Token
 import app.meetacy.sdk.types.location.Location
-import app.meetacy.sdk.types.user.UserOnMap
 import app.meetacy.sdk.users.AuthorizedRegularUserRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
