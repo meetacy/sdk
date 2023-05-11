@@ -3,7 +3,3 @@ plugins {
 }
 
 version = libs.versions.meetacySdk.get()
-
-dependencies {
-    commonMainImplementation(libs.kotlinxCoroutines)
-}

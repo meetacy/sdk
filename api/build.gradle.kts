@@ -6,6 +6,6 @@ version = libs.versions.meetacySdk.get()
 
 dependencies {
     commonMainApi(projects.types)
-    commonMainApi(projects.io.ioKtor)
+    commonMainApi(projects.io.ktorIo)
     commonMainImplementation(libs.kotlinxCoroutines)
 }
