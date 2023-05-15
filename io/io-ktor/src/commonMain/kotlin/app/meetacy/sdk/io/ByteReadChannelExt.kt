@@ -10,7 +10,7 @@ public suspend fun ByteReadChannel.readMaxBytes(destination: ByteArrayView): Int
     )
 }
 
-private suspend fun ByteReadChannel.readMaxBytes(destination: ByteArrayView, readAcc: Int): Int {
+private tailrec suspend fun ByteReadChannel.readMaxBytes(destination: ByteArrayView, readAcc: Int): Int {
     val readSize = this.readAvailable(
         dst = destination.underlying,
         offset = destination.fromIndex + readAcc,

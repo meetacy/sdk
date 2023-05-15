@@ -11,5 +11,5 @@ public data class ListFriendsRequest(
     val amount: Amount,
     val pagingId: PagingId?
 ) : MeetacyRequest<ListFriendsRequest.Response> {
-    public data class Response(val paging: PagingResponse<List<RegularUser>>)
+    public data class Response(val paging: PagingResponse<RegularUser>)
 }
