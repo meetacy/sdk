@@ -5,19 +5,16 @@ package app.meetacy.sdk.types.paging
  *
  * val (users) = api.users.list(...)
  */
-public data class PagingResponse<T>(
-    val data: T,
+public data class PagingResponse<out T>(
+    val data: List<T>,
     val nextPagingId: PagingId?
 ) {
-    public inline fun <R> map(transform: (T) -> R): PagingResponse<R> =
+    public inline fun <R> map(transform: (List<T>) -> List<R>): PagingResponse<R> =
         PagingResponse(
             data = transform(data),
             nextPagingId = nextPagingId
         )
+
+    public inline fun <R> mapItems(transform: (T) -> R): PagingResponse<R> =
+        map { list -> list.map(transform) }
 }
-
-
-public inline fun <T, R> PagingResponse<List<T>>.mapItems(transform: (T) -> R): PagingResponse<List<R>> =
-    map { list ->
-        list.map(transform)
-    }

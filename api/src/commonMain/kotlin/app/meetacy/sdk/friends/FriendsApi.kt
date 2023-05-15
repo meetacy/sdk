@@ -5,15 +5,11 @@ import app.meetacy.sdk.engine.requests.AddFriendRequest
 import app.meetacy.sdk.engine.requests.DeleteFriendRequest
 import app.meetacy.sdk.engine.requests.ListFriendsRequest
 import app.meetacy.sdk.friends.location.FriendsLocationApi
-import app.meetacy.sdk.internal.paging.pagingFlow
 import app.meetacy.sdk.users.RegularUserRepository
 import app.meetacy.sdk.types.amount.Amount
 import app.meetacy.sdk.types.auth.Token
-import app.meetacy.sdk.types.paging.PagingId
-import app.meetacy.sdk.types.paging.PagingResponse
-import app.meetacy.sdk.types.paging.mapItems
+import app.meetacy.sdk.types.paging.*
 import app.meetacy.sdk.types.user.UserId
-import kotlinx.coroutines.flow.Flow
 
 /**
  * When modifying this class, corresponding classes should be altered:
@@ -33,26 +29,31 @@ public class FriendsApi(private val api: MeetacyApi) {
         token: Token,
         amount: Amount,
         pagingId: PagingId? = null
-    ): PagingResponse<List<RegularUserRepository>> {
-        return api.engine.execute(
+    ): PagingRepository<RegularUserRepository> = PagingRepository(
+        amount = amount,
+        startPagingId = pagingId
+    ) { currentAmount, currentPagingId ->
+        api.engine.execute(
             request = ListFriendsRequest(
                 token = token,
-                amount = amount,
-                pagingId = pagingId
+                amount = currentAmount,
+                pagingId = currentPagingId
             )
         ).paging.mapItems { regularUser ->
             RegularUserRepository(regularUser, api)
         }
     }
 
-    public fun flow(
+    public fun paging(
         token: Token,
         chunkSize: Amount,
         startPagingId: PagingId? = null,
         limit: Amount? = null
-    ): Flow<List<RegularUserRepository>> {
-        return pagingFlow(chunkSize, startPagingId, limit) { pagingId, amount ->
-            list(token, amount, pagingId)
+    ): PagingSource<RegularUserRepository> {
+        return PagingSource(
+            chunkSize, startPagingId, limit
+        ) { currentAmount, currentPagingId ->
+            list(token, currentAmount, currentPagingId).response
         }
     }
 }
