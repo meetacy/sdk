@@ -18,9 +18,10 @@ public value class Amount @UnsafeConstructor constructor(public val int: Int) {
             return Amount(int)
         }
     }
+
     public data class OrZero @UnsafeConstructor constructor(public val int: Int) {
-        val nonZero: Amount get() = Amount.parse(int)
-        val nonZeroOrNull: Amount? get() = Amount.parseOrNull(int)
+        public fun toNonZero(): Amount = Amount.parse(int)
+        public fun toNonZeroOrNull(): Amount? = Amount.parseOrNull(int)
 
         @OptIn(UnsafeConstructor::class)
         public companion object {
