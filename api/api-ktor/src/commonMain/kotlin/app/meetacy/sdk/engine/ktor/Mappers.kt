@@ -29,7 +29,8 @@ internal fun GeneratedUser.mapToUser(): User = if (isSelf) {
     RegularUser(
         id = UserId(id),
         nickname = nickname,
-        avatarId = avatarId?.let(::FileId)
+        avatarId = avatarId?.let(::FileId),
+        isFriend = isFriend ?: error("Regular user should always return isFriend parameter")
     )
 }
 
