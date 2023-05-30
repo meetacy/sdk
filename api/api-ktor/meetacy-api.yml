@@ -1340,6 +1340,8 @@ components:
       properties:
         isSelf:
           type: boolean
+        isFriend:
+          type: boolean
         id:
           type: string
           example: "15:fzK6CgXqQihDqeXpVYqVpOIgH0s5HvBAaR2BN2PkCxsLe63fAwMrV4uDInfYgoKFXY5C18Rnu9I2x5d46qmGNPLTM9uDepdKPKo7ss1tPsMk5AbslGwQCjlBrscOJmxUFSt7iwsmbZdLdjgYecKoXrJBVGwkZC3HYBUCLtgkexYsOk1mmDRxk482k3fCuo2Nxnjy82INdkOTjVsnew6vGhtOOrOWdpR1Ci6v1d06SQ6aFqs5QasWiTEPXNyCjGGd"
