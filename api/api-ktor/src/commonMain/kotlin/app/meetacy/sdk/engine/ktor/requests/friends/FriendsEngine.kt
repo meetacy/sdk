@@ -81,7 +81,8 @@ internal class FriendsEngine(
                 RegularUser(
                     id = UserId(user.id),
                     nickname = user.nickname,
-                    avatarId = user.avatarId?.let(::FileId)
+                    avatarId = user.avatarId?.let(::FileId),
+                    isFriend = user.isFriend ?: error("Regular user should always have isFriend parameter")
                 )
             }
         )
