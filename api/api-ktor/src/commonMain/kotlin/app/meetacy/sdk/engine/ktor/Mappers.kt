@@ -9,10 +9,7 @@ import app.meetacy.sdk.types.file.FileId
 import app.meetacy.sdk.types.location.Location
 import app.meetacy.sdk.types.meeting.Meeting
 import app.meetacy.sdk.types.meeting.MeetingId
-import app.meetacy.sdk.types.user.RegularUser
-import app.meetacy.sdk.types.user.SelfUser
-import app.meetacy.sdk.types.user.User
-import app.meetacy.sdk.types.user.UserId
+import app.meetacy.sdk.types.user.*
 import dev.icerock.moko.network.generated.models.Location as GeneratedLocation
 import dev.icerock.moko.network.generated.models.Meeting as GeneratedMeeting
 import dev.icerock.moko.network.generated.models.User as GeneratedUser
@@ -30,8 +27,16 @@ internal fun GeneratedUser.mapToUser(): User = if (isSelf) {
         id = UserId(id),
         nickname = nickname,
         avatarId = avatarId?.let(::FileId),
-        isFriend = isFriend ?: error("Regular user should always return isFriend parameter")
+        isFriend = isFriend?.mapToRelationship() ?: error("Regular user should always return isFriend parameter")
     )
+}
+
+internal fun String.mapToRelationship(): Relationship? = when(this) {
+    "none" -> Relationship.None
+    "subscription" -> Relationship.Subscription
+    "subscriber" -> Relationship.Subscriber
+    "friend" -> Relationship.Friend
+    else -> null
 }
 
 internal fun GeneratedMeeting.mapToMeeting(): Meeting = Meeting(
