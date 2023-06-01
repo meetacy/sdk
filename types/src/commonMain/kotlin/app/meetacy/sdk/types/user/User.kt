@@ -7,7 +7,7 @@ public sealed interface User {
     public val nickname: String
     public val avatarId: FileId?
     public val isSelf: Boolean
-    public val isFriend: Relationship?
+    public val relationship: Relationship?
 }
 
 public sealed interface Relationship {

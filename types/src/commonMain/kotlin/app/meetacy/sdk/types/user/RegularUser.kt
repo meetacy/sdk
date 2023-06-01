@@ -10,7 +10,7 @@ public data class RegularUser(
     override val id: UserId,
     override val nickname: String,
     override val avatarId: FileId?,
-    override val isFriend: Relationship
+    override val relationship: Relationship
 ) : User {
     override val isSelf: Boolean = false
 }

@@ -14,7 +14,7 @@ public class RegularUserRepository(
     public val id: UserId get() = data.id
     public val nickname: String get() = data.nickname
     public val avatar: FileRepository? get() = FileRepository(data.avatarId, api)
-    public val isFriend: Relationship get() = data.isFriend
+    public val isFriend: Relationship get() = data.relationship
 
     public suspend fun addFriend(token: Token) {
         api.friends.add(token, data.id)
