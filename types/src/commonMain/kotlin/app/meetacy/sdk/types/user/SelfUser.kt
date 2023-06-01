@@ -11,5 +11,5 @@ public data class SelfUser(
     override val avatarId: FileId?
 ) : User {
     override val isSelf: Boolean = true
-    override val isFriend: Boolean? = null
+    override val relationship: Relationship? = null
 }
