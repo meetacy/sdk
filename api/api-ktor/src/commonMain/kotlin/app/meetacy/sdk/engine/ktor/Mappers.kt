@@ -4,16 +4,22 @@ package app.meetacy.sdk.engine.ktor
 
 import app.meetacy.sdk.types.annotation.UnsafeConstructor
 import app.meetacy.sdk.types.datetime.Date
+import app.meetacy.sdk.types.datetime.DateTime
 import app.meetacy.sdk.types.email.Email
 import app.meetacy.sdk.types.file.FileId
+import app.meetacy.sdk.types.invitation.AcceptationState
+import app.meetacy.sdk.types.invitation.Invitation
+import app.meetacy.sdk.types.invitation.InvitationId
 import app.meetacy.sdk.types.location.Location
 import app.meetacy.sdk.types.meeting.Meeting
 import app.meetacy.sdk.types.meeting.MeetingId
 import app.meetacy.sdk.types.user.*
+import dev.icerock.moko.network.generated.models.Invitation as GeneratedInvitation
 import dev.icerock.moko.network.generated.models.Location as GeneratedLocation
 import dev.icerock.moko.network.generated.models.Meeting as GeneratedMeeting
 import dev.icerock.moko.network.generated.models.User as GeneratedUser
 
+@OptIn(UnsafeConstructor::class)
 internal fun GeneratedUser.mapToUser(): User = if (isSelf) {
     SelfUser(
         id = UserId(id),
@@ -30,6 +36,19 @@ internal fun GeneratedUser.mapToUser(): User = if (isSelf) {
         relationship = relationship?.mapToRelationship() ?: error("Regular user should always return relationship parameter")
     )
 }
+
+internal fun GeneratedInvitation.toInvitation(): Invitation = Invitation(
+    id = identity.let(::InvitationId),
+    meeting = meeting.mapToMeeting(),
+    invitedUser = invitedUser.mapToUser(),
+    invitorUser = invitorUser.mapToUser(),
+    expiryDate = DateTime(expiryDate),
+    isAccepted = when (isAccepted) {
+        null -> AcceptationState.Waiting
+        true -> AcceptationState.Accepted
+        false -> AcceptationState.Declined
+    }
+)
 
 internal fun String.mapToRelationship(): Relationship? = when(this) {
     "none" -> Relationship.None
