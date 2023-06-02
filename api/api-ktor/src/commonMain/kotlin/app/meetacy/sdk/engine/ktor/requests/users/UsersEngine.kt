@@ -8,7 +8,6 @@ import app.meetacy.sdk.types.exception.meetacyApiError
 import app.meetacy.sdk.types.optional.ifPresent
 import app.meetacy.sdk.types.url.Url
 import app.meetacy.sdk.types.user.SelfUser
-import app.meetacy.sdk.types.user.User
 import dev.icerock.moko.network.generated.apis.UserApi
 import dev.icerock.moko.network.generated.apis.UserApiImpl
 import dev.icerock.moko.network.generated.models.EditUserResponse
@@ -22,7 +21,6 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import dev.icerock.moko.network.generated.models.GetUserRequest as GeneratedGetUserRequest
-import dev.icerock.moko.network.generated.models.User as GeneratedUser
 
 internal class UsersEngine(
     private val baseUrl: Url,
