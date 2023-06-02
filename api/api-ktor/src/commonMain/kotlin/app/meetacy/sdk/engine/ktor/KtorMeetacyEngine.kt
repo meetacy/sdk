@@ -4,6 +4,7 @@ import app.meetacy.sdk.engine.MeetacyRequestsEngine
 import app.meetacy.sdk.engine.ktor.requests.auth.AuthEngine
 import app.meetacy.sdk.engine.ktor.requests.files.FilesEngine
 import app.meetacy.sdk.engine.ktor.requests.friends.FriendsEngine
+import app.meetacy.sdk.engine.ktor.requests.invitations.InvitationsEngine
 import app.meetacy.sdk.engine.ktor.requests.meetings.MeetingsEngine
 import app.meetacy.sdk.engine.ktor.requests.users.UsersEngine
 import app.meetacy.sdk.engine.ktor.response.ErrorResponse
@@ -43,6 +44,7 @@ public class KtorMeetacyEngine(
     private val friends = FriendsEngine(baseUrl, this.httpClient, json)
     private val meetings = MeetingsEngine(baseUrl, this.httpClient, json)
     private val files = FilesEngine(baseUrl, this.httpClient)
+    private val invitations = InvitationsEngine(baseUrl, httpClient, json)
 
     override fun getFileUrl(
         id: FileId
@@ -73,6 +75,8 @@ public class KtorMeetacyEngine(
             // files
             is GetFileRequest -> files.get(request) as T
             is UploadFileRequest -> files.upload(request) as T
+            // invitations
+            is CreateInvitationRequest -> invitations.create(request) as T
             // not yet supported
             is LinkEmailRequest -> notSupported()
             is ConfirmEmailRequest -> notSupported()
