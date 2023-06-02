@@ -5,6 +5,7 @@ import app.meetacy.sdk.engine.MeetacyRequestsEngine
 import app.meetacy.sdk.engine.requests.GetMeRequest
 import app.meetacy.sdk.files.FilesApi
 import app.meetacy.sdk.friends.FriendsApi
+import app.meetacy.sdk.invitations.InvitationsApi
 import app.meetacy.sdk.meetings.MeetingsApi
 import app.meetacy.sdk.types.annotation.UnsafeConstructor
 import app.meetacy.sdk.types.auth.Token
@@ -19,6 +20,7 @@ public class MeetacyApi(
     public val friends: FriendsApi = FriendsApi(api = this)
     public val users: UsersApi = UsersApi(api = this)
     public val meetings: MeetingsApi = MeetingsApi(api = this)
+    public val invitations: InvitationsApi = InvitationsApi(api = this)
 
     public suspend fun getMe(token: Token): SelfUser {
         return engine.execute(GetMeRequest(token)).me
