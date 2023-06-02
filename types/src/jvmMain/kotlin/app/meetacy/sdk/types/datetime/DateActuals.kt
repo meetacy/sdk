@@ -5,7 +5,7 @@ import java.time.Instant
 import java.time.LocalDate
 import java.util.Date as JavaDate
 
-private val dateTimeRegex = Regex("""\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}}Z""")
+private val dateTimeRegex = Regex("""\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z""")
 
 /**
  * Check whether a given string is iso8601 and doesn't specify time
@@ -25,7 +25,7 @@ internal actual fun checkDate(iso8601: String): CheckDateResult = try {
 
 internal actual fun checkDateTime(iso8601: String): CheckDateTimeResult = try {
     Instant.parse(iso8601)
-    iso8601.matches(dateTimeRegex) || throw IllegalStateException()
+    if (!iso8601.matches(dateTimeRegex)) throw IllegalStateException()
     CheckDateTimeResult.Success
 } catch (_: ParseException) {
     try {
