@@ -345,7 +345,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Invitation'
+                $ref: '#/components/schemas/CreateInvitationResponse'
         "400":
           description: Example of failed invitation creation
           content:
@@ -1460,3 +1460,14 @@ components:
         - meeting
         - invitedUser
         - expiryDate
+    CreateInvitationResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+          example: true
+        result:
+          $ref: '#/components/schemas/Invitation'
+      required:
+        - "status"
+        - "result"
