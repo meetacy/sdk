@@ -1,12 +1,13 @@
 package app.meetacy.sdk.engine.ktor.requests.invitations
 
+import app.meetacy.sdk.engine.ktor.toInvitation
 import app.meetacy.sdk.engine.requests.CreateInvitationRequest
 import app.meetacy.sdk.types.url.Url
 import dev.icerock.moko.network.generated.apis.InvitationsApi
 import dev.icerock.moko.network.generated.apis.InvitationsApiImpl
-import dev.icerock.moko.network.generated.models.CreateInvitationRequest as GeneratedCreateInvitationRequest
 import io.ktor.client.*
 import kotlinx.serialization.json.Json
+import dev.icerock.moko.network.generated.models.CreateInvitationRequest as GeneratedCreateInvitationRequest
 
 internal class InvitationsEngine(
     private val baseUrl: Url,
@@ -15,8 +16,10 @@ internal class InvitationsEngine(
 ) {
     private val base: InvitationsApi = InvitationsApiImpl(baseUrl.string, httpClient, json)
 
-    suspend fun create(request: CreateInvitationRequest) {
-        base.invitationsCreatePost(
+    suspend fun create(
+        request: CreateInvitationRequest
+    ): CreateInvitationRequest.Response {
+        val response = base.invitationsCreatePost(
             createInvitationRequest = GeneratedCreateInvitationRequest(
                 token = request.token.string,
                 meeting = request.meeting.string,
@@ -24,6 +27,8 @@ internal class InvitationsEngine(
                 expiryDate = request.expiryDate.iso8601
             ),
             apiVersion = request.apiVersion.int.toString()
-        )
+        ).result
+
+        return CreateInvitationRequest.Response(response.toInvitation())
     }
 }
