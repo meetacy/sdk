@@ -357,6 +357,42 @@ paths:
                   $ref: '#/components/examples/InvalidToken'
                 FriendNotFound:
                   $ref: '#/components/examples/FriendNotFound'
+  /invitations/accept:
+    description: Accept an invitation
+    parameters:
+      - name: Api-Version
+        in: header
+        description: The version of API to invoke request with
+        required: true
+        schema:
+          type: string
+    post:
+      tags:
+        - invitations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AcceptInvitationRequest'
+      responses:
+        "200":
+          description: Example of a successful invitation acceptation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusTrueResponse'
+              examples:
+                Success:
+                  $ref: '#/components/schemas/StatusTrueResponse'
+        "400":
+          description: Example of failed invitation acceptation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidResponse'
+              examples:
+                InvalidAccessIdentity:
+                  $ref: '#/components/examples/InvalidToken'
   /meetings/edit:
     parameters:
       - name: Api-Version
@@ -1471,3 +1507,13 @@ components:
       required:
         - "status"
         - "result"
+    AcceptInvitationRequest:
+      type: object
+      properties:
+        token:
+          type: string
+        invitationIdentity:
+          type: string
+      required:
+        - token
+        - invitationIdentity
