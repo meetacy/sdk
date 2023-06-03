@@ -7,6 +7,8 @@ import app.meetacy.sdk.types.invitation.InvitationId
 import app.meetacy.sdk.types.meeting.MeetingId
 import app.meetacy.sdk.types.user.User
 import app.meetacy.sdk.types.user.UserId
+import app.meetacy.sdk.users.UserRepository
+import kotlin.jvm.JvmName
 
 public class AuthorizedInvitationsApi(private val api: AuthorizedMeetacyApi) {
     public val token: Token get() = api.token
@@ -38,8 +40,21 @@ public class AuthorizedInvitationsApi(private val api: AuthorizedMeetacyApi) {
         return invitations.map { AuthorizedInvitationRepository(it, api) }
     }
 
-    public suspend fun readFrom(from: List<UserId>): List<AuthorizedInvitationRepository> {
-        val invitations = base.readFrom(token, from).map { it.data }
+    @JvmName("readFrom-id")
+    public suspend fun read(from: List<UserId>): List<AuthorizedInvitationRepository> {
+        val invitations = base.read(token, from).map { it.data }
+        return invitations.map { AuthorizedInvitationRepository(it, api) }
+    }
+
+    @JvmName("readFrom-user")
+    public suspend fun read(from: List<User>): List<AuthorizedInvitationRepository> {
+        val invitations = base.read(token, from).map { it.data }
+        return invitations.map { AuthorizedInvitationRepository(it, api) }
+    }
+
+    @JvmName("readFrom-userRepo")
+    public suspend fun read(from: List<UserRepository>): List<AuthorizedInvitationRepository> {
+        val invitations = base.read(token, from).map { it.data }
         return invitations.map { AuthorizedInvitationRepository(it, api) }
     }
 }
