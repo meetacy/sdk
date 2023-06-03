@@ -3,6 +3,7 @@ package app.meetacy.sdk.invitations
 import app.meetacy.sdk.AuthorizedMeetacyApi
 import app.meetacy.sdk.types.auth.Token
 import app.meetacy.sdk.types.datetime.DateTime
+import app.meetacy.sdk.types.invitation.InvitationId
 import app.meetacy.sdk.types.meeting.MeetingId
 import app.meetacy.sdk.types.user.User
 
@@ -17,6 +18,12 @@ public class AuthorizedInvitationsApi(private val api: AuthorizedMeetacyApi) {
     ): AuthorizedInvitationRepository {
         val invitation = base.create(token, invitedUser, expiryDate, meetingId).data
 
-        return AuthorizedInvitationRepository(invitation)
+        return AuthorizedInvitationRepository(invitation, api)
+    }
+
+    public suspend fun accept(
+        invitationId: InvitationId
+    ) {
+        base.accept(token, invitationId)
     }
 }
