@@ -393,6 +393,39 @@ paths:
               examples:
                 InvalidAccessIdentity:
                   $ref: '#/components/examples/InvalidToken'
+  /invitations/read:
+    description: Read an invitation
+    parameters:
+      - name: Api-Version
+        in: header
+        description: The version of API to invoke request with
+        required: true
+        schema:
+          type: string
+    get:
+      tags:
+        - invitations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReadInvitationRequest'
+      responses:
+        "200":
+          description: Example of a successfully retrieved invitation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReadInvitationResponse'
+        "400":
+          description: Example of some possible errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidResponse'
+              examples:
+                InvalidToken:
+                  $ref: '#/components/examples/InvalidToken'
   /meetings/edit:
     parameters:
       - name: Api-Version
@@ -1517,3 +1550,31 @@ components:
       required:
         - token
         - invitationIdentity
+    ReadInvitationRequest:
+      type: object
+      properties:
+        token:
+          type: string
+        invitorUserIds:
+          type: array
+          items:
+            type: string
+        invitationIds:
+          type: array
+          items:
+            type: string
+      required:
+        - token
+    ReadInvitationResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+          example: true
+        result:
+          type: array
+          items:
+            $ref: "#/components/schemas/Invitation"
+      required:
+        - "status"
+        - "result"
