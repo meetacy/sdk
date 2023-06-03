@@ -3,6 +3,7 @@
 package app.meetacy.sdk.engine.ktor.requests.friends
 
 import app.meetacy.sdk.engine.ktor.mapToLocation
+import app.meetacy.sdk.engine.ktor.mapToRelationship
 import app.meetacy.sdk.engine.ktor.mapToUser
 import app.meetacy.sdk.engine.requests.AddFriendRequest
 import app.meetacy.sdk.engine.requests.DeleteFriendRequest
@@ -81,7 +82,9 @@ internal class FriendsEngine(
                 RegularUser(
                     id = UserId(user.id),
                     nickname = user.nickname,
-                    avatarId = user.avatarId?.let(::FileId)
+                    avatarId = user.avatarId?.let(::FileId),
+                    relationship = user.relationship?.mapToRelationship()
+                        ?: error("Regular user should always have relationship parameter")
                 )
             }
         )
