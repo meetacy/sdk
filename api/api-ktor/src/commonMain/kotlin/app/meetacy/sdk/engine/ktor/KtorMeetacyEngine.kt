@@ -76,6 +76,7 @@ public class KtorMeetacyEngine(
             is UploadFileRequest -> files.upload(request) as T
             // invitations
             is CreateInvitationRequest -> invitations.create(request) as T
+            is ReadInvitationRequest -> invitations.read(request) as T
             is AcceptInvitationRequest -> invitations.accept(request) as T
             // not yet supported
             is LinkEmailRequest -> notSupported()
