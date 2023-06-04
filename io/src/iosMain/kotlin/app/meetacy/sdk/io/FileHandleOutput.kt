@@ -1,38 +1,39 @@
 package app.meetacy.sdk.io
 
 import app.meetacy.sdk.io.bytes.ByteArrayView
-import kotlinx.cinterop.allocArrayOf
-import kotlinx.cinterop.memScoped
+import kotlinx.cinterop.*
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import platform.Foundation.NSData
-import platform.Foundation.NSFileHandle
-import platform.Foundation.closeFile
-import platform.Foundation.create
-import platform.Foundation.writeData
+import platform.Foundation.*
 import kotlin.coroutines.CoroutineContext
+
+public fun NSFileHandle.asMeetacyOutputSource(
+    context: CoroutineContext = Dispatchers.Default
+): OutputSource = object : OutputSource {
+    override suspend fun open(scope: CoroutineScope): Output {
+        return this@asMeetacyOutputSource.asMeetacyOutput(context)
+    }
+}
 
 public fun NSFileHandle.asMeetacyOutput(
     context: CoroutineContext = Dispatchers.Default,
 ): Output = object : Output {
     val stream = this@asMeetacyOutput
 
-    override suspend fun write(source: ByteArrayView) = withContext(context) {
-        val currentOffset: ULong = stream.getOffset().first ?: error("get current offset error")
-        val newOffset: ULong = currentOffset + source.fromIndex.toULong()
-        val (result, error) = stream.seek(newOffset)
+    override suspend fun write(source: ByteArrayView) {
+        withContext(context) {
+            val data = memScoped {
+                NSData.create(
+                    bytes = allocArrayOf(source.extractData()),
+                    length = source.size.toULong()
+                )
+            }
 
-        if (error != null) throw error.toException()
-        if (result == null || !result) error("the seek could not be performed")
-
-        val data = memScoped {
-            NSData.create(
-                bytes = allocArrayOf(source.underlying.copyOf(source.size)),
-                length = source.size.toULong()
-            )
+            runMemScopedCatching { error ->
+                stream.writeData(data, error.ptr)
+            }.asKotlinResult().getOrThrow()
         }
-
-        stream.writeData(data)
     }
 
     override suspend fun close() = withContext(context) { stream.closeFile() }
