@@ -1,6 +1,7 @@
 package app.meetacy.sdk.io
 
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.coroutineScope
 
 public interface InputSource {
@@ -15,5 +16,6 @@ public suspend inline fun <T> InputSource.use(
         block(input)
     } finally {
         input.close()
+        cancel()
     }
 }

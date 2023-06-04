@@ -1,18 +1,24 @@
 package app.meetacy.sdk.io
 
 import app.meetacy.sdk.io.bytes.ByteArrayView
-import kotlinx.cinterop.*
+import kotlinx.cinterop.allocArrayOf
+import kotlinx.cinterop.memScoped
+import kotlinx.cinterop.ptr
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import platform.Foundation.*
 import kotlin.coroutines.CoroutineContext
 
-public fun NSFileHandle.asMeetacyOutputSource(
+public fun NSURL.asMeetacyOutputSource(
     context: CoroutineContext = Dispatchers.Default
 ): OutputSource = object : OutputSource {
     override suspend fun open(scope: CoroutineScope): Output {
-        return this@asMeetacyOutputSource.asMeetacyOutput(context)
+        val result = runMemScopedCatching { error ->
+            NSFileHandle.fileHandleForReadingFromURL(this@asMeetacyOutputSource, error.ptr)
+        }.asKotlinResult().getOrThrow() ?: error("Cannot open file handle for write")
+
+        return result.asMeetacyOutput(context)
     }
 }
 
@@ -31,7 +37,8 @@ public fun NSFileHandle.asMeetacyOutput(
             }
 
             runMemScopedCatching { error ->
-                stream.writeData(data, error.ptr)
+                val result = stream.writeData(data, error.ptr)
+                require(result) { "Couldn't write data to file handle" }
             }.asKotlinResult().getOrThrow()
         }
     }
