@@ -16,6 +16,5 @@ public suspend inline fun <T> InputSource.use(
         block(input)
     } finally {
         input.close()
-        cancel()
     }
 }

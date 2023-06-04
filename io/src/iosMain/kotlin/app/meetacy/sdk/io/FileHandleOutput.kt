@@ -15,7 +15,7 @@ public fun NSURL.asMeetacyOutputSource(
 ): OutputSource = object : OutputSource {
     override suspend fun open(scope: CoroutineScope): Output {
         val result = runMemScopedCatching { error ->
-            NSFileHandle.fileHandleForReadingFromURL(this@asMeetacyOutputSource, error.ptr)
+            NSFileHandle.fileHandleForWritingToURL(this@asMeetacyOutputSource, error.ptr)
         }.asKotlinResult().getOrThrow() ?: error("Cannot open file handle for write")
 
         return result.asMeetacyOutput(context)

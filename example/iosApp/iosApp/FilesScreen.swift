@@ -22,27 +22,20 @@ import Foundation
     
     func setUrl(_ url: URL) {
         Task { @MainActor in
-            guard let fileHandle = try? FileHandle(forReadingFrom: url) else { return }
-            await setupImageAsync(fileHandle)
+            await setupImageAsync(url)
         }
     }
     
     
-    func setupImageAsync(_ source: FileHandle) async {
+    func setupImageAsync(_ url: URL) async {
         guard let useCase else { return }
         do {
-            
-            let result = try await useCase.filesApi.upload(source: source, onUpdate: { first, second in
-                print(first)
-                print(second)
-                print("*******")
+            let fileId = try await useCase.filesApi.upload(source: url, onUpdate: { read, fileSize in
+                print("read: \(read), fileSize: \(fileSize)")
             })
-            let fileId = result as? String
-            if let fileId {
-                useCase.setupFileId(fileId: fileId)
-            }
+            useCase.setupFileId(fileId: fileId)
         } catch {
-            print("some error")
+            self.error = "Upload image error"
         }
     }
     
@@ -79,16 +72,9 @@ import Foundation
         
         FileManager.default.createFile(atPath: temporaryFileURL.path(), contents: nil)
         
-        guard let fileHandle = try? FileHandle(forWritingTo: temporaryFileURL) else {
-            self.error = "Create File Handle error"
-            return
-        }
-        
         do {
-            try await file.download(destination: fileHandle) { long1, long2 in
-                print(long1)
-                print(long2)
-                print("********")
+            try await file.download(destination: temporaryFileURL) { write, fileSize in
+                print("write: \(write), fileSize: \(fileSize)")
             }
             guard let imageData = try? Data(contentsOf: temporaryFileURL) else {
                 self.error = "Get image data error"

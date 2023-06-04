@@ -6,7 +6,6 @@ import app.meetacy.sdk.io.asMeetacyInput
 import app.meetacy.sdk.io.asMeetacyInputSource
 import app.meetacy.sdk.io.asMeetacyOutput
 import app.meetacy.sdk.io.asMeetacyOutputSource
-import app.meetacy.sdk.io.size
 import app.meetacy.sdk.io.transferTo
 import app.meetacy.sdk.io.use
 import app.meetacy.sdk.types.auth.Token
@@ -15,10 +14,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import platform.Foundation.NSFileHandle
+import platform.Foundation.NSURL
 
 public suspend inline fun FilesApi.download(
     fileId: FileId,
-    destination: NSFileHandle,
+    destination: NSURL,
     crossinline onUpdate: (downloaded: Long, totalBytes: Long) -> Unit = { _, _ -> }
 ) {
     val file = get(fileId)
@@ -52,10 +52,12 @@ public suspend inline fun FilesApi.download(
 
 public suspend inline fun FilesApi.upload(
     token: Token,
-    source: NSFileHandle,
+    source: NSURL,
     crossinline onUpdate: (uploaded: Long, totalBytes: Long) -> Unit = { _, _ -> }
-): FileId {
-    val fileSize = withContext(Dispatchers.Default) { source.size }
+): String {
+    val fileSize = withContext(Dispatchers.Default) {
+        source.fileSize ?: error("Cannot read file length")
+    }
 
     return upload(
         token = token,
@@ -63,7 +65,7 @@ public suspend inline fun FilesApi.upload(
             size = fileSize.toLong(),
             input = source.asMeetacyInputSource().withCallback { read -> onUpdate(read, fileSize.toLong()) }
         )
-    )
+    ).string
 }
 
 public suspend inline fun FilesApi.upload(
@@ -71,7 +73,7 @@ public suspend inline fun FilesApi.upload(
     fileSize: Long,
     crossinline source: suspend () -> NSFileHandle,
     crossinline onUpdate: (uploaded: Long, totalBytes: Long) -> Unit = { _, _ -> }
-): FileId = upload(
+): String = upload(
     token = token,
     source = UploadableFile(
         size = fileSize,
@@ -81,4 +83,4 @@ public suspend inline fun FilesApi.upload(
                 .withCallback { read -> onUpdate(read, fileSize) }
         }
     )
-)
+).string

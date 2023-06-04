@@ -3,9 +3,10 @@ package app.meetacy.sdk.files
 import app.meetacy.sdk.io.*
 import kotlinx.coroutines.CoroutineScope
 import platform.Foundation.NSFileHandle
+import platform.Foundation.NSURL
 
 public suspend inline fun FileRepository.download(
-    destination: NSFileHandle,
+    destination: NSURL,
     crossinline onUpdate: (downloaded: Long, totalBytes: Long) -> Unit = { _, _ -> }
 ) {
     val file = api.files.get(id)

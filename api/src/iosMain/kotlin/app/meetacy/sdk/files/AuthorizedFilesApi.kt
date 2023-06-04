@@ -7,7 +7,6 @@ import app.meetacy.sdk.io.asMeetacyInput
 import app.meetacy.sdk.io.asMeetacyInputSource
 import app.meetacy.sdk.io.asMeetacyOutput
 import app.meetacy.sdk.io.asMeetacyOutputSource
-import app.meetacy.sdk.io.size
 import app.meetacy.sdk.io.transferTo
 import app.meetacy.sdk.io.use
 import app.meetacy.sdk.types.file.FileId
@@ -15,12 +14,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import platform.Foundation.NSFileHandle
+import platform.Foundation.NSURL
 
 public suspend fun AuthorizedFilesApi.upload(file: UploadableFile): String = upload(file).string
 
 public suspend inline fun AuthorizedFilesApi.download(
     fileId: FileId,
-    destination: NSFileHandle,
+    destination: NSURL,
     crossinline onUpdate: (downloaded: Long, totalBytes: Long) -> Unit = { _, _ -> }
 ) {
     val file = get(fileId)
@@ -53,10 +53,12 @@ public suspend inline fun AuthorizedFilesApi.download(
 }
 
 public suspend inline fun AuthorizedFilesApi.upload(
-    source: NSFileHandle,
+    source: NSURL,
     crossinline onUpdate: (uploaded: Long, totalBytes: Long) -> Unit = { _, _ -> }
 ): String {
-    val fileSize = withContext(Dispatchers.Default) { source.size }
+    val fileSize = withContext(Dispatchers.Default) {
+        source.fileSize ?: error("Cannot read file length")
+    }
 
     return upload(
         file = UploadableFile(

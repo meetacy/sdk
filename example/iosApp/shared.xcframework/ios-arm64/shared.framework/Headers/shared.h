@@ -6,9 +6,9 @@
 #import <Foundation/NSString.h>
 #import <Foundation/NSValue.h>
 
-@class SharedKtor_client_coreHttpClient, SharedKotlinx_serialization_jsonJson, SharedMeetacyApi, SharedAuthorizedSelfUserRepository, SharedAuthorizedAuthApi, SharedAuthorizedFilesApi, SharedAuthorizedFriendsApi, SharedAuthorizedMeetingsApi, SharedAuthorizedUsersApi, SharedMeetacyApiCompanion, SharedAuthorizedMeetacyApi, SharedTypesSelfUser, SharedAuthApi, SharedFilesApi, SharedFriendsApi, SharedMeetingsApi, SharedUsersApi, SharedEmailApi, SharedAuthorizedEmailApi, SharedLinkEmailResult, SharedKotlinThrowable, SharedKotlinArray<T>, SharedKotlinException, SharedKotlinRuntimeException, SharedMeetacyException, SharedMeetacyResponseException, SharedMeetacyUnauthorizedExceptionCompanion, SharedTypesRegularUser, SharedFileRepository, SharedRegularUserRepository, SharedSelfUserRepository, SharedAuthorizedUserRepositoryCompanion, SharedUserRepositoryCompanion, SharedTypesMeeting, SharedAuthorizedMeetingRepository, SharedTypesLocation, SharedTypesMeetingVisibility, SharedMeetingRepository, SharedAuthorizedMeetingParticipantsRepository, SharedAuthorizedMeetingsHistoryApi, SharedAuthorizedMeetingsMapApi, SharedAuthorizedMeetingParticipantsApi, SharedMeetingParticipantsRepository, SharedMeetingsHistoryApi, SharedMeetingsMapApi, SharedMeetingParticipantsApi, SharedDownloadableFile, SharedUploadableFile, SharedAuthorizedFriendsLocationApi, SharedFriendsLocationApi, SharedAuthorizedRegularUserRepository, SharedAddFriendRequest, SharedConfirmEmailRequest, SharedConfirmEmailRequestResponse, SharedCreateMeetingRequestResponse, SharedDeleteFriendRequest, SharedEditMeetingRequest, SharedEditMeetingRequestResponse, SharedEditUserRequest, SharedEditUserRequestResponse, SharedEmitFriendsLocationRequest, SharedTypesUserLocationSnapshot, SharedEmitFriendsLocationRequestUpdate, SharedGenerateAuthRequest, SharedGenerateAuthRequestResponse, SharedGetFileRequest, SharedGetFileRequestResponse, SharedGetMeRequest, SharedGetMeRequestResponse, SharedGetMeetingRequest, SharedGetMeetingRequestResponse, SharedGetUserRequest, SharedGetUserRequestResponse, SharedLinkEmailRequest, SharedListFriendsRequest, SharedTypesPagingResponse<__covariant T>, SharedListFriendsRequestResponse, SharedListMeetingParticipantsRequest, SharedListMeetingParticipantsRequestResponse, SharedListMeetingsHistoryRequest, SharedListMeetingsHistoryRequestResponse, SharedListMeetingsMapRequest, SharedListMeetingsMapRequestResponse, SharedParticipateMeetingRequest, SharedUploadFileRequestResponse, SharedByteArrayView, SharedKotlinByteArray, SharedByteArrayViewCompanion, SharedKotlinByteIterator, SharedKotlinIntRange, SharedFilesUseCase, SharedRegisterUseCase, NSFileHandle, NSError, SharedKotlinPair<__covariant A, __covariant B>, SharedKotlinIllegalStateException, SharedKtor_client_coreHttpClientEngineConfig, SharedKtor_client_coreHttpClientConfig<T>, SharedKtor_eventsEvents, SharedKtor_client_coreHttpReceivePipeline, SharedKtor_client_coreHttpRequestPipeline, SharedKtor_client_coreHttpResponsePipeline, SharedKtor_client_coreHttpSendPipeline, SharedKotlinx_serialization_coreSerializersModule, SharedKotlinx_serialization_jsonJsonDefault, SharedKotlinx_serialization_jsonJsonElement, SharedKotlinx_serialization_jsonJsonConfiguration, SharedTypesLocationCompanion, SharedKotlinEnumCompanion, SharedKotlinEnum<E>, SharedTypesLocationSnapshot, SharedKotlinIntProgressionCompanion, SharedKotlinIntIterator, SharedKotlinIntProgression, SharedKotlinIntRangeCompanion, SharedKtor_client_coreHttpRequestData, SharedKtor_client_coreHttpResponseData, SharedKotlinx_coroutines_coreCoroutineDispatcher, SharedKtor_client_coreProxyConfig, SharedKtor_utilsAttributeKey<T>, SharedKtor_eventsEventDefinition<T>, SharedKtor_utilsPipelinePhase, SharedKtor_utilsPipeline<TSubject, TContext>, SharedKtor_client_coreHttpReceivePipelinePhases, SharedKtor_client_coreHttpResponse, SharedKotlinUnit, SharedKtor_client_coreHttpRequestPipelinePhases, SharedKtor_client_coreHttpRequestBuilder, SharedKtor_client_coreHttpResponsePipelinePhases, SharedKtor_client_coreHttpResponseContainer, SharedKtor_client_coreHttpClientCall, SharedKtor_client_coreHttpSendPipelinePhases, SharedKotlinx_serialization_jsonJsonElementCompanion, SharedKtor_httpUrl, SharedKtor_httpHttpMethod, SharedKtor_httpOutgoingContent, SharedKtor_httpHttpStatusCode, SharedKtor_utilsGMTDate, SharedKtor_httpHttpProtocolVersion, SharedKotlinAbstractCoroutineContextElement, SharedKotlinx_coroutines_coreCoroutineDispatcherKey, SharedKtor_httpHeadersBuilder, SharedKtor_client_coreHttpRequestBuilderCompanion, SharedKtor_httpURLBuilder, SharedKtor_utilsTypeInfo, SharedKtor_client_coreHttpClientCallCompanion, SharedKotlinNothing, SharedKotlinx_serialization_coreSerialKind, SharedKtor_httpUrlCompanion, SharedKtor_httpURLProtocol, SharedKtor_httpHttpMethodCompanion, SharedKtor_httpContentType, SharedKotlinCancellationException, SharedKtor_httpHttpStatusCodeCompanion, SharedKtor_utilsGMTDateCompanion, SharedKtor_utilsWeekDay, SharedKtor_utilsMonth, SharedKtor_httpHttpProtocolVersionCompanion, SharedKotlinAbstractCoroutineContextKey<B, E>, SharedKtor_ioMemory, SharedKtor_ioChunkBuffer, SharedKtor_ioBuffer, SharedKtor_ioByteReadPacket, SharedKtor_utilsStringValuesBuilderImpl, SharedKtor_httpURLBuilderCompanion, SharedKtor_httpURLProtocolCompanion, SharedKtor_httpHeaderValueParam, SharedKtor_httpHeaderValueWithParametersCompanion, SharedKtor_httpHeaderValueWithParameters, SharedKtor_httpContentTypeCompanion, SharedKtor_utilsWeekDayCompanion, SharedKtor_utilsMonthCompanion, SharedKtor_ioMemoryCompanion, SharedKtor_ioBufferCompanion, SharedKtor_ioChunkBufferCompanion, SharedKtor_ioInputCompanion, SharedKtor_ioInput, SharedKtor_ioByteReadPacketCompanion, SharedKotlinKTypeProjection, SharedKotlinx_coroutines_coreAtomicDesc, SharedKotlinx_coroutines_coreLockFreeLinkedListNodePrepareOp, SharedKotlinKVariance, SharedKotlinKTypeProjectionCompanion, SharedKotlinx_coroutines_coreAtomicOp<__contravariant T>, SharedKotlinx_coroutines_coreOpDescriptor, SharedKotlinx_coroutines_coreLockFreeLinkedListNode, SharedKotlinx_coroutines_coreLockFreeLinkedListNodeAbstractAtomicDesc, SharedKotlinx_coroutines_coreLockFreeLinkedListNodeAddLastDesc<T>, SharedKotlinx_coroutines_coreLockFreeLinkedListNodeRemoveFirstDesc<T>;
+@class SharedKtor_client_coreHttpClient, SharedKotlinx_serialization_jsonJson, SharedMeetacyApi, SharedAuthorizedSelfUserRepository, SharedAuthorizedAuthApi, SharedAuthorizedFilesApi, SharedAuthorizedFriendsApi, SharedAuthorizedMeetingsApi, SharedAuthorizedUsersApi, SharedMeetacyApiCompanion, SharedAuthorizedMeetacyApi, SharedTypesSelfUser, SharedAuthApi, SharedFilesApi, SharedFriendsApi, SharedMeetingsApi, SharedUsersApi, SharedEmailApi, SharedAuthorizedEmailApi, SharedLinkEmailResult, SharedKotlinThrowable, SharedKotlinArray<T>, SharedKotlinException, SharedKotlinRuntimeException, SharedMeetacyException, SharedMeetacyResponseException, SharedMeetacyUnauthorizedExceptionCompanion, SharedTypesRegularUser, SharedFileRepository, SharedRegularUserRepository, SharedSelfUserRepository, SharedAuthorizedUserRepositoryCompanion, SharedUserRepositoryCompanion, SharedTypesMeeting, SharedAuthorizedMeetingRepository, SharedTypesLocation, SharedTypesMeetingVisibility, SharedMeetingRepository, SharedAuthorizedMeetingParticipantsRepository, SharedAuthorizedMeetingsHistoryApi, SharedAuthorizedMeetingsMapApi, SharedAuthorizedMeetingParticipantsApi, SharedMeetingParticipantsRepository, SharedMeetingsHistoryApi, SharedMeetingsMapApi, SharedMeetingParticipantsApi, SharedDownloadableFile, SharedUploadableFile, SharedAuthorizedFriendsLocationApi, SharedFriendsLocationApi, SharedAuthorizedRegularUserRepository, SharedAddFriendRequest, SharedConfirmEmailRequest, SharedConfirmEmailRequestResponse, SharedCreateMeetingRequestResponse, SharedDeleteFriendRequest, SharedEditMeetingRequest, SharedEditMeetingRequestResponse, SharedEditUserRequest, SharedEditUserRequestResponse, SharedEmitFriendsLocationRequest, SharedTypesUserLocationSnapshot, SharedEmitFriendsLocationRequestUpdate, SharedGenerateAuthRequest, SharedGenerateAuthRequestResponse, SharedGetFileRequest, SharedGetFileRequestResponse, SharedGetMeRequest, SharedGetMeRequestResponse, SharedGetMeetingRequest, SharedGetMeetingRequestResponse, SharedGetUserRequest, SharedGetUserRequestResponse, SharedLinkEmailRequest, SharedListFriendsRequest, SharedTypesPagingResponse<__covariant T>, SharedListFriendsRequestResponse, SharedListMeetingParticipantsRequest, SharedListMeetingParticipantsRequestResponse, SharedListMeetingsHistoryRequest, SharedListMeetingsHistoryRequestResponse, SharedListMeetingsMapRequest, SharedListMeetingsMapRequestResponse, SharedParticipateMeetingRequest, SharedUploadFileRequestResponse, SharedByteArrayView, NSError, SharedKotlinByteArray, SharedByteArrayViewCompanion, SharedKotlinByteIterator, SharedKotlinIntRange, SharedFilesUseCase, SharedRegisterUseCase, NSURL, SharedKotlinDeferScope, SharedKotlinAutofreeScope, SharedKotlinArenaBase, SharedKotlinCValues<T>, SharedKotlinMemScope, NSFileHandle, SharedKotlinIllegalStateException, SharedKtor_client_coreHttpClientEngineConfig, SharedKtor_client_coreHttpClientConfig<T>, SharedKtor_eventsEvents, SharedKtor_client_coreHttpReceivePipeline, SharedKtor_client_coreHttpRequestPipeline, SharedKtor_client_coreHttpResponsePipeline, SharedKtor_client_coreHttpSendPipeline, SharedKotlinx_serialization_coreSerializersModule, SharedKotlinx_serialization_jsonJsonDefault, SharedKotlinx_serialization_jsonJsonElement, SharedKotlinx_serialization_jsonJsonConfiguration, SharedTypesLocationCompanion, SharedKotlinEnumCompanion, SharedKotlinEnum<E>, SharedTypesLocationSnapshot, SharedKotlinIntProgressionCompanion, SharedKotlinIntIterator, SharedKotlinIntProgression, SharedKotlinIntRangeCompanion, SharedKotlinCValuesRef<T>, SharedKtor_client_coreHttpRequestData, SharedKtor_client_coreHttpResponseData, SharedKotlinx_coroutines_coreCoroutineDispatcher, SharedKtor_client_coreProxyConfig, SharedKtor_utilsAttributeKey<T>, SharedKtor_eventsEventDefinition<T>, SharedKtor_utilsPipelinePhase, SharedKtor_utilsPipeline<TSubject, TContext>, SharedKtor_client_coreHttpReceivePipelinePhases, SharedKtor_client_coreHttpResponse, SharedKotlinUnit, SharedKtor_client_coreHttpRequestPipelinePhases, SharedKtor_client_coreHttpRequestBuilder, SharedKtor_client_coreHttpResponsePipelinePhases, SharedKtor_client_coreHttpResponseContainer, SharedKtor_client_coreHttpClientCall, SharedKtor_client_coreHttpSendPipelinePhases, SharedKotlinx_serialization_jsonJsonElementCompanion, SharedKtor_httpUrl, SharedKtor_httpHttpMethod, SharedKtor_httpOutgoingContent, SharedKtor_httpHttpStatusCode, SharedKtor_utilsGMTDate, SharedKtor_httpHttpProtocolVersion, SharedKotlinAbstractCoroutineContextElement, SharedKotlinx_coroutines_coreCoroutineDispatcherKey, SharedKtor_httpHeadersBuilder, SharedKtor_client_coreHttpRequestBuilderCompanion, SharedKtor_httpURLBuilder, SharedKtor_utilsTypeInfo, SharedKtor_client_coreHttpClientCallCompanion, SharedKotlinNothing, SharedKotlinx_serialization_coreSerialKind, SharedKtor_httpUrlCompanion, SharedKtor_httpURLProtocol, SharedKtor_httpHttpMethodCompanion, SharedKtor_httpContentType, SharedKotlinCancellationException, SharedKtor_httpHttpStatusCodeCompanion, SharedKtor_utilsGMTDateCompanion, SharedKtor_utilsWeekDay, SharedKtor_utilsMonth, SharedKtor_httpHttpProtocolVersionCompanion, SharedKotlinAbstractCoroutineContextKey<B, E>, SharedKtor_ioMemory, SharedKtor_ioChunkBuffer, SharedKtor_ioBuffer, SharedKtor_ioByteReadPacket, SharedKtor_utilsStringValuesBuilderImpl, SharedKtor_httpURLBuilderCompanion, SharedKtor_httpURLProtocolCompanion, SharedKtor_httpHeaderValueParam, SharedKtor_httpHeaderValueWithParametersCompanion, SharedKtor_httpHeaderValueWithParameters, SharedKtor_httpContentTypeCompanion, SharedKtor_utilsWeekDayCompanion, SharedKtor_utilsMonthCompanion, SharedKtor_ioMemoryCompanion, SharedKtor_ioBufferCompanion, SharedKtor_ioChunkBufferCompanion, SharedKtor_ioInputCompanion, SharedKtor_ioInput, SharedKtor_ioByteReadPacketCompanion, SharedKotlinKTypeProjection, SharedKotlinx_coroutines_coreAtomicDesc, SharedKotlinx_coroutines_coreLockFreeLinkedListNodePrepareOp, SharedKotlinKVariance, SharedKotlinKTypeProjectionCompanion, SharedKotlinx_coroutines_coreAtomicOp<__contravariant T>, SharedKotlinx_coroutines_coreOpDescriptor, SharedKotlinx_coroutines_coreLockFreeLinkedListNode, SharedKotlinx_coroutines_coreLockFreeLinkedListNodeAbstractAtomicDesc, SharedKotlinx_coroutines_coreLockFreeLinkedListNodeAddLastDesc<T>, SharedKotlinx_coroutines_coreLockFreeLinkedListNodeRemoveFirstDesc<T>;
 
-@protocol SharedMeetacyRequest, SharedMeetacyRequestsEngine, SharedTypesConfirmEmailStatus, SharedUserRepository, SharedTypesUser, SharedAuthorizedUserRepository, SharedTypesOptional, SharedTypesRelationship, SharedTypesPagingRepository, SharedTypesPagingSource, SharedInputSource, SharedKotlinx_coroutines_coreFlow, SharedKotlinx_coroutines_coreFlowCollector, SharedFlowMeetacyRequest, SharedInput, SharedOutput, SharedKotlinx_coroutines_coreCoroutineScope, SharedIOChannel, SharedOutputSource, SharedKotlinSuspendFunction0, SharedKotlinCoroutineContext, SharedIOSource, SharedKotlinSuspendFunction1, SharedKtor_ioCloseable, SharedKtor_client_coreHttpClientEngine, SharedKtor_client_coreHttpClientEngineCapability, SharedKtor_utilsAttributes, SharedKotlinx_serialization_coreDeserializationStrategy, SharedKotlinx_serialization_coreSerializationStrategy, SharedKotlinx_serialization_coreSerialFormat, SharedKotlinx_serialization_coreStringFormat, SharedKotlinIterator, SharedKotlinComparable, SharedTypesPagingIterator, SharedKotlinIterable, SharedKotlinClosedRange, SharedKotlinOpenEndRange, SharedKotlinFunction, SharedKotlinCoroutineContextElement, SharedKotlinCoroutineContextKey, SharedKtor_client_coreHttpClientPlugin, SharedKotlinx_coroutines_coreDisposableHandle, SharedKotlinSuspendFunction2, SharedKotlinx_serialization_coreDecoder, SharedKotlinx_serialization_coreSerialDescriptor, SharedKotlinx_serialization_coreEncoder, SharedKotlinx_serialization_coreSerializersModuleCollector, SharedKotlinx_serialization_coreKSerializer, SharedKotlinKClass, SharedKtor_httpHeaders, SharedKotlinx_coroutines_coreJob, SharedKotlinContinuation, SharedKotlinContinuationInterceptor, SharedKotlinx_coroutines_coreRunnable, SharedKtor_httpHttpMessage, SharedKtor_ioByteReadChannel, SharedKtor_httpHttpMessageBuilder, SharedKtor_client_coreHttpRequest, SharedKotlinx_serialization_coreCompositeDecoder, SharedKotlinAnnotation, SharedKotlinx_serialization_coreCompositeEncoder, SharedKotlinKDeclarationContainer, SharedKotlinKAnnotatedElement, SharedKotlinKClassifier, SharedKtor_httpParameters, SharedKotlinMapEntry, SharedKtor_utilsStringValues, SharedKotlinx_coroutines_coreChildHandle, SharedKotlinx_coroutines_coreChildJob, SharedKotlinSequence, SharedKotlinx_coroutines_coreSelectClause0, SharedKtor_ioReadSession, SharedKotlinAppendable, SharedKtor_utilsStringValuesBuilder, SharedKtor_httpParametersBuilder, SharedKotlinKType, SharedKotlinx_coroutines_coreParentJob, SharedKotlinx_coroutines_coreSelectInstance, SharedKtor_ioObjectPool;
+@protocol SharedMeetacyRequest, SharedMeetacyRequestsEngine, SharedTypesConfirmEmailStatus, SharedUserRepository, SharedTypesUser, SharedAuthorizedUserRepository, SharedTypesOptional, SharedTypesRelationship, SharedTypesPagingRepository, SharedTypesPagingSource, SharedInputSource, SharedKotlinx_coroutines_coreFlow, SharedKotlinx_coroutines_coreFlowCollector, SharedFlowMeetacyRequest, SharedInput, SharedOutput, SharedKotlinx_coroutines_coreCoroutineScope, SharedIOChannel, SharedOutputSource, SharedIosResult, SharedKotlinSuspendFunction0, SharedKotlinNativePlacement, SharedKotlinNativeFreeablePlacement, SharedKotlinCoroutineContext, SharedIOSource, SharedKotlinSuspendFunction1, SharedKtor_ioCloseable, SharedKtor_client_coreHttpClientEngine, SharedKtor_client_coreHttpClientEngineCapability, SharedKtor_utilsAttributes, SharedKotlinx_serialization_coreDeserializationStrategy, SharedKotlinx_serialization_coreSerializationStrategy, SharedKotlinx_serialization_coreSerialFormat, SharedKotlinx_serialization_coreStringFormat, SharedKotlinIterator, SharedKotlinComparable, SharedTypesPagingIterator, SharedKotlinIterable, SharedKotlinClosedRange, SharedKotlinOpenEndRange, SharedKotlinFunction, SharedKotlinCoroutineContextElement, SharedKotlinCoroutineContextKey, SharedKtor_client_coreHttpClientPlugin, SharedKotlinx_coroutines_coreDisposableHandle, SharedKotlinSuspendFunction2, SharedKotlinx_serialization_coreDecoder, SharedKotlinx_serialization_coreSerialDescriptor, SharedKotlinx_serialization_coreEncoder, SharedKotlinx_serialization_coreSerializersModuleCollector, SharedKotlinx_serialization_coreKSerializer, SharedKotlinKClass, SharedKtor_httpHeaders, SharedKotlinx_coroutines_coreJob, SharedKotlinContinuation, SharedKotlinContinuationInterceptor, SharedKotlinx_coroutines_coreRunnable, SharedKtor_httpHttpMessage, SharedKtor_ioByteReadChannel, SharedKtor_httpHttpMessageBuilder, SharedKtor_client_coreHttpRequest, SharedKotlinx_serialization_coreCompositeDecoder, SharedKotlinAnnotation, SharedKotlinx_serialization_coreCompositeEncoder, SharedKotlinKDeclarationContainer, SharedKotlinKAnnotatedElement, SharedKotlinKClassifier, SharedKtor_httpParameters, SharedKotlinMapEntry, SharedKtor_utilsStringValues, SharedKotlinx_coroutines_coreChildHandle, SharedKotlinx_coroutines_coreChildJob, SharedKotlinSequence, SharedKotlinx_coroutines_coreSelectClause0, SharedKtor_ioReadSession, SharedKotlinAppendable, SharedKtor_utilsStringValuesBuilder, SharedKtor_httpParametersBuilder, SharedKotlinKType, SharedKotlinx_coroutines_coreParentJob, SharedKotlinx_coroutines_coreSelectInstance, SharedKtor_ioObjectPool;
 
 NS_ASSUME_NONNULL_BEGIN
 #pragma clang diagnostic push
@@ -1483,6 +1483,50 @@ __attribute__((swift_name("InputSource")))
 - (void)openScope:(id<SharedKotlinx_coroutines_coreCoroutineScope>)scope completionHandler:(void (^)(id<SharedInput> _Nullable, NSError * _Nullable))completionHandler __attribute__((swift_name("open(scope:completionHandler:)")));
 @end
 
+__attribute__((swift_name("IosResult")))
+@protocol SharedIosResult
+@required
+- (id _Nullable)asKotlinResult __attribute__((swift_name("asKotlinResult()")));
+@end
+
+__attribute__((objc_subclassing_restricted))
+__attribute__((swift_name("IosResultException")))
+@interface SharedIosResultException : SharedKotlinRuntimeException
+- (instancetype)initWithError:(NSError *)error __attribute__((swift_name("init(error:)"))) __attribute__((objc_designated_initializer));
+- (instancetype)init __attribute__((swift_name("init()"))) __attribute__((objc_designated_initializer)) __attribute__((unavailable));
++ (instancetype)new __attribute__((unavailable));
+- (instancetype)initWithMessage:(NSString * _Nullable)message __attribute__((swift_name("init(message:)"))) __attribute__((objc_designated_initializer)) __attribute__((unavailable));
+- (instancetype)initWithMessage:(NSString * _Nullable)message cause:(SharedKotlinThrowable * _Nullable)cause __attribute__((swift_name("init(message:cause:)"))) __attribute__((objc_designated_initializer)) __attribute__((unavailable));
+- (instancetype)initWithCause:(SharedKotlinThrowable * _Nullable)cause __attribute__((swift_name("init(cause:)"))) __attribute__((objc_designated_initializer)) __attribute__((unavailable));
+@property (readonly) NSError *error __attribute__((swift_name("error")));
+@end
+
+__attribute__((objc_subclassing_restricted))
+__attribute__((swift_name("IosResultFailure")))
+@interface SharedIosResultFailure : SharedBase <SharedIosResult>
+- (instancetype)initWithError:(NSError *)error __attribute__((swift_name("init(error:)"))) __attribute__((objc_designated_initializer));
+@property (readonly) NSError *error __attribute__((swift_name("error")));
+@end
+
+__attribute__((objc_subclassing_restricted))
+__attribute__((swift_name("IosResultSuccess")))
+@interface SharedIosResultSuccess<T> : SharedBase <SharedIosResult>
+- (instancetype)initWithValue:(T _Nullable)value __attribute__((swift_name("init(value:)"))) __attribute__((objc_designated_initializer));
+@property (readonly) T _Nullable value __attribute__((swift_name("value")));
+@end
+
+__attribute__((objc_subclassing_restricted))
+__attribute__((swift_name("NativeException")))
+@interface SharedNativeException : SharedKotlinThrowable
+- (instancetype)initWithError:(NSError *)error __attribute__((swift_name("init(error:)"))) __attribute__((objc_designated_initializer));
+- (instancetype)initWithMessage:(NSString * _Nullable)message __attribute__((swift_name("init(message:)"))) __attribute__((objc_designated_initializer)) __attribute__((unavailable));
+- (instancetype)initWithCause:(SharedKotlinThrowable * _Nullable)cause __attribute__((swift_name("init(cause:)"))) __attribute__((objc_designated_initializer)) __attribute__((unavailable));
+- (instancetype)init __attribute__((swift_name("init()"))) __attribute__((objc_designated_initializer)) __attribute__((unavailable));
++ (instancetype)new __attribute__((unavailable));
+- (instancetype)initWithMessage:(NSString * _Nullable)message cause:(SharedKotlinThrowable * _Nullable)cause __attribute__((swift_name("init(message:cause:)"))) __attribute__((objc_designated_initializer)) __attribute__((unavailable));
+@property (readonly) NSError *error __attribute__((swift_name("error")));
+@end
+
 __attribute__((swift_name("Output")))
 @protocol SharedOutput
 @required
@@ -1607,7 +1651,7 @@ __attribute__((swift_name("ThrowableToNSErrorMapper")))
  * @note This method converts instances of CancellationException to errors.
  * Other uncaught Kotlin exceptions are fatal.
 */
-- (void)downloadFileId:(id)fileId destination:(NSFileHandle *)destination onUpdate:(void (^)(SharedLong *, SharedLong *))onUpdate completionHandler:(void (^)(NSError * _Nullable))completionHandler __attribute__((swift_name("download(fileId:destination:onUpdate:completionHandler:)")));
+- (void)downloadFileId:(id)fileId destination:(NSURL *)destination onUpdate:(void (^)(SharedLong *, SharedLong *))onUpdate completionHandler:(void (^)(NSError * _Nullable))completionHandler __attribute__((swift_name("download(fileId:destination:onUpdate:completionHandler:)")));
 
 /**
  * @note This method converts instances of CancellationException to errors.
@@ -1631,7 +1675,7 @@ __attribute__((swift_name("ThrowableToNSErrorMapper")))
  * @note This method converts instances of CancellationException to errors.
  * Other uncaught Kotlin exceptions are fatal.
 */
-- (void)uploadSource:(NSFileHandle *)source onUpdate:(void (^)(SharedLong *, SharedLong *))onUpdate completionHandler:(void (^)(NSString * _Nullable, NSError * _Nullable))completionHandler __attribute__((swift_name("upload(source:onUpdate:completionHandler:)")));
+- (void)uploadSource:(NSURL *)source onUpdate:(void (^)(SharedLong *, SharedLong *))onUpdate completionHandler:(void (^)(NSString * _Nullable, NSError * _Nullable))completionHandler __attribute__((swift_name("upload(source:onUpdate:completionHandler:)")));
 @end
 
 @interface SharedDownloadableFile (Extensions)
@@ -1640,7 +1684,7 @@ __attribute__((swift_name("ThrowableToNSErrorMapper")))
  * @note This method converts instances of CancellationException to errors.
  * Other uncaught Kotlin exceptions are fatal.
 */
-- (void)downloadDestination:(NSFileHandle *)destination onUpdate:(void (^)(SharedLong *, SharedLong *))onUpdate completionHandler:(void (^)(NSError * _Nullable))completionHandler __attribute__((swift_name("download(destination:onUpdate:completionHandler:)")));
+- (void)downloadDestination:(NSURL *)destination onUpdate:(void (^)(SharedLong *, SharedLong *))onUpdate completionHandler:(void (^)(NSError * _Nullable))completionHandler __attribute__((swift_name("download(destination:onUpdate:completionHandler:)")));
 
 /**
  * @note This method converts instances of CancellationException to errors.
@@ -1655,7 +1699,7 @@ __attribute__((swift_name("ThrowableToNSErrorMapper")))
  * @note This method converts instances of CancellationException to errors.
  * Other uncaught Kotlin exceptions are fatal.
 */
-- (void)downloadDestination:(NSFileHandle *)destination onUpdate:(void (^)(SharedLong *, SharedLong *))onUpdate completionHandler:(void (^)(NSError * _Nullable))completionHandler __attribute__((swift_name("download(destination:onUpdate:completionHandler:)")));
+- (void)downloadDestination:(NSURL *)destination onUpdate:(void (^)(SharedLong *, SharedLong *))onUpdate completionHandler:(void (^)(NSError * _Nullable))completionHandler __attribute__((swift_name("download(destination:onUpdate:completionHandler:)")));
 
 /**
  * @note This method converts instances of CancellationException to errors.
@@ -1670,7 +1714,7 @@ __attribute__((swift_name("ThrowableToNSErrorMapper")))
  * @note This method converts instances of CancellationException to errors.
  * Other uncaught Kotlin exceptions are fatal.
 */
-- (void)downloadFileId:(id)fileId destination:(NSFileHandle *)destination onUpdate:(void (^)(SharedLong *, SharedLong *))onUpdate completionHandler:(void (^)(NSError * _Nullable))completionHandler __attribute__((swift_name("download(fileId:destination:onUpdate:completionHandler:)")));
+- (void)downloadFileId:(id)fileId destination:(NSURL *)destination onUpdate:(void (^)(SharedLong *, SharedLong *))onUpdate completionHandler:(void (^)(NSError * _Nullable))completionHandler __attribute__((swift_name("download(fileId:destination:onUpdate:completionHandler:)")));
 
 /**
  * @note This method converts instances of CancellationException to errors.
@@ -1682,19 +1726,68 @@ __attribute__((swift_name("ThrowableToNSErrorMapper")))
  * @note This method converts instances of CancellationException to errors.
  * Other uncaught Kotlin exceptions are fatal.
 */
-- (void)uploadToken:(id)token fileSize:(int64_t)fileSize source:(id<SharedKotlinSuspendFunction0>)source onUpdate:(void (^)(SharedLong *, SharedLong *))onUpdate completionHandler:(void (^)(id _Nullable, NSError * _Nullable))completionHandler __attribute__((swift_name("upload(token:fileSize:source:onUpdate:completionHandler:)")));
+- (void)uploadToken:(id)token fileSize:(int64_t)fileSize source:(id<SharedKotlinSuspendFunction0>)source onUpdate:(void (^)(SharedLong *, SharedLong *))onUpdate completionHandler:(void (^)(NSString * _Nullable, NSError * _Nullable))completionHandler __attribute__((swift_name("upload(token:fileSize:source:onUpdate:completionHandler:)")));
 
 /**
  * @note This method converts instances of CancellationException to errors.
  * Other uncaught Kotlin exceptions are fatal.
 */
-- (void)uploadToken:(id)token source:(NSFileHandle *)source onUpdate:(void (^)(SharedLong *, SharedLong *))onUpdate completionHandler:(void (^)(id _Nullable, NSError * _Nullable))completionHandler __attribute__((swift_name("upload(token:source:onUpdate:completionHandler:)")));
+- (void)uploadToken:(id)token source:(NSURL *)source onUpdate:(void (^)(SharedLong *, SharedLong *))onUpdate completionHandler:(void (^)(NSString * _Nullable, NSError * _Nullable))completionHandler __attribute__((swift_name("upload(token:source:onUpdate:completionHandler:)")));
+@end
+
+__attribute__((swift_name("KotlinDeferScope")))
+@interface SharedKotlinDeferScope : SharedBase
+- (instancetype)init __attribute__((swift_name("init()"))) __attribute__((objc_designated_initializer));
++ (instancetype)new __attribute__((availability(swift, unavailable, message="use object initializers instead")));
+- (void)deferBlock:(void (^)(void))block __attribute__((swift_name("defer(block:)")));
+@end
+
+__attribute__((swift_name("KotlinNativePlacement")))
+@protocol SharedKotlinNativePlacement
+@required
+- (void *)doAllocSize:(int32_t)size align:(int32_t)align __attribute__((swift_name("doAlloc(size:align:)")));
+- (void *)doAllocSize:(int64_t)size align_:(int32_t)align __attribute__((swift_name("doAlloc(size:align_:)")));
+@end
+
+__attribute__((swift_name("KotlinAutofreeScope")))
+@interface SharedKotlinAutofreeScope : SharedKotlinDeferScope <SharedKotlinNativePlacement>
+- (instancetype)init __attribute__((swift_name("init()"))) __attribute__((objc_designated_initializer));
++ (instancetype)new __attribute__((availability(swift, unavailable, message="use object initializers instead")));
+- (void *)doAllocSize:(int64_t)size align_:(int32_t)align __attribute__((swift_name("doAlloc(size:align_:)")));
+@end
+
+__attribute__((swift_name("KotlinArenaBase")))
+@interface SharedKotlinArenaBase : SharedKotlinAutofreeScope
+- (instancetype)initWithParent:(id<SharedKotlinNativeFreeablePlacement>)parent __attribute__((swift_name("init(parent:)"))) __attribute__((objc_designated_initializer));
+- (instancetype)init __attribute__((swift_name("init()"))) __attribute__((objc_designated_initializer)) __attribute__((unavailable));
++ (instancetype)new __attribute__((unavailable));
+- (void *)doAllocSize:(int64_t)size align_:(int32_t)align __attribute__((swift_name("doAlloc(size:align_:)")));
+@end
+
+__attribute__((objc_subclassing_restricted))
+__attribute__((swift_name("KotlinMemScope")))
+@interface SharedKotlinMemScope : SharedKotlinArenaBase
+- (instancetype)init __attribute__((swift_name("init()"))) __attribute__((objc_designated_initializer));
++ (instancetype)new __attribute__((availability(swift, unavailable, message="use object initializers instead")));
+- (instancetype)initWithParent:(id<SharedKotlinNativeFreeablePlacement>)parent __attribute__((swift_name("init(parent:)"))) __attribute__((objc_designated_initializer)) __attribute__((unavailable));
+- (void *)ptr:(SharedKotlinCValues<id> *)receiver __attribute__((swift_name("ptr(_:)")));
+@property (readonly) SharedKotlinMemScope *memScope __attribute__((swift_name("memScope")));
+@end
+
+@interface SharedKotlinMemScope (Extensions)
+- (id<SharedIosResult>)runCatchingBlock:(id _Nullable (^)(id))block __attribute__((swift_name("runCatching(block:)")));
 @end
 
 __attribute__((objc_subclassing_restricted))
 __attribute__((swift_name("MeetacyApiKt")))
 @interface SharedMeetacyApiKt : SharedBase
 + (SharedMeetacyApi *)MeetacyApiBaseUrl:(id)baseUrl httpClient:(SharedKtor_client_coreHttpClient *)httpClient json:(SharedKotlinx_serialization_jsonJson *)json __attribute__((swift_name("MeetacyApi(baseUrl:httpClient:json:)")));
+@end
+
+__attribute__((objc_subclassing_restricted))
+__attribute__((swift_name("NSURLExtKt")))
+@interface SharedNSURLExtKt : SharedBase
++ (SharedULong * _Nullable)fileSize:(NSURL *)receiver __attribute__((swift_name("fileSize(_:)")));
 @end
 
 __attribute__((objc_subclassing_restricted))
@@ -1718,24 +1811,23 @@ __attribute__((swift_name("IOChannelKt")))
 @end
 
 __attribute__((objc_subclassing_restricted))
+__attribute__((swift_name("NSErrorKt")))
+@interface SharedNSErrorKt : SharedBase
++ (id<SharedIosResult>)runMemScopedCatchingBlock:(id _Nullable (^)(id))block __attribute__((swift_name("runMemScopedCatching(block:)")));
+@end
+
+__attribute__((objc_subclassing_restricted))
 __attribute__((swift_name("FileHandleInputKt")))
 @interface SharedFileHandleInputKt : SharedBase
 + (id<SharedInput>)asMeetacyInput:(NSFileHandle *)receiver context:(id<SharedKotlinCoroutineContext>)context __attribute__((swift_name("asMeetacyInput(_:context:)")));
-+ (id<SharedInputSource>)asMeetacyInputSource:(NSFileHandle *)receiver context:(id<SharedKotlinCoroutineContext>)context __attribute__((swift_name("asMeetacyInputSource(_:context:)")));
-+ (id<SharedOutputSource>)asMeetacyOutputSource:(NSFileHandle *)receiver context:(id<SharedKotlinCoroutineContext>)context __attribute__((swift_name("asMeetacyOutputSource(_:context:)")));
++ (id<SharedInputSource>)asMeetacyInputSource:(NSURL *)receiver context:(id<SharedKotlinCoroutineContext>)context __attribute__((swift_name("asMeetacyInputSource(_:context:)")));
 @end
 
 __attribute__((objc_subclassing_restricted))
 __attribute__((swift_name("FileHandleOutputKt")))
 @interface SharedFileHandleOutputKt : SharedBase
 + (id<SharedOutput>)asMeetacyOutput:(NSFileHandle *)receiver context:(id<SharedKotlinCoroutineContext>)context __attribute__((swift_name("asMeetacyOutput(_:context:)")));
-@end
-
-__attribute__((objc_subclassing_restricted))
-__attribute__((swift_name("FileHandleSeekKt")))
-@interface SharedFileHandleSeekKt : SharedBase
-+ (SharedKotlinPair<SharedULong *, NSError *> *)getOffset:(NSFileHandle *)receiver __attribute__((swift_name("getOffset(_:)")));
-+ (SharedKotlinPair<SharedBoolean *, NSError *> *)seek:(NSFileHandle *)receiver offset:(uint64_t)offset __attribute__((swift_name("seek(_:offset:)")));
++ (id<SharedOutputSource>)asMeetacyOutputSource:(NSURL *)receiver context:(id<SharedKotlinCoroutineContext>)context __attribute__((swift_name("asMeetacyOutputSource(_:context:)")));
 @end
 
 __attribute__((objc_subclassing_restricted))
@@ -2194,6 +2286,31 @@ __attribute__((swift_name("KotlinSuspendFunction0")))
 - (void)invokeWithCompletionHandler:(void (^)(id _Nullable_result, NSError * _Nullable))completionHandler __attribute__((swift_name("invoke(completionHandler:)")));
 @end
 
+__attribute__((swift_name("KotlinNativeFreeablePlacement")))
+@protocol SharedKotlinNativeFreeablePlacement <SharedKotlinNativePlacement>
+@required
+- (void)freeMem:(void * _Nullable)mem __attribute__((swift_name("free(mem:)")));
+@end
+
+__attribute__((swift_name("KotlinCValuesRef")))
+@interface SharedKotlinCValuesRef<T> : SharedBase
+- (instancetype)init __attribute__((swift_name("init()"))) __attribute__((objc_designated_initializer));
++ (instancetype)new __attribute__((availability(swift, unavailable, message="use object initializers instead")));
+- (void *)getPointerScope:(SharedKotlinAutofreeScope *)scope __attribute__((swift_name("getPointer(scope:)")));
+@end
+
+__attribute__((swift_name("KotlinCValues")))
+@interface SharedKotlinCValues<T> : SharedKotlinCValuesRef<T>
+- (instancetype)init __attribute__((swift_name("init()"))) __attribute__((objc_designated_initializer));
++ (instancetype)new __attribute__((availability(swift, unavailable, message="use object initializers instead")));
+- (BOOL)isEqual:(id _Nullable)other __attribute__((swift_name("isEqual(_:)")));
+- (void *)getPointerScope:(SharedKotlinAutofreeScope *)scope __attribute__((swift_name("getPointer(scope:)")));
+- (NSUInteger)hash __attribute__((swift_name("hash()")));
+- (void *)placePlacement:(void *)placement __attribute__((swift_name("place(placement:)")));
+@property (readonly) int32_t align __attribute__((swift_name("align")));
+@property (readonly) int32_t size __attribute__((swift_name("size")));
+@end
+
 
 /**
  * @note annotations
@@ -2206,18 +2323,6 @@ __attribute__((swift_name("KotlinCoroutineContext")))
 - (id<SharedKotlinCoroutineContextElement> _Nullable)getKey:(id<SharedKotlinCoroutineContextKey>)key __attribute__((swift_name("get(key:)")));
 - (id<SharedKotlinCoroutineContext>)minusKeyKey:(id<SharedKotlinCoroutineContextKey>)key __attribute__((swift_name("minusKey(key:)")));
 - (id<SharedKotlinCoroutineContext>)plusContext:(id<SharedKotlinCoroutineContext>)context __attribute__((swift_name("plus(context:)")));
-@end
-
-__attribute__((objc_subclassing_restricted))
-__attribute__((swift_name("KotlinPair")))
-@interface SharedKotlinPair<__covariant A, __covariant B> : SharedBase
-- (instancetype)initWithFirst:(A _Nullable)first second:(B _Nullable)second __attribute__((swift_name("init(first:second:)"))) __attribute__((objc_designated_initializer));
-- (SharedKotlinPair<A, B> *)doCopyFirst:(A _Nullable)first second:(B _Nullable)second __attribute__((swift_name("doCopy(first:second:)")));
-- (BOOL)equalsOther:(id _Nullable)other __attribute__((swift_name("equals(other:)")));
-- (int32_t)hashCode __attribute__((swift_name("hashCode()")));
-- (NSString *)toString __attribute__((swift_name("toString()")));
-@property (readonly) A _Nullable first __attribute__((swift_name("first")));
-@property (readonly) B _Nullable second __attribute__((swift_name("second")));
 @end
 
 __attribute__((swift_name("KotlinSuspendFunction1")))
