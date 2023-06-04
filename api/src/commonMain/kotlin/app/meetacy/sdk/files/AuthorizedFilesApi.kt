@@ -5,6 +5,8 @@ import app.meetacy.sdk.io.InputSource
 import app.meetacy.sdk.types.auth.Token
 import app.meetacy.sdk.types.file.FileId
 import app.meetacy.sdk.types.url.Url
+import kotlin.experimental.ExperimentalObjCRefinement
+import kotlin.native.HiddenFromObjC
 
 public class AuthorizedFilesApi(private val api: AuthorizedMeetacyApi) {
     public val token: Token get() = api.token
@@ -18,6 +20,8 @@ public class AuthorizedFilesApi(private val api: AuthorizedMeetacyApi) {
         return api.base.files.get(fileId)
     }
 
+    @OptIn(ExperimentalObjCRefinement::class)
+    @HiddenFromObjC
     public suspend fun upload(file: UploadableFile): FileId {
         return api.base.files.upload(token, file)
     }

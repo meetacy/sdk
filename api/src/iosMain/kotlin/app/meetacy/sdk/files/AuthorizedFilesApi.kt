@@ -1,10 +1,22 @@
 package app.meetacy.sdk.files
 
-import app.meetacy.sdk.io.*
+import app.meetacy.sdk.io.Input
+import app.meetacy.sdk.io.InputSource
+import app.meetacy.sdk.io.OutputSource
+import app.meetacy.sdk.io.asMeetacyInput
+import app.meetacy.sdk.io.asMeetacyInputSource
+import app.meetacy.sdk.io.asMeetacyOutput
+import app.meetacy.sdk.io.asMeetacyOutputSource
+import app.meetacy.sdk.io.size
+import app.meetacy.sdk.io.transferTo
+import app.meetacy.sdk.io.use
 import app.meetacy.sdk.types.file.FileId
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import platform.Foundation.NSFileHandle
+
+public suspend fun AuthorizedFilesApi.upload(file: UploadableFile): String = upload(file).string
 
 public suspend inline fun AuthorizedFilesApi.download(
     fileId: FileId,
@@ -24,7 +36,7 @@ public suspend inline fun AuthorizedFilesApi.download(
 
 public suspend inline fun AuthorizedFilesApi.download(
     fileId: FileId,
-    crossinline destination: suspend () -> OutputStream,
+    crossinline destination: suspend () -> NSFileHandle,
     crossinline onUpdate: (downloaded: Long, totalBytes: Long) -> Unit = { _, _ -> }
 ) {
     val file = get(fileId)
@@ -43,22 +55,23 @@ public suspend inline fun AuthorizedFilesApi.download(
 public suspend inline fun AuthorizedFilesApi.upload(
     source: NSFileHandle,
     crossinline onUpdate: (uploaded: Long, totalBytes: Long) -> Unit = { _, _ -> }
-): FileId {
-    val fileSize = withContext(Dispatchers.Default) { source.length() }
+): String {
+    val fileSize = withContext(Dispatchers.Default) { source.size }
 
     return upload(
         file = UploadableFile(
-            size = fileSize,
-            input = source.asMeetacyInputSource().withCallback { read -> onUpdate(read, fileSize) }
+            size = fileSize.toLong(),
+            input = source.asMeetacyInputSource()
+                .withCallback { read -> onUpdate(read, fileSize.toLong()) }
         )
-    )
+    ).string
 }
 
 public suspend inline fun AuthorizedFilesApi.upload(
     fileSize: Long,
     crossinline source: suspend () -> NSFileHandle,
     crossinline onUpdate: (uploaded: Long, totalBytes: Long) -> Unit = { _, _ -> }
-): FileId {
+): String {
     return upload(
         file = UploadableFile(
             size = fileSize,
@@ -68,5 +81,5 @@ public suspend inline fun AuthorizedFilesApi.upload(
                     .withCallback { read -> onUpdate(read, fileSize) }
             }
         )
-    )
+    ).string
 }

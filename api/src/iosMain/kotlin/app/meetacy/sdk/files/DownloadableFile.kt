@@ -2,6 +2,7 @@ package app.meetacy.sdk.files
 
 import app.meetacy.sdk.io.*
 import kotlinx.coroutines.CoroutineScope
+import platform.Foundation.NSFileHandle
 
 public suspend inline fun DownloadableFile.download(
     destination: NSFileHandle,

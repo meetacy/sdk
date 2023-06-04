@@ -1,11 +1,20 @@
 package app.meetacy.sdk.files
 
-import app.meetacy.sdk.io.*
+import app.meetacy.sdk.io.InputSource
+import app.meetacy.sdk.io.OutputSource
+import app.meetacy.sdk.io.asMeetacyInput
+import app.meetacy.sdk.io.asMeetacyInputSource
+import app.meetacy.sdk.io.asMeetacyOutput
+import app.meetacy.sdk.io.asMeetacyOutputSource
+import app.meetacy.sdk.io.size
+import app.meetacy.sdk.io.transferTo
+import app.meetacy.sdk.io.use
 import app.meetacy.sdk.types.auth.Token
 import app.meetacy.sdk.types.file.FileId
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import platform.Foundation.NSFileHandle
 
 public suspend inline fun FilesApi.download(
     fileId: FileId,
@@ -46,12 +55,13 @@ public suspend inline fun FilesApi.upload(
     source: NSFileHandle,
     crossinline onUpdate: (uploaded: Long, totalBytes: Long) -> Unit = { _, _ -> }
 ): FileId {
-    val fileSize = withContext(Dispatchers.IO) { source.length() }
+    val fileSize = withContext(Dispatchers.Default) { source.size }
+
     return upload(
         token = token,
         source = UploadableFile(
-            size = fileSize,
-            input = source.asMeetacyInputSource().withCallback { read -> onUpdate(read, fileSize) }
+            size = fileSize.toLong(),
+            input = source.asMeetacyInputSource().withCallback { read -> onUpdate(read, fileSize.toLong()) }
         )
     )
 }
@@ -59,7 +69,7 @@ public suspend inline fun FilesApi.upload(
 public suspend inline fun FilesApi.upload(
     token: Token,
     fileSize: Long,
-    crossinline source: suspend () -> InputStream,
+    crossinline source: suspend () -> NSFileHandle,
     crossinline onUpdate: (uploaded: Long, totalBytes: Long) -> Unit = { _, _ -> }
 ): FileId = upload(
     token = token,
