@@ -27,14 +27,18 @@ public class KtorMeetacyEngine(
     json: Json = Json,
 ) : MeetacyRequestsEngine {
 
+    private val json = Json(json) {
+        ignoreUnknownKeys = true
+    }
+
     private val httpClient = httpClient.config {
         expectSuccess = true
     }
 
-    private val auth = AuthEngine(baseUrl, this.httpClient, json)
-    private val users = UsersEngine(baseUrl, this.httpClient, json)
-    private val friends = FriendsEngine(baseUrl, this.httpClient, json)
-    private val meetings = MeetingsEngine(baseUrl, this.httpClient, json)
+    private val auth = AuthEngine(baseUrl, this.httpClient, this.json)
+    private val users = UsersEngine(baseUrl, this.httpClient, this.json)
+    private val friends = FriendsEngine(baseUrl, this.httpClient, this.json)
+    private val meetings = MeetingsEngine(baseUrl, this.httpClient, this.json)
 
     override fun getFileUrl(
         id: FileId
