@@ -12,6 +12,7 @@ import dev.icerock.moko.network.generated.models.CancelInvitationRequest as Gene
 import dev.icerock.moko.network.generated.models.CreateInvitationRequest as GeneratedCreateInvitationRequest
 import dev.icerock.moko.network.generated.models.DenyInvitationRequest as GeneratedDenyInvitationRequest
 import dev.icerock.moko.network.generated.models.ReadInvitationRequest as GeneratedReadInvitationRequest
+import dev.icerock.moko.network.generated.models.UpdateInvitationRequest as GeneratedUpdateInvitationRequest
 
 internal class InvitationsEngine(
     private val baseUrl: Url,
@@ -85,5 +86,21 @@ internal class InvitationsEngine(
         ).result
 
         return ReadInvitationRequest.Response(response.map { it.toInvitation() })
+    }
+
+    suspend fun update(
+        request: UpdateInvitationRequest
+    ): UpdateInvitationRequest.Response {
+        val response = base.invitationsUpdatePost(
+            apiVersion = request.apiVersion.int.toString(),
+            updateInvitationRequest = GeneratedUpdateInvitationRequest(
+                token = request.token.string,
+                id = request.id.string,
+                expiryDate = request.expiryDate?.iso8601,
+                meetingId = request.meetingId?.string
+            )
+        ).result
+
+        return UpdateInvitationRequest.Response(response.toInvitation())
     }
 }
