@@ -32,6 +32,10 @@ public class AuthorizedInvitationsApi(private val api: AuthorizedMeetacyApi) {
         base.deny(token, invitationId)
     }
 
+    public suspend fun cancel(invitationId: InvitationId) {
+        base.cancel(token, invitationId)
+    }
+
     public suspend fun read(): List<AuthorizedInvitationRepository> {
         val invitations = base.read(token).map { it.data }
         return invitations.map { AuthorizedInvitationRepository(it, api) }
