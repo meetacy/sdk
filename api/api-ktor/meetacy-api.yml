@@ -357,6 +357,40 @@ paths:
                   $ref: '#/components/examples/InvalidToken'
                 FriendNotFound:
                   $ref: '#/components/examples/FriendNotFound'
+  /invitations/update:
+    description: Update an invitation
+    parameters:
+      - name: Api-Version
+        in: header
+        description: The version of API to invoke request with
+        required: true
+        schema:
+          type: string
+    post:
+      summary: Update an invitation
+      tags:
+        - invitations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateInvitationRequest"
+      responses:
+        "200":
+          description: Example of a successful updated invitation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateInvitationResponse'
+        "400":
+          description: Example of failed invitation update
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvalidResponse"
+              examples:
+                InvalidAccessIdentity:
+                  $ref: '#/components/examples/InvalidToken'
   /invitations/accept:
     description: Accept an invitation
     parameters:
@@ -367,6 +401,7 @@ paths:
         schema:
           type: string
     post:
+      summary: Accept an invitation
       tags:
         - invitations
       requestBody:
@@ -403,6 +438,7 @@ paths:
         schema:
           type: string
     post:
+      summary: Cancel an invitation
       tags:
         - invitations
       requestBody:
@@ -439,6 +475,7 @@ paths:
         schema:
           type: string
     post:
+      summary: Deny an invitation
       tags:
         - invitations
       requestBody:
@@ -475,6 +512,7 @@ paths:
         schema:
           type: string
     get:
+      summary: Read an invitation
       tags:
         - invitations
       requestBody:
@@ -1670,3 +1708,28 @@ components:
       required:
         - "id"
         - "token"
+    UpdateInvitationRequest:
+      type: object
+      properties:
+        id:
+          type: string
+        token:
+          type: string
+        expiryDate:
+          type: string
+        meetingId:
+          type: string
+      required:
+        - id
+        - token
+    UpdateInvitationResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+          example: true
+        result:
+          $ref: '#/components/schemas/Invitation'
+      required:
+        - status
+        - result
