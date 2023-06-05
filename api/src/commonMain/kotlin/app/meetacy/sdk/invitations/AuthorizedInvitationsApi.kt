@@ -24,10 +24,12 @@ public class AuthorizedInvitationsApi(private val api: AuthorizedMeetacyApi) {
         return AuthorizedInvitationRepository(invitation, api)
     }
 
-    public suspend fun accept(
-        invitationId: InvitationId
-    ) {
+    public suspend fun accept(invitationId: InvitationId) {
         base.accept(token, invitationId)
+    }
+
+    public suspend fun deny(invitationId: InvitationId) {
+        base.deny(token, invitationId)
     }
 
     public suspend fun read(): List<AuthorizedInvitationRepository> {
