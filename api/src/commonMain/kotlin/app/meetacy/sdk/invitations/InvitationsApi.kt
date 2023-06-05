@@ -109,4 +109,17 @@ public class InvitationsApi(private val api: MeetacyApi) {
 
         return invitations.map { InvitationsRepository(it, api) }
     }
+
+    public suspend fun update(
+        token: Token,
+        id: InvitationId,
+        expiryDate: DateTime? = null,
+        meetingId: MeetingId? = null
+    ): InvitationsRepository {
+        val invitation = api.engine.execute(
+            request = UpdateInvitationRequest(token, id, expiryDate, meetingId)
+        ).result
+
+        return InvitationsRepository(invitation, api)
+    }
 }
