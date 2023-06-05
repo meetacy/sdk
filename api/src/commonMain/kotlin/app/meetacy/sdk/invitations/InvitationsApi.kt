@@ -3,6 +3,7 @@ package app.meetacy.sdk.invitations
 import app.meetacy.sdk.MeetacyApi
 import app.meetacy.sdk.engine.requests.AcceptInvitationRequest
 import app.meetacy.sdk.engine.requests.CreateInvitationRequest
+import app.meetacy.sdk.engine.requests.DenyInvitationRequest
 import app.meetacy.sdk.engine.requests.ReadInvitationRequest
 import app.meetacy.sdk.types.auth.Token
 import app.meetacy.sdk.types.datetime.DateTime
@@ -37,6 +38,13 @@ public class InvitationsApi(private val api: MeetacyApi) {
         invitationId: InvitationId
     ) {
         api.engine.execute(request = AcceptInvitationRequest(token, invitationId))
+    }
+
+    public suspend fun deny(
+        token: Token,
+        invitationId: InvitationId
+    ) {
+        api.engine.execute(request = DenyInvitationRequest(token, invitationId))
     }
 
     public suspend fun read(
