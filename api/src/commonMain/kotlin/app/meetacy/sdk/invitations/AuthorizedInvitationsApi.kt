@@ -63,4 +63,13 @@ public class AuthorizedInvitationsApi(private val api: AuthorizedMeetacyApi) {
         val invitations = base.read(token, from).map { it.data }
         return invitations.map { AuthorizedInvitationRepository(it, api) }
     }
+
+    public suspend fun update(
+        id: InvitationId,
+        expiryDate: DateTime? = null,
+        meetingId: MeetingId? = null
+    ): AuthorizedInvitationRepository {
+        val invitation = base.update(token, id, expiryDate, meetingId).data
+        return AuthorizedInvitationRepository(invitation, api)
+    }
 }
