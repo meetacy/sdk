@@ -79,6 +79,7 @@ public class KtorMeetacyEngine(
             is ReadInvitationRequest -> invitations.read(request) as T
             is AcceptInvitationRequest -> invitations.accept(request) as T
             is DenyInvitationRequest -> invitations.deny(request) as T
+            is CancelInvitationRequest -> invitations.cancel(request) as T
             // not yet supported
             is LinkEmailRequest -> notSupported()
             is ConfirmEmailRequest -> notSupported()
