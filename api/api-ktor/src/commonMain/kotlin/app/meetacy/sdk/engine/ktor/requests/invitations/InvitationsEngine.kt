@@ -1,16 +1,14 @@
 package app.meetacy.sdk.engine.ktor.requests.invitations
 
 import app.meetacy.sdk.engine.ktor.toInvitation
-import app.meetacy.sdk.engine.requests.AcceptInvitationRequest
-import app.meetacy.sdk.engine.requests.CreateInvitationRequest
-import app.meetacy.sdk.engine.requests.DenyInvitationRequest
-import app.meetacy.sdk.engine.requests.ReadInvitationRequest
+import app.meetacy.sdk.engine.requests.*
 import app.meetacy.sdk.types.url.Url
 import dev.icerock.moko.network.generated.apis.InvitationsApi
 import dev.icerock.moko.network.generated.apis.InvitationsApiImpl
 import io.ktor.client.*
 import kotlinx.serialization.json.Json
 import dev.icerock.moko.network.generated.models.AcceptInvitationRequest as GeneratedAcceptInvitationRequest
+import dev.icerock.moko.network.generated.models.CancelInvitationRequest as GeneratedCancelInvitationRequest
 import dev.icerock.moko.network.generated.models.CreateInvitationRequest as GeneratedCreateInvitationRequest
 import dev.icerock.moko.network.generated.models.DenyInvitationRequest as GeneratedDenyInvitationRequest
 import dev.icerock.moko.network.generated.models.ReadInvitationRequest as GeneratedReadInvitationRequest
@@ -58,6 +56,18 @@ internal class InvitationsEngine(
             denyInvitationRequest = GeneratedDenyInvitationRequest(
                 token = request.token.string,
                 id = request.invitationId.string
+            )
+        )
+    }
+
+    suspend fun cancel(
+        request: CancelInvitationRequest
+    ) {
+        base.invitationsCancelPost(
+            apiVersion = request.apiVersion.int.toString(),
+            cancelInvitationRequest = GeneratedCancelInvitationRequest(
+                id = request.invitationId.string,
+                token = request.token.string
             )
         )
     }
