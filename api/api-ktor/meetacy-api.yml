@@ -393,6 +393,42 @@ paths:
               examples:
                 InvalidAccessIdentity:
                   $ref: '#/components/examples/InvalidToken'
+  /invitations/cancel:
+    description: Cancel an invitation
+    parameters:
+      - name: Api-Version
+        in: header
+        description: The version of API to invoke request with
+        required: true
+        schema:
+          type: string
+    post:
+      tags:
+        - invitations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CancelInvitationRequest'
+      responses:
+        "200":
+          description: Example of a successful invitation cancellation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusTrueResponse'
+              examples:
+                Success:
+                  $ref: '#/components/schemas/StatusTrueResponse'
+        "400":
+          description: Example of failed invitation cancellation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidResponse'
+              examples:
+                InvalidAccessIdentity:
+                  $ref: '#/components/examples/InvalidToken'
   /invitations/deny:
     description: Deny an invitation
     parameters:
@@ -1615,6 +1651,16 @@ components:
         - "status"
         - "result"
     DenyInvitationRequest:
+      type: object
+      properties:
+        id:
+          type: string
+        token:
+          type: string
+      required:
+        - "id"
+        - "token"
+    CancelInvitationRequest:
       type: object
       properties:
         id:
