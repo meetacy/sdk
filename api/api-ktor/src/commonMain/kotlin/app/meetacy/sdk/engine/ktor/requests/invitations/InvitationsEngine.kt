@@ -43,7 +43,7 @@ internal class InvitationsEngine(
             apiVersion = request.apiVersion.int.toString(),
             acceptInvitationRequest = GeneratedAcceptInvitationRequest(
                 token = request.token.string,
-                invitationIdentity = request.invitationId.string
+                id = request.invitationId.string
             )
         )
     }

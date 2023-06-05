@@ -36,11 +36,7 @@ public class InvitationsApi(private val api: MeetacyApi) {
         token: Token,
         invitationId: InvitationId
     ) {
-        api.engine.execute(
-            request = AcceptInvitationRequest(
-                token, invitationId
-            )
-        )
+        api.engine.execute(request = AcceptInvitationRequest(token, invitationId))
     }
 
     public suspend fun read(

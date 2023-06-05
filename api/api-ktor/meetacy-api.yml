@@ -1545,7 +1545,7 @@ components:
       properties:
         token:
           type: string
-        invitationIdentity:
+        id:
           type: string
       required:
         - token
