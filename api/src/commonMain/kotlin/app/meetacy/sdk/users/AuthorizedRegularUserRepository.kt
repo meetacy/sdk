@@ -6,7 +6,7 @@ import app.meetacy.sdk.types.user.RegularUser
 import app.meetacy.sdk.types.user.UserId
 
 public class AuthorizedRegularUserRepository(
-    public val data: RegularUser,
+    override val data: RegularUser,
     private val api: AuthorizedMeetacyApi
 ) : AuthorizedUserRepository {
     override val base: RegularUserRepository get() = RegularUserRepository(data, api.base)

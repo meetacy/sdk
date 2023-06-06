@@ -24,11 +24,11 @@ import kotlinx.serialization.json.put
 import dev.icerock.moko.network.generated.models.GetUserRequest as GeneratedGetUserRequest
 
 internal class UsersEngine(
-    private val baseUrl: String,
+    private val baseUrl: Url,
     private val httpClient: HttpClient,
     json: Json
 ) {
-    private val base: UserApi = UserApiImpl(baseUrl, httpClient, json)
+    private val base: UserApi = UserApiImpl(baseUrl.string, httpClient, json)
 
     suspend fun getMe(request: GetMeRequest): GetMeRequest.Response {
         val response = base.usersGetPost(
@@ -59,7 +59,7 @@ internal class UsersEngine(
     }
 
     suspend fun editUser(request: EditUserRequest): EditUserRequest.Response = with(request) {
-        val url = Url(baseUrl) / "users" / "edit"
+        val url = baseUrl / "users" / "edit"
 
         val jsonObject = buildJsonObject {
             put("token", token.string)

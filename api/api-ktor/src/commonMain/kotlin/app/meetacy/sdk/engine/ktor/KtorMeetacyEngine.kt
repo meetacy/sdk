@@ -1,8 +1,8 @@
 package app.meetacy.sdk.engine.ktor
 
-import app.meetacy.sdk.MeetacyApi
 import app.meetacy.sdk.engine.MeetacyRequestsEngine
 import app.meetacy.sdk.engine.ktor.requests.auth.AuthEngine
+import app.meetacy.sdk.engine.ktor.requests.files.FilesEngine
 import app.meetacy.sdk.engine.ktor.requests.friends.FriendsEngine
 import app.meetacy.sdk.engine.ktor.requests.meetings.MeetingsEngine
 import app.meetacy.sdk.engine.ktor.requests.users.UsersEngine
@@ -14,15 +14,19 @@ import app.meetacy.sdk.exception.MeetacyInternalException
 import app.meetacy.sdk.types.file.FileId
 import app.meetacy.sdk.types.url.Url
 import app.meetacy.sdk.types.url.parametersOf
+import app.meetacy.sdk.types.url.url
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.*
+import io.ktor.client.plugins.websocket.WebSockets
 import io.ktor.utils.io.errors.*
+import io.rsocket.kotlin.ktor.client.RSocketSupport
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
+import kotlin.coroutines.cancellation.CancellationException
 
 public class KtorMeetacyEngine(
-    private val baseUrl: String,
+    private val baseUrl: Url,
     httpClient: HttpClient = HttpClient(),
     json: Json = Json,
 ) : MeetacyRequestsEngine {
@@ -33,16 +37,20 @@ public class KtorMeetacyEngine(
 
     private val httpClient = httpClient.config {
         expectSuccess = true
+
+        install(WebSockets)
+        install(RSocketSupport)
     }
 
     private val auth = AuthEngine(baseUrl, this.httpClient, this.json)
     private val users = UsersEngine(baseUrl, this.httpClient, this.json)
     private val friends = FriendsEngine(baseUrl, this.httpClient, this.json)
     private val meetings = MeetingsEngine(baseUrl, this.httpClient, this.json)
+    private val files = FilesEngine(baseUrl, this.httpClient)
 
     override fun getFileUrl(
         id: FileId
-    ): Url = Url(baseUrl) / "files" / "download" + parametersOf("fileIdentity" to id.string)
+    ): Url = baseUrl / "files" / "download" + parametersOf("fileIdentity" to id.string)
 
     @Suppress("UNCHECKED_CAST")
     override suspend fun <T> execute(request: MeetacyRequest<T>): T = handleMeetacyExceptions {
@@ -53,6 +61,7 @@ public class KtorMeetacyEngine(
             is AddFriendRequest -> friends.add(request) as T
             is DeleteFriendRequest -> friends.delete(request) as T
             is ListFriendsRequest -> friends.list(request) as T
+            is EmitFriendsLocationRequest -> friends.streamFriendsLocation(request) as T
             // users
             is GetMeRequest -> users.getMe(request) as T
             is GetUserRequest -> users.getUser(request) as T
@@ -64,6 +73,10 @@ public class KtorMeetacyEngine(
             is ParticipateMeetingRequest -> meetings.participateMeeting(request) as T
             is GetMeetingRequest -> meetings.getMeeting(request) as T
             is EditMeetingRequest -> meetings.editMeeting(request) as T
+            is ListMeetingParticipantsRequest -> meetings.listMeetingParticipants(request) as T
+            // files
+            is GetFileRequest -> files.get(request) as T
+            is UploadFileRequest -> files.upload(request) as T
             // not yet supported
             is LinkEmailRequest -> notSupported()
             is ConfirmEmailRequest -> notSupported()
@@ -82,8 +95,11 @@ public class KtorMeetacyEngine(
             throw getException(response.errorCode, response.errorMessage, cause = exception)
         } catch (exception: IOException) {
             throw MeetacyConnectionException(cause = exception)
-        } catch (throwable: Throwable) {
-            throw MeetacyInternalException(cause = throwable)
+        } catch (exception: RuntimeException) {
+            throw when (exception) {
+                is CancellationException -> exception
+                else -> MeetacyInternalException(cause = exception)
+            }
         }
     }
 
@@ -93,7 +109,7 @@ public class KtorMeetacyEngine(
         cause: Throwable
     ): Throwable = when (code) {
         MeetacyUnauthorizedException.CODE -> MeetacyUnauthorizedException(message, cause)
-        else -> MeetacyInternalException(cause = cause)
+        else -> MeetacyInternalException(message, cause)
     }
 
     private fun notSupported(): Nothing = TODO("This request is not supported yet!")

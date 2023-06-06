@@ -5,6 +5,7 @@ package app.meetacy.sdk.engine.ktor.requests.auth
 import app.meetacy.sdk.engine.requests.GenerateAuthRequest
 import app.meetacy.sdk.types.annotation.UnsafeConstructor
 import app.meetacy.sdk.types.auth.Token
+import app.meetacy.sdk.types.url.Url
 import dev.icerock.moko.network.generated.apis.AuthApi
 import dev.icerock.moko.network.generated.apis.AuthApiImpl
 import dev.icerock.moko.network.generated.models.GenerateIdentityRequest
@@ -12,11 +13,11 @@ import io.ktor.client.*
 import kotlinx.serialization.json.Json
 
 internal class AuthEngine(
-    baseUrl: String,
+    baseUrl: Url,
     httpClient: HttpClient,
     json: Json
 ) {
-    private val base: AuthApi = AuthApiImpl(baseUrl, httpClient, json)
+    private val base: AuthApi = AuthApiImpl(baseUrl.string, httpClient, json)
 
     suspend fun generate(request: GenerateAuthRequest): GenerateAuthRequest.Response {
         val response = base.authGeneratePost(

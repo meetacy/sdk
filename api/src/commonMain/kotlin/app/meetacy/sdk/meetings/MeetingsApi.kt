@@ -7,6 +7,7 @@ import app.meetacy.sdk.engine.requests.GetMeetingRequest
 import app.meetacy.sdk.engine.requests.ParticipateMeetingRequest
 import app.meetacy.sdk.meetings.history.MeetingsHistoryApi
 import app.meetacy.sdk.meetings.map.MeetingsMapApi
+import app.meetacy.sdk.meetings.participants.MeetingParticipantsApi
 import app.meetacy.sdk.types.auth.Token
 import app.meetacy.sdk.types.datetime.Date
 import app.meetacy.sdk.types.file.FileId
@@ -23,6 +24,7 @@ import app.meetacy.sdk.types.optional.Optional
 public class MeetingsApi(private val api: MeetacyApi) {
     public val history: MeetingsHistoryApi = MeetingsHistoryApi(api)
     public val map: MeetingsMapApi = MeetingsMapApi(api)
+    public val participants: MeetingParticipantsApi = MeetingParticipantsApi(api)
 
     public suspend fun create(
         token: Token,

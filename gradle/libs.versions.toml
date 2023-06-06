@@ -9,6 +9,7 @@ kotlinxCoroutines = "1.6.4"
 kotlinxSerialization = "1.4.1"
 kotlinxDateTime = "0.4.0"
 mokoNetwork = "0.20.1"
+rsocket = "0.15.4"
 
 [libraries]
 
@@ -20,6 +21,9 @@ ktorClientLogging = { module = "io.ktor:ktor-client-logging", version.ref = "kto
 ktorSerializationJson = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 ktorClientDarwin = { module = "io.ktor:ktor-client-darwin-legacy", version.ref = "ktor" }
 ktorClientMock = { module = "io.ktor:ktor-client-mock", version.ref = "ktor" }
+ktorClientWebSockets = { module = "io.ktor:ktor-client-websockets", version.ref = "ktor" }
+
+rsocketKtorClient = { module = "io.rsocket.kotlin:rsocket-ktor-client", version.ref = "rsocket" }
 
 # moko
 mokoNetwork = { module = "dev.icerock.moko:network", version.ref="mokoNetwork" }
@@ -27,11 +31,10 @@ mokoNetwork = { module = "dev.icerock.moko:network", version.ref="mokoNetwork" }
 # kotlinx
 kotlinxCoroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
 kotlinxCoroutinesTest = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
-kotlinSerialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
-kotlinSerializationProperties = { module = "org.jetbrains.kotlinx:kotlinx-serialization-properties", version.ref = "kotlinxSerialization" }
+kotlinxSerialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
 kotlinxDateTime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDateTime" }
 
 # gradle plugins
-kotlinSerializationGradle = { module = "org.jetbrains.kotlin:kotlin-serialization", version.ref = "kotlin" }
-kotlinGradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
-mokoNetworkGenerator = { module = "dev.icerock.moko:network-generator", version.ref = "mokoNetwork" }
+kotlinxSerializationPlugin = { module = "org.jetbrains.kotlin:kotlin-serialization", version.ref = "kotlin" }
+kotlinPlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+mokoNetworkPlugin = { module = "dev.icerock.moko:network-generator", version.ref = "mokoNetwork" }

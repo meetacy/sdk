@@ -5,28 +5,49 @@ package app.meetacy.sdk.engine.ktor.requests.friends
 import app.meetacy.sdk.engine.ktor.mapToRegularUser
 import app.meetacy.sdk.engine.ktor.mapToSelfUser
 import app.meetacy.sdk.engine.ktor.mapToUser
+import app.meetacy.sdk.engine.ktor.mapToLocation
+import app.meetacy.sdk.engine.ktor.mapToRelationship
+import app.meetacy.sdk.engine.ktor.mapToUser
 import app.meetacy.sdk.engine.requests.AddFriendRequest
 import app.meetacy.sdk.engine.requests.DeleteFriendRequest
+import app.meetacy.sdk.engine.requests.EmitFriendsLocationRequest
 import app.meetacy.sdk.engine.requests.ListFriendsRequest
 import app.meetacy.sdk.types.annotation.UnsafeConstructor
+import app.meetacy.sdk.types.datetime.DateTime
 import app.meetacy.sdk.types.file.FileId
+import app.meetacy.sdk.types.location.Location
 import app.meetacy.sdk.types.paging.PagingId
 import app.meetacy.sdk.types.paging.PagingResponse
+import app.meetacy.sdk.types.url.Url
+import app.meetacy.sdk.types.url.UrlProtocol
 import app.meetacy.sdk.types.user.RegularUser
 import app.meetacy.sdk.types.user.UserId
+import app.meetacy.sdk.types.user.UserLocationSnapshot
 import dev.icerock.moko.network.generated.apis.FriendsApi
 import dev.icerock.moko.network.generated.apis.FriendsApiImpl
 import dev.icerock.moko.network.generated.models.AccessFriendRequest
 import io.ktor.client.*
+import io.rsocket.kotlin.ktor.client.rSocket
+import io.rsocket.kotlin.payload.Payload
+import io.rsocket.kotlin.payload.buildPayload
+import io.rsocket.kotlin.payload.data
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.map
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.put
 import dev.icerock.moko.network.generated.models.ListFriendsRequest as GeneratedListFriendsRequest
+import dev.icerock.moko.network.generated.models.Location as GeneratedLocation
+import dev.icerock.moko.network.generated.models.User as GeneratedUser
 
 internal class FriendsEngine(
-    baseUrl: String,
-    httpClient: HttpClient,
+    private val baseUrl: Url,
+    private val httpClient: HttpClient,
     json: Json
 ) {
-    private val base: FriendsApi = FriendsApiImpl(baseUrl, httpClient, json)
+    private val base: FriendsApi = FriendsApiImpl(baseUrl.string, httpClient, json)
 
     suspend fun add(request: AddFriendRequest) {
         base.friendsAddPost(
@@ -65,4 +86,68 @@ internal class FriendsEngine(
 
         return ListFriendsRequest.Response(paging)
     }
+
+    suspend fun streamFriendsLocation(request: EmitFriendsLocationRequest) {
+        val newProtocol = when {
+            baseUrl.protocol.isHttp -> UrlProtocol.Ws
+            baseUrl.protocol.isHttps -> UrlProtocol.Wss
+            else -> error("Cannot convert url to websocket protocol")
+        }
+
+        val url = baseUrl.replaceProtocol(newProtocol) / "friends" / "location" / "stream"
+
+        val socket = httpClient.rSocket(
+            urlString = url.string,
+            secure = newProtocol.isWss
+        )
+
+        val flow = socket.requestChannel(
+            initPayload = request.encodeToPayload(),
+            payloads = request.selfLocation.map { location -> location.encodeToPayload() }
+        ).map { payload ->
+            EmitFriendsLocationRequest.Update(
+                user = payload.decodeToUserOnMap()
+            )
+        }
+
+        request.collector.emitAll(flow)
+    }
+}
+
+private fun EmitFriendsLocationRequest.encodeToPayload(): Payload = buildPayload {
+    val initString = buildJsonObject {
+        put("token", token.string)
+        put("apiVersion", apiVersion.int)
+    }.toString()
+
+    data(initString)
+}
+
+private fun Location.encodeToPayload(): Payload = buildPayload {
+    val locationString = buildJsonObject {
+        val `object` = buildJsonObject {
+            put("latitude", latitude)
+            put("longitude", longitude)
+        }
+        put("location", `object`)
+    }.toString()
+
+    data(locationString)
+}
+
+@Serializable
+private data class UserOnMapSerializable(
+    val user: GeneratedUser,
+    val location: GeneratedLocation,
+    val capturedAt: String
+)
+
+private fun Payload.decodeToUserOnMap(): UserLocationSnapshot {
+    val deserialized = Json.decodeFromString<UserOnMapSerializable>(data.readText())
+
+    return UserLocationSnapshot(
+        user = deserialized.user.mapToUser() as RegularUser,
+        location = deserialized.location.mapToLocation(),
+        capturedAt = DateTime(deserialized.capturedAt)
+    )
 }

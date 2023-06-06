@@ -8,19 +8,21 @@ import app.meetacy.sdk.types.user.SelfUser
 import app.meetacy.sdk.types.user.User
 
 public sealed interface UserRepository {
+    public val data: User
+
     public companion object {
         public fun of(
             token: Token,
-            user: User,
+            data: User,
             api: MeetacyApi
-        ): UserRepository = of(user, api.authorized(token))
+        ): UserRepository = of(data, api.authorized(token))
 
         public fun of(
-            user: User,
+            data: User,
             api: AuthorizedMeetacyApi
-        ): UserRepository = when (user) {
-            is RegularUser -> RegularUserRepository(user, api.base)
-            is SelfUser -> SelfUserRepository(user, api)
+        ): UserRepository = when (data) {
+            is RegularUser -> RegularUserRepository(data, api.base)
+            is SelfUser -> SelfUserRepository(data, api)
         }
     }
 }
