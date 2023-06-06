@@ -1,10 +1,8 @@
 package app.meetacy.sdk.meetings
 
 import app.meetacy.sdk.AuthorizedMeetacyApi
-import app.meetacy.sdk.engine.requests.EditMeetingRequest
 import app.meetacy.sdk.meetings.history.AuthorizedMeetingsHistoryApi
 import app.meetacy.sdk.meetings.map.AuthorizedMeetingsMapApi
-import app.meetacy.sdk.types.auth.Token
 import app.meetacy.sdk.types.datetime.Date
 import app.meetacy.sdk.types.file.FileId
 import app.meetacy.sdk.types.location.Location

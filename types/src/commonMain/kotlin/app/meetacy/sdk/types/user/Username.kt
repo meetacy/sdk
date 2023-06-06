@@ -23,6 +23,6 @@ public val String.username: Username get() = Username.parse(string = this)
 public val String.usernameOrNull: Username? get() = Username.parseOrNull(string = this)
 
 private fun checkUsername(username: String): Boolean {
-    val regex = Regex("[a-zA-Z][a-zA-Z0-9_]*")
+    val regex = Regex("[a-zA-Z][a-zA-Z0-9_]{4,31}")
     return regex.matches(username)
 }

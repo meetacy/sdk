@@ -1,5 +1,6 @@
 package app.meetacy.sdk.engine.ktor.requests.users
 
+import app.meetacy.sdk.engine.ktor.mapToSelfUser
 import app.meetacy.sdk.engine.ktor.mapToUser
 import app.meetacy.sdk.engine.requests.EditUserRequest
 import app.meetacy.sdk.engine.requests.GetMeRequest
@@ -8,7 +9,6 @@ import app.meetacy.sdk.types.exception.meetacyApiError
 import app.meetacy.sdk.types.optional.ifPresent
 import app.meetacy.sdk.types.url.Url
 import app.meetacy.sdk.types.user.SelfUser
-import app.meetacy.sdk.types.user.User
 import dev.icerock.moko.network.generated.apis.UserApi
 import dev.icerock.moko.network.generated.apis.UserApiImpl
 import dev.icerock.moko.network.generated.models.EditUserResponse
@@ -22,7 +22,6 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import dev.icerock.moko.network.generated.models.GetUserRequest as GeneratedGetUserRequest
-import dev.icerock.moko.network.generated.models.User as GeneratedUser
 
 internal class UsersEngine(
     private val baseUrl: String,
@@ -71,6 +70,9 @@ internal class UsersEngine(
             avatarId.ifPresent { avatarId ->
                 put("avatarId", avatarId?.string)
             }
+            username.ifPresent { username ->
+                put("username", username?.string)
+            }
         }
 
         val string = httpClient.post(url.string) {
@@ -84,6 +86,6 @@ internal class UsersEngine(
 
         val user = Json.decodeFromString<EditUserResponse>(string).result
 
-        return EditUserRequest.Response(user = user.mapToUser() as SelfUser)
+        return EditUserRequest.Response(user = user.mapToSelfUser())
     }
 }

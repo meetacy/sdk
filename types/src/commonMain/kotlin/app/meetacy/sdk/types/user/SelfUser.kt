@@ -8,6 +8,7 @@ public data class SelfUser(
     val email: Email?,
     override val nickname: String,
     val emailVerified: Boolean,
+    override val username: Username?,
     override val avatarId: FileId?
 ) : User {
     override val isSelf: Boolean = true

@@ -9,6 +9,7 @@ import app.meetacy.sdk.types.file.FileId
 public data class RegularUser(
     override val id: UserId,
     override val nickname: String,
+    override val username: Username?,
     override val avatarId: FileId?
 ) : User {
     override val isSelf: Boolean = false
