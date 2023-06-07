@@ -9,6 +9,7 @@ import app.meetacy.sdk.types.optional.Optional
 import app.meetacy.sdk.types.user.SelfUser
 import app.meetacy.sdk.types.user.User
 import app.meetacy.sdk.types.user.UserId
+import app.meetacy.sdk.types.user.Username
 
 /**
  * When modifying this class, corresponding classes should be altered:
@@ -24,19 +25,22 @@ public class UsersApi(private val api: MeetacyApi) {
     public suspend fun edit(
         token: Token,
         nickname: String,
+        username: Username?,
         avatarId: FileId?
     ): SelfUserRepository = edit(
         token = token,
         nickname = Optional.Present(nickname),
+        username = Optional.Present(username),
         avatarId = Optional.Present(avatarId)
     )
 
     public suspend fun edit(
         token: Token,
         nickname: Optional<String> = Optional.Undefined,
+        username: Optional<Username?> = Optional.Undefined,
         avatarId: Optional<FileId?> = Optional.Undefined
     ): SelfUserRepository {
-        val user = api.engine.execute(EditUserRequest(token, nickname, avatarId)).user
+        val user = api.engine.execute(EditUserRequest(token, nickname, username, avatarId)).user
         return SelfUserRepository(
             data = user,
             api = api.authorized(token)
