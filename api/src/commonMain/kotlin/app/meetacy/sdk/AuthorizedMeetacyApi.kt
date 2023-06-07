@@ -2,11 +2,12 @@ package app.meetacy.sdk
 
 import app.meetacy.sdk.files.AuthorizedFilesApi
 import app.meetacy.sdk.friends.AuthorizedFriendsApi
+import app.meetacy.sdk.invitations.AuthorizedInvitationsApi
 import app.meetacy.sdk.meetings.AuthorizedMeetingsApi
-import app.meetacy.sdk.users.AuthorizedSelfUserRepository
-import app.meetacy.sdk.users.AuthorizedUsersApi
 import app.meetacy.sdk.types.annotation.UnsafeConstructor
 import app.meetacy.sdk.types.auth.Token
+import app.meetacy.sdk.users.AuthorizedSelfUserRepository
+import app.meetacy.sdk.users.AuthorizedUsersApi
 
 /**
  * Even though this class *seems* to be safe,
@@ -26,6 +27,7 @@ public class AuthorizedMeetacyApi @UnsafeConstructor constructor(
     public val friends: AuthorizedFriendsApi = AuthorizedFriendsApi(api = this)
     public val users: AuthorizedUsersApi = AuthorizedUsersApi(api = this)
     public val meetings: AuthorizedMeetingsApi = AuthorizedMeetingsApi(api = this)
+    public val invitations: AuthorizedInvitationsApi = AuthorizedInvitationsApi(api = this)
 
     public suspend fun getMe(): AuthorizedSelfUserRepository =
         AuthorizedSelfUserRepository(

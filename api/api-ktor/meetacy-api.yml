@@ -1,8 +1,8 @@
 openapi: "3.0.3"
 info:
   title: "Meetacy Backend API"
-  description: "_Version 1.0.1 of the `Meetacy` API documentation_. It is recommended to fill in the request body on your own according to the sample provided below. The `Notifications` section is under development. "
-  version: "1.0.1"
+  description: "_Version 1.0.2 of the `Meetacy` API documentation_. It is recommended to fill in the request body on your own according to the sample provided below. The `Notifications` section is under development. "
+  version: "1.0.2"
 servers:
   - url: "https://api.meetacy.app"
   - url: "http://localhost:8080"
@@ -19,6 +19,8 @@ tags:
     description: THIS PART IS NOT CONFIGURED YET
   - name: user
     description: Operations about user
+  - name: invitations
+    description: Operations about invitations
 
 paths:
   /auth/email/confirm:
@@ -320,6 +322,220 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/InvalidResponse'
+  /invitations/create:
+    parameters:
+      - name: Api-Version
+        in: header
+        description: The version of API to invoke request with
+        required: true
+        schema:
+          type: string
+    post:
+      summary: Create an invitation
+      tags:
+        - invitations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateInvitationRequest"
+      responses:
+        "200":
+          description: Example of a successful created invitation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateInvitationResponse'
+        "400":
+          description: Example of failed invitation creation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvalidResponse"
+              examples:
+                InvalidAccessIdentity:
+                  $ref: '#/components/examples/InvalidToken'
+                FriendNotFound:
+                  $ref: '#/components/examples/FriendNotFound'
+  /invitations/update:
+    description: Update an invitation
+    parameters:
+      - name: Api-Version
+        in: header
+        description: The version of API to invoke request with
+        required: true
+        schema:
+          type: string
+    post:
+      summary: Update an invitation
+      tags:
+        - invitations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateInvitationRequest"
+      responses:
+        "200":
+          description: Example of a successful updated invitation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateInvitationResponse'
+        "400":
+          description: Example of failed invitation update
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvalidResponse"
+              examples:
+                InvalidAccessIdentity:
+                  $ref: '#/components/examples/InvalidToken'
+  /invitations/accept:
+    description: Accept an invitation
+    parameters:
+      - name: Api-Version
+        in: header
+        description: The version of API to invoke request with
+        required: true
+        schema:
+          type: string
+    post:
+      summary: Accept an invitation
+      tags:
+        - invitations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AcceptInvitationRequest'
+      responses:
+        "200":
+          description: Example of a successful invitation acceptation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusTrueResponse'
+              examples:
+                Success:
+                  $ref: '#/components/schemas/StatusTrueResponse'
+        "400":
+          description: Example of failed invitation acceptation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidResponse'
+              examples:
+                InvalidAccessIdentity:
+                  $ref: '#/components/examples/InvalidToken'
+  /invitations/cancel:
+    description: Cancel an invitation
+    parameters:
+      - name: Api-Version
+        in: header
+        description: The version of API to invoke request with
+        required: true
+        schema:
+          type: string
+    post:
+      summary: Cancel an invitation
+      tags:
+        - invitations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CancelInvitationRequest'
+      responses:
+        "200":
+          description: Example of a successful invitation cancellation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusTrueResponse'
+              examples:
+                Success:
+                  $ref: '#/components/schemas/StatusTrueResponse'
+        "400":
+          description: Example of failed invitation cancellation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidResponse'
+              examples:
+                InvalidAccessIdentity:
+                  $ref: '#/components/examples/InvalidToken'
+  /invitations/deny:
+    description: Deny an invitation
+    parameters:
+      - name: Api-Version
+        in: header
+        description: The version of API to invoke request with
+        required: true
+        schema:
+          type: string
+    post:
+      summary: Deny an invitation
+      tags:
+        - invitations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DenyInvitationRequest'
+      responses:
+        "200":
+          description: Example of a successful invitation denying
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusTrueResponse'
+              examples:
+                Success:
+                  $ref: '#/components/schemas/StatusTrueResponse'
+        "400":
+          description: Example of failed invitation denying
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidResponse'
+              examples:
+                InvalidAccessIdentity:
+                  $ref: '#/components/examples/InvalidToken'
+  /invitations/read:
+    description: Read an invitation
+    parameters:
+      - name: Api-Version
+        in: header
+        description: The version of API to invoke request with
+        required: true
+        schema:
+          type: string
+    get:
+      summary: Read an invitation
+      tags:
+        - invitations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReadInvitationRequest'
+      responses:
+        "200":
+          description: Example of a successfully retrieved invitation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReadInvitationResponse'
+        "400":
+          description: Example of some possible errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidResponse'
+              examples:
+                InvalidToken:
+                  $ref: '#/components/examples/InvalidToken'
   /meetings/edit:
     parameters:
       - name: Api-Version
@@ -1063,22 +1279,22 @@ components:
         "token":
           type: string
           example:
-            - "14:BtEpi2o77Uia9NvwQqbumtNggJzjlEVS5gTS1Z8SDs9BmXk7E8lGxji5MBHxcor0j9X1tMgTjiYwbVvuqjdhkdDTr4XtZY6lFhURbKYG17LlfgqPVi6xJpoAdwQyxLz6wILAaiJdBy3wK1PZ3t0Zg3oBGeyeKJtfestgJylmEMCBjH7eXkBP9Bi93xkV4u68kB4OBKPesxJrTpUHlQjwuP8bCpj8Q591BUdUm9t9dXR4xSksMKWWWe4t4Y4ZrAfA"
+            "14:BtEpi2o77Uia9NvwQqbumtNggJzjlEVS5gTS1Z8SDs9BmXk7E8lGxji5MBHxcor0j9X1tMgTjiYwbVvuqjdhkdDTr4XtZY6lFhURbKYG17LlfgqPVi6xJpoAdwQyxLz6wILAaiJdBy3wK1PZ3t0Zg3oBGeyeKJtfestgJylmEMCBjH7eXkBP9Bi93xkV4u68kB4OBKPesxJrTpUHlQjwuP8bCpj8Q591BUdUm9t9dXR4xSksMKWWWe4t4Y4ZrAfA"
         "avatarId":
           type: string
           example: "14:BtEpi2o77Uia9NvwQqbumtNggJzjlEVS5gTS1Z8SDs9BmXk7E8lGxji5MBHxcor0j9X1tMgTjiYwbVvuqjdhkdDTr4XtZY6lFhURbKYG17LlfgqPVi6xJpoAdwQyxLz6wILAaiJdBy3wK1PZ3t0Zg3oBGeyeKJtfestgJylmEMCBjH7eXkBP9Bi93xkV4u68kB4OBKPesxJrTpUHlQjwuP8bCpj8Q591BUdUm9t9dXR4xSksMKWWWe4t4Y4ZrAfA"
         "title":
           type: string
           example:
-            - "Meet on the Elbe"
+            "Meet on the Elbe"
         "description":
           type: string
           example:
-            - "Thematic meeting of like-minded people on the Elbe"
+            "Thematic meeting of like-minded people on the Elbe"
         "date":
           type: string
           example:
-            - 20232402T100000+0300
+            20232402T100000+0300
         "location":
           $ref: '#/components/schemas/Location'
         "visibility":
@@ -1110,27 +1326,27 @@ components:
         "token":
           type: string
           example:
-            - "14:BtEpi2o77Uia9NvwQqbumtNggJzjlEVS5gTS1Z8SDs9BmXk7E8lGxji5MBHxcor0j9X1tMgTjiYwbVvuqjdhkdDTr4XtZY6lFhURbKYG17LlfgqPVi6xJpoAdwQyxLz6wILAaiJdBy3wK1PZ3t0Zg3oBGeyeKJtfestgJylmEMCBjH7eXkBP9Bi93xkV4u68kB4OBKPesxJrTpUHlQjwuP8bCpj8Q591BUdUm9t9dXR4xSksMKWWWe4t4Y4ZrAfA"
+            "14:BtEpi2o77Uia9NvwQqbumtNggJzjlEVS5gTS1Z8SDs9BmXk7E8lGxji5MBHxcor0j9X1tMgTjiYwbVvuqjdhkdDTr4XtZY6lFhURbKYG17LlfgqPVi6xJpoAdwQyxLz6wILAaiJdBy3wK1PZ3t0Zg3oBGeyeKJtfestgJylmEMCBjH7eXkBP9Bi93xkV4u68kB4OBKPesxJrTpUHlQjwuP8bCpj8Q591BUdUm9t9dXR4xSksMKWWWe4t4Y4ZrAfA"
         "meetingId":
           type: string
           example:
-            - "8:wtzbOPJqX8SVCDQj4UMavNoKJId5UylyL4GRZAkacc2PcGnyu8TCqZCLYvFnG4kb75HOVz6TIeRxXbarsdQZBdrB1rDbHSGD7yCW0EOTbRhxs5qRGncOjG5DmTrAULbWlWMiUkt2RiDRNTkoGJunQgtP63FEZ1MrYJPPdyX1Qn3xpIW6joZZ5p2XahuGGAE13UceQYz6bWO5ZWSJiWjwrA0xOvqf6ad0FHuEXcQaWbJBbBfEA9oGm4KsDHfnkvCT"
+            "8:wtzbOPJqX8SVCDQj4UMavNoKJId5UylyL4GRZAkacc2PcGnyu8TCqZCLYvFnG4kb75HOVz6TIeRxXbarsdQZBdrB1rDbHSGD7yCW0EOTbRhxs5qRGncOjG5DmTrAULbWlWMiUkt2RiDRNTkoGJunQgtP63FEZ1MrYJPPdyX1Qn3xpIW6joZZ5p2XahuGGAE13UceQYz6bWO5ZWSJiWjwrA0xOvqf6ad0FHuEXcQaWbJBbBfEA9oGm4KsDHfnkvCT"
         "avatarId":
           type: string
           example:
-            - "6:27nUexdZbK0BEn9M48Db9SFP6XTd2O6sjQeX5wsfECftnkVDZ0pP0jYGev23GBGHlQu7RsNk9t8SrO3jOZaiQXbVN22IU5o3TeChCZ2qjgZlOT9owypOBbusAJu16TN0YzIsMtzlgspjOyd5lZzV4LL47QLwcc6b7Z6Uuw0Pkz8IMaCCNdlBBvDaRwsQLqQBLkomRjFOye5owLalAguUHxnjJVSquzDjsljqLwprTPfFGSCGQuqh4JUtWtjUsaWi"
+            "6:27nUexdZbK0BEn9M48Db9SFP6XTd2O6sjQeX5wsfECftnkVDZ0pP0jYGev23GBGHlQu7RsNk9t8SrO3jOZaiQXbVN22IU5o3TeChCZ2qjgZlOT9owypOBbusAJu16TN0YzIsMtzlgspjOyd5lZzV4LL47QLwcc6b7Z6Uuw0Pkz8IMaCCNdlBBvDaRwsQLqQBLkomRjFOye5owLalAguUHxnjJVSquzDjsljqLwprTPfFGSCGQuqh4JUtWtjUsaWi"
         "title":
           type: string
           example:
-            - "Meet on the Elbe"
+            "Meet on the Elbe"
         "description":
           type: string
           example:
-            - "Thematic meeting of like-minded people on the Elbe"
+            "Thematic meeting of like-minded people on the Elbe"
         "date":
           type: string
           example:
-            - 20232402T100000+0300
+            20232402T100000+0300
         "location":
           $ref: '#/components/schemas/Location'
         "visibility":
@@ -1340,8 +1556,6 @@ components:
         isSelf:
           type: boolean
           example: false
-        relationship:
-          type: string
         id:
           type: string
           example: "15:fzK6CgXqQihDqeXpVYqVpOIgH0s5HvBAaR2BN2PkCxsLe63fAwMrV4uDInfYgoKFXY5C18Rnu9I2x5d46qmGNPLTM9uDepdKPKo7ss1tPsMk5AbslGwQCjlBrscOJmxUFSt7iwsmbZdLdjgYecKoXrJBVGwkZC3HYBUCLtgkexYsOk1mmDRxk482k3fCuo2Nxnjy82INdkOTjVsnew6vGhtOOrOWdpR1Ci6v1d06SQ6aFqs5QasWiTEPXNyCjGGd"
@@ -1360,6 +1574,10 @@ components:
         avatarId:
           type: string
           example: "1:rXfskQTJuGm7U0UvDNpojpDhvrwhfkOfPqRlHRwg2R6EMA9aMtp5iZB2t6JLRTxAJp2LhZIIVrmj3uYpjKzji46krsK4GgtG3Uw3TRudeslGdtL4ye2N6LTWRy8WYN1giGOBgRFZLjwQ4hoEdVIJqmmHCRQZNhHpMAsdWUYdoWStgMumTkCTKbXcraZYMpGESqFcaFfstyjCMVZtuXcl23IusOkEzGPcmWy6ykbiHa4D7lhcq4szdSmpksBo2mov"
+        relationship:
+          type: string
+          description: "Relationship field can be one of four types - subscription, subscriber, friend and none. In case if isSelf == true, relationship field is null"
+          example: "subscription"
       required:
         - id
         - nickname
@@ -1394,3 +1612,135 @@ components:
           example: "1:rXfskQTJuGm7U0UvDNpojpDhvrwhfkOfPqRlHRwg2R6EMA9aMtp5iZB2t6JLRTxAJp2LhZIIVrmj3uYpjKzji46krsK4GgtG3Uw3TRudeslGdtL4ye2N6LTWRy8WYN1giGOBgRFZLjwQ4hoEdVIJqmmHCRQZNhHpMAsdWUYdoWStgMumTkCTKbXcraZYMpGESqFcaFfstyjCMVZtuXcl23IusOkEzGPcmWy6ykbiHa4D7lhcq4szdSmpksBo2mov"
       required:
         - token
+    Invitation:
+      type: object
+      properties:
+        identity:
+          type: string
+        expiryDate:
+          type: string
+        invitedUser:
+          $ref: "#/components/schemas/User"
+        invitorUser:
+          $ref: "#/components/schemas/User"
+        meeting:
+          $ref: "#/components/schemas/Meeting"
+        isAccepted:
+          type: boolean
+      required:
+        - identity
+        - expiryDate
+        - invitedUser
+        - invitorUser
+        - meeting
+    CreateInvitationRequest:
+      type: object
+      properties:
+        token:
+          type: string
+        meeting:
+          type: string
+          example: "6:EBnp2woyRmY4snRvZaiEtuOIfk4eEXgWdzy8psVPL60Mz92Ts8qIdaoAHVTpvl9hTygMpfUYjNHJpjwpK0txBKRWl7EqCgmnZjm57pIWnlRIo2WoH856AibK8xmCdgOlENPUsmBGLPa7EVOtd43rnGVdeC3wUfHSNV9PT3S0Q3mXCpHF0tOfssQTnKKbBSy9V19Euo7VzpjS4WXI82ILzPVfLqTaRGEUabXw9issiVZhK97zZhBXrV3CFO26pAZa"
+        invitedUser:
+          type: string
+        expiryDate:
+          type: string
+      required:
+        - token
+        - meeting
+        - invitedUser
+        - expiryDate
+    CreateInvitationResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+          example: true
+        result:
+          $ref: '#/components/schemas/Invitation'
+      required:
+        - "status"
+        - "result"
+    AcceptInvitationRequest:
+      type: object
+      properties:
+        token:
+          type: string
+        id:
+          type: string
+      required:
+        - token
+        - invitationIdentity
+    ReadInvitationRequest:
+      type: object
+      properties:
+        token:
+          type: string
+        invitorUserIds:
+          type: array
+          items:
+            type: string
+        invitationIds:
+          type: array
+          items:
+            type: string
+      required:
+        - token
+    ReadInvitationResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+          example: true
+        result:
+          type: array
+          items:
+            $ref: "#/components/schemas/Invitation"
+      required:
+        - "status"
+        - "result"
+    DenyInvitationRequest:
+      type: object
+      properties:
+        id:
+          type: string
+        token:
+          type: string
+      required:
+        - "id"
+        - "token"
+    CancelInvitationRequest:
+      type: object
+      properties:
+        id:
+          type: string
+        token:
+          type: string
+      required:
+        - "id"
+        - "token"
+    UpdateInvitationRequest:
+      type: object
+      properties:
+        id:
+          type: string
+        token:
+          type: string
+        expiryDate:
+          type: string
+        meetingId:
+          type: string
+      required:
+        - id
+        - token
+    UpdateInvitationResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+          example: true
+        result:
+          $ref: '#/components/schemas/Invitation'
+      required:
+        - status
+        - result

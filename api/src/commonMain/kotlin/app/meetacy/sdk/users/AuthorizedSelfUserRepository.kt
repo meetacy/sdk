@@ -5,6 +5,7 @@ import app.meetacy.sdk.auth.AuthorizedAuthApi
 import app.meetacy.sdk.files.AuthorizedFilesApi
 import app.meetacy.sdk.files.FileRepository
 import app.meetacy.sdk.friends.AuthorizedFriendsApi
+import app.meetacy.sdk.invitations.AuthorizedInvitationsApi
 import app.meetacy.sdk.meetings.AuthorizedMeetingsApi
 import app.meetacy.sdk.types.auth.Token
 import app.meetacy.sdk.types.email.Email
@@ -33,6 +34,7 @@ public class AuthorizedSelfUserRepository(
     public val friends: AuthorizedFriendsApi get() = api.friends
     public val users: AuthorizedUsersApi get() = api.users
     public val meetings: AuthorizedMeetingsApi get() = api.meetings
+    public val invitations: AuthorizedInvitationsApi get() = api.invitations
 
     public suspend fun edited(
         nickname: String,
