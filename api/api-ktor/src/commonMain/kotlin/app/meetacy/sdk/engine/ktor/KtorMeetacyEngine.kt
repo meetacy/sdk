@@ -11,6 +11,7 @@ import app.meetacy.sdk.engine.requests.*
 import app.meetacy.sdk.exception.MeetacyUnauthorizedException
 import app.meetacy.sdk.exception.MeetacyConnectionException
 import app.meetacy.sdk.exception.MeetacyInternalException
+import app.meetacy.sdk.exception.MeetacyUsernameAlreadyOccupiedException
 import app.meetacy.sdk.types.file.FileId
 import app.meetacy.sdk.types.url.Url
 import app.meetacy.sdk.types.url.parametersOf
@@ -109,6 +110,7 @@ public class KtorMeetacyEngine(
         cause: Throwable
     ): Throwable = when (code) {
         MeetacyUnauthorizedException.CODE -> MeetacyUnauthorizedException(message, cause)
+        MeetacyUsernameAlreadyOccupiedException.CODE -> MeetacyUsernameAlreadyOccupiedException(message, cause)
         else -> MeetacyInternalException(message, cause)
     }
 
