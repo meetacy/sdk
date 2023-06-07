@@ -1,6 +1,7 @@
 package app.meetacy.sdk.io
 
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.coroutineScope
 
 public interface InputSource {

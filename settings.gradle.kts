@@ -26,4 +26,6 @@ include(
     ":io:io-ktor"
 )
 
+include(":example:shared")
+
 rootProject.name = "meetacy-sdk"
