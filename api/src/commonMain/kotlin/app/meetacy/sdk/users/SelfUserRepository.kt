@@ -13,6 +13,7 @@ import app.meetacy.sdk.types.file.FileId
 import app.meetacy.sdk.types.optional.Optional
 import app.meetacy.sdk.types.user.SelfUser
 import app.meetacy.sdk.types.user.UserId
+import app.meetacy.sdk.types.user.Username
 
 public class SelfUserRepository(
     override val data: SelfUser,
@@ -22,6 +23,7 @@ public class SelfUserRepository(
     public val email: Email? get() = data.email
     public val nickname: String get() = data.nickname
     public val emailVerified: Boolean get() = data.emailVerified
+    public val username: Username? get() = data.username
     public val avatar: FileRepository? get() = FileRepository(data.avatarId, api)
 
     public val token: Token get() = api.token
@@ -34,11 +36,13 @@ public class SelfUserRepository(
 
     public suspend fun edited(
         nickname: String,
+        username: Username?,
         avatarId: FileId?
-    ): SelfUserRepository = api.base.users.edit(token, nickname, avatarId)
+    ): SelfUserRepository = api.base.users.edit(token, nickname, username, avatarId)
 
     public suspend fun edited(
         nickname: Optional<String> = Optional.Undefined,
+        username: Optional<Username?> = Optional.Undefined,
         avatarId: Optional<FileId?> = Optional.Undefined
-    ): SelfUserRepository = api.base.users.edit(token, nickname, avatarId)
+    ): SelfUserRepository = api.base.users.edit(token, nickname, username, avatarId)
 }

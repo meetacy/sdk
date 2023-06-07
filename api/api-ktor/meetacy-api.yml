@@ -942,7 +942,7 @@ paths:
                   $ref: '#/components/examples/InvalidToken'
                 UserNotFound:
                   $ref: '#/components/examples/UserNotFound'
-  /user/edit:
+  /users/edit:
     parameters:
       - name: Api-Version
         in: header
@@ -1073,6 +1073,7 @@ components:
       properties:
         nickname:
           type: "string"
+          example: "John"
       required:
         - "nickname"
       additionalProperties: false
@@ -1084,6 +1085,7 @@ components:
           example: true
         result:
           type: "string"
+          example: "1:Nf7knMA3Oj3cAgrFjLSZEm7iIkyJbHxalO3c224qKsm8Sod01jnWPGlV7zGokTAgMpvhzOKSpZYx8WFE0ABlgf9DGxE8cqqvvovonRpfnl3TXQXmPNMemIfgGuvhvQsLKLEpTpflOT7be3VyeQWzLHjZQtlVgB6eeEaL4OlI1etzBY4z2jMyQKr89BFo9ztcXEVycDUVvI2m62sWS1NIQyKZXOWXYsxocJ4O1L2WB3y0EW8r7uTmosK4lCXTlka6"
       required:
         - "status"
         - "result"
@@ -1170,30 +1172,16 @@ components:
       required:
         - "accessIdentity"
       additionalProperties: false
-    AccessUserIdRequest:
-      type: "object"
-      properties:
-        id:
-          type: string
-          enum:
-            - null
-        token:
-          type: string
-          enum:
-            - "14:BtEpi2o77Uia9NvwQqbumtNggJzjlEVS5gTS1Z8SDs9BmXk7E8lGxji5MBHxcor0j9X1tMgTjiYwbVvuqjdhkdDTr4XtZY6lFhURbKYG17LlfgqPVi6xJpoAdwQyxLz6wILAaiJdBy3wK1PZ3t0Zg3oBGeyeKJtfestgJylmEMCBjH7eXkBP9Bi93xkV4u68kB4OBKPesxJrTpUHlQjwuP8bCpj8Q591BUdUm9t9dXR4xSksMKWWWe4t4Y4ZrAfA"
-      required:
-        - "token"
-      additionalProperties: false
     IdentityRequest:
       type: object
       properties:
         id:
           type: string
-          enum:
+          example:
             - "46:QTZepulLdiPsDLNNjinSQ8HJeyidzrdMrYATwD5fmb080VGxzQCUXRubsbxx8DqhojU2y80LiXXBT1N0FQhZZ3rYNTqQZoaDJDYRM31Qd3ugkzBV7QWwtCdAjQ2AxZAAukUCgvwiy2wGmuxSlXhME224gPXRq53WqlFVjMDsAZiIo9HGr0qmclO2EZUPRVlyd5plu83UApbIrOVHeXksq1NbSXxloAhDq6iK9C2Ck8BNoZS8wQWsXdCXBqnPVb85"
         token:
           type: string
-          enum:
+          example:
             - "14:BtEpi2o77Uia9NvwQqbumtNggJzjlEVS5gTS1Z8SDs9BmXk7E8lGxji5MBHxcor0j9X1tMgTjiYwbVvuqjdhkdDTr4XtZY6lFhURbKYG17LlfgqPVi6xJpoAdwQyxLz6wILAaiJdBy3wK1PZ3t0Zg3oBGeyeKJtfestgJylmEMCBjH7eXkBP9Bi93xkV4u68kB4OBKPesxJrTpUHlQjwuP8bCpj8Q591BUdUm9t9dXR4xSksMKWWWe4t4Y4ZrAfA"
       required:
         - "token"
@@ -1204,8 +1192,10 @@ components:
       properties:
         token:
           type: string
+          example: "4:Nf7knMA3Oj3cAgrFjLSZEm7iIkyJbHxalO3c224qKsm8Sod01jnWPGlV7zGokTAgMpvhzOKSpZYx8WFE0ABlgf9DGxE8cqqvvovonRpfnl3TXQXmPNMemIfgGuvhvQsLKLEpTpflOT7be3VyeQWzLHjZQtlVgB6eeEaL4OlI1etzBY4z2jMyQKr89BFo9ztcXEVycDUVvI2m62sWS1NIQyKZXOWXYsxocJ4O1L2WB3y0EW8r7uTmosK4lCXTlka6"
         friendId:
           type: string
+          example: "5:PjvgzvEu2YsHIm5OP4L0apfqtQV9Ck9I02ZuhJxDqJ4VeS9SwQJGpBRV0QhvbaDJjsTaMZRVRzsM3yn9uSvBffdY1ul9k3J7IDgWqgbQXHlI0quTL0ORJAUONHzzRfLHs6sOmTAf7AlRP4AmGu9aqwN6hALE9MeDITcY3LlNJR6HPE5z3SK1aE5OC2YKpjhX0xQLBQd6wlkdeoCPhyJRevx60u1T1kVIhpnjBLyXQZwbHYGPCIVJ5ryeVByQCQI8"
       required:
         - "token"
         - "friendId"
@@ -1215,10 +1205,13 @@ components:
       properties:
         token:
           type: string
+          example: "6:47ioG3IwdRg9PmEAVsG8B54Ka742J5KDpVl1T8NZ5RkAskxhfpCmeRG1USNswsors49wcpR5Iw5YFxKmLghKddzQSDGKM6KanFa1pzETfmxMHN5EqHZACkeHvvytOxjCprZGWvJSjKRkiHLrnXxc1LAYQOhoN4iojsH4QJH0LmP295TfyZgchhTZx9kZ6O0D9x116DWbj5yO6KJrklUz0R0ND0XEvnOZi8KJcLub3snY0PMCiurQdb0CTZbJV2Dl"
         pagingId:
           type: string
+          example: "10"
         amount:
           type: integer
+          example: 3
       required:
         - "token"
         - "amount"
@@ -1227,10 +1220,13 @@ components:
       properties:
         token:
           type: string
+          example: "7:jiNM2w0xhtIxfmBsHiQ8Ai3tkexOA9715hxlmahXLxvnrSJGybv9oMDvJ8PvxHOMJNqgtAVFU7C4VHiDFDyvIPxUux1R1MLJxRF1xK5cJp0B7U0hEHChtkhc1nuIhcIDRt4fFFwcYCGc1ugmd6m8cYeaGev5ZbnffAQua4Bkz3Clu2hjqNWA5Z5tnEoBlvGYrpbYD3YW1KwemrZPqDo58dQh5DDDBrXGXvFo0vkRsgERiW8rUVxl5eEszb2iIgnH"
         pagingId:
           type: string
+          example: "8"
         amount:
           type: integer
+          example: 3
       required:
         - "token"
         - "amount"
@@ -1239,8 +1235,10 @@ components:
       properties:
         email:
           type: string
+          example: swagger@meetacy.com
         confirmHash:
           type: string
+          example: "67tRo8LLHhCNjmcMLXEmVIj49CYlDjJ39LERann2uzz6qlPa059uqHQ2i8wpJADHcHaLR5orUpIRPSBJyAC7BmspAU9Rzny1V8Z8uYJlzPTnjRPORPgzJzBySAOB2F85hwyEMjD0xZtIuoXbVnZ19lTBbsnq3HInZ47jHZccqWcApByvEkZs3EH4Q6YQSzx4QbMNFtGUScGABgKCAV6uOSNXXzcVve4atPd0HVzlrM2jqfmHt0McNapRExjKpWXx"
       required:
         - "email"
         - "confirmHash"
@@ -1265,11 +1263,11 @@ components:
       properties:
         accessIdentity:
           type: string
-          enum:
+          example:
             - "14:BtEpi2o77Uia9NvwQqbumtNggJzjlEVS5gTS1Z8SDs9BmXk7E8lGxji5MBHxcor0j9X1tMgTjiYwbVvuqjdhkdDTr4XtZY6lFhURbKYG17LlfgqPVi6xJpoAdwQyxLz6wILAaiJdBy3wK1PZ3t0Zg3oBGeyeKJtfestgJylmEMCBjH7eXkBP9Bi93xkV4u68kB4OBKPesxJrTpUHlQjwuP8bCpj8Q591BUdUm9t9dXR4xSksMKWWWe4t4Y4ZrAfA"
         fileIdentity:
           type: string
-          enum:
+          example:
             - "14:BtEpi2o77Uia9NvwQqbumtNggJzjlEVS5gTS1Z8SDs9BmXk7E8lGxji5MBHxcor0j9X1tMgTjiYwbVvuqjdhkdDTr4XtZY6lFhURbKYG17LlfgqPVi6xJpoAdwQyxLz6wILAaiJdBy3wK1PZ3t0Zg3oBGeyeKJtfestgJylmEMCBjH7eXkBP9Bi93xkV4u68kB4OBKPesxJrTpUHlQjwuP8bCpj8Q591BUdUm9t9dXR4xSksMKWWWe4t4Y4ZrAfA"
       required:
         - "accessIdentity"
@@ -1404,6 +1402,7 @@ components:
           properties:
             nextPagingId:
               type: string
+              example: "11"
             data:
               type: array
               items:
@@ -1563,6 +1562,9 @@ components:
         nickname:
           type: string
           example: Dmytro Koriukivka
+        username:
+          type: string
+          example: username
         email:
           type: string
           example: "*depending on the privacy settings of the user, his mail will be displayed*"
@@ -1571,6 +1573,7 @@ components:
           example: true
         avatarId:
           type: string
+          example: "1:rXfskQTJuGm7U0UvDNpojpDhvrwhfkOfPqRlHRwg2R6EMA9aMtp5iZB2t6JLRTxAJp2LhZIIVrmj3uYpjKzji46krsK4GgtG3Uw3TRudeslGdtL4ye2N6LTWRy8WYN1giGOBgRFZLjwQ4hoEdVIJqmmHCRQZNhHpMAsdWUYdoWStgMumTkCTKbXcraZYMpGESqFcaFfstyjCMVZtuXcl23IusOkEzGPcmWy6ykbiHa4D7lhcq4szdSmpksBo2mov"
         relationship:
           type: string
           description: "Relationship field can be one of four types - subscription, subscriber, friend and none. In case if isSelf == true, relationship field is null"
@@ -1585,8 +1588,10 @@ components:
       properties:
         id:
           type: string
+          example: "8:bqLhYy1hjNTL0wXcN0dnmSeyZDMt2akkGYMDdaa81oc8fPhOHBWTuFWzMdWNqu7gTHHrfhvC64RE2ZEtngYD5YVpOAGz8Nx1ii7l6BxpBCfHgaL6hHzkEqsmuGlea2gijOEZFkDEhebZ9lwkav13DMTdWJUm4GMm0VQgXzX8s3B528XsMxkXiu5ps9JrRB4m2m4vnZHEaskq9SXEGfhxzeuVft4d2eHWlp5V06NPmfhuyehq9J3GwWxYSkN3Doun"
         token:
           type: string
+          example: "8:PmP14Ai8NFskTUwjOw0mXjhWIAPECsoYenhp8ECesY1DikwjPXrfk5ZGM8Bue0MGgMF0tWD3iI9TijFAGeDRXltuwREAyGW7AVe4gXfrrIBeVBIuY9lYH3WiO65kzKCmeg5wLEICWzFjjO7j2fQL5OUwQPVm5futMEcJmYo4EGTyDSYEcaVjx5lqMkMWPLN52N9jwTVXAowIvGPqxSJubwrobhz4tQCYi2Gzj4YzLFeSdnTorqdaRGPAs3z10Lge"
       required:
         - token
       additionalProperties: false
@@ -1595,10 +1600,16 @@ components:
       properties:
         token:
           type: string
-        avatarId:
-          type: string
+          example: "9:UjXlL2TeJLWtAoKM1qX6Lv2GjMOvumOzn7Pi9j0q9n28LCCN1WDkFsW7OUi7n2osONPQegFXq9iK3painNnQZeU4J34bBD4DVC5jp4vTK4rdIU28IMEcC0FQdeu3CTbMKXCJWcZXMNIiihJqYOlki5WmjtsWAL84XN0ym1rWFMPrP8yok4jkYAUvPS6APaDU8gHhj5YMARAKdWN4wvTzQ5BbTNrKmmO5d3QdDWNcIH6lGWHPtHXCPjkyFA62iNC5"
         nickname:
           type: string
+          example: "Alexander"
+        username:
+          type: string
+          example: "alexSokol"
+        avatarId:
+          type: string
+          example: "1:rXfskQTJuGm7U0UvDNpojpDhvrwhfkOfPqRlHRwg2R6EMA9aMtp5iZB2t6JLRTxAJp2LhZIIVrmj3uYpjKzji46krsK4GgtG3Uw3TRudeslGdtL4ye2N6LTWRy8WYN1giGOBgRFZLjwQ4hoEdVIJqmmHCRQZNhHpMAsdWUYdoWStgMumTkCTKbXcraZYMpGESqFcaFfstyjCMVZtuXcl23IusOkEzGPcmWy6ykbiHa4D7lhcq4szdSmpksBo2mov"
       required:
         - token
     Invitation:

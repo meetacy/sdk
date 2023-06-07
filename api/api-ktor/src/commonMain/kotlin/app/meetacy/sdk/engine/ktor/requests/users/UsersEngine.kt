@@ -1,5 +1,6 @@
 package app.meetacy.sdk.engine.ktor.requests.users
 
+import app.meetacy.sdk.engine.ktor.mapToSelfUser
 import app.meetacy.sdk.engine.ktor.mapToUser
 import app.meetacy.sdk.engine.requests.EditUserRequest
 import app.meetacy.sdk.engine.requests.GetMeRequest
@@ -69,6 +70,9 @@ internal class UsersEngine(
             avatarId.ifPresent { avatarId ->
                 put("avatarId", avatarId?.string)
             }
+            username.ifPresent { username ->
+                put("username", username?.string)
+            }
         }
 
         val string = httpClient.post(url.string) {
@@ -82,6 +86,6 @@ internal class UsersEngine(
 
         val user = Json.decodeFromString<EditUserResponse>(string).result
 
-        return EditUserRequest.Response(user = user.mapToUser() as SelfUser)
+        return EditUserRequest.Response(user = user.mapToSelfUser())
     }
 }

@@ -11,6 +11,7 @@ import app.meetacy.sdk.engine.ktor.response.ErrorResponse
 import app.meetacy.sdk.engine.requests.*
 import app.meetacy.sdk.exception.MeetacyConnectionException
 import app.meetacy.sdk.exception.MeetacyInternalException
+import app.meetacy.sdk.exception.MeetacyUsernameAlreadyOccupiedException
 import app.meetacy.sdk.exception.MeetacyUnauthorizedException
 import app.meetacy.sdk.types.file.FileId
 import app.meetacy.sdk.types.url.Url
@@ -18,7 +19,7 @@ import app.meetacy.sdk.types.url.parametersOf
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.*
-import io.ktor.client.plugins.websocket.*
+import io.ktor.client.plugins.websocket.WebSockets
 import io.ktor.utils.io.errors.*
 import io.rsocket.kotlin.ktor.client.RSocketSupport
 import kotlinx.serialization.decodeFromString
@@ -31,6 +32,10 @@ public class KtorMeetacyEngine(
     json: Json = Json,
 ) : MeetacyRequestsEngine {
 
+    private val json = Json(json) {
+        ignoreUnknownKeys = true
+    }
+
     private val httpClient = httpClient.config {
         expectSuccess = true
 
@@ -38,12 +43,12 @@ public class KtorMeetacyEngine(
         install(RSocketSupport)
     }
 
-    private val auth = AuthEngine(baseUrl, this.httpClient, json)
-    private val users = UsersEngine(baseUrl, this.httpClient, json)
-    private val friends = FriendsEngine(baseUrl, this.httpClient, json)
-    private val meetings = MeetingsEngine(baseUrl, this.httpClient, json)
+    private val auth = AuthEngine(baseUrl, this.httpClient, this.json)
+    private val users = UsersEngine(baseUrl, this.httpClient, this.json)
+    private val friends = FriendsEngine(baseUrl, this.httpClient, this.json)
+    private val meetings = MeetingsEngine(baseUrl, this.httpClient, this.json)
     private val files = FilesEngine(baseUrl, this.httpClient)
-    private val invitations = InvitationsEngine(baseUrl, httpClient, json)
+    private val invitations = InvitationsEngine(baseUrl, httpClient, this.json)
 
     override fun getFileUrl(
         id: FileId
@@ -113,6 +118,7 @@ public class KtorMeetacyEngine(
         cause: Throwable
     ): Throwable = when (code) {
         MeetacyUnauthorizedException.CODE -> MeetacyUnauthorizedException(message, cause)
+        MeetacyUsernameAlreadyOccupiedException.CODE -> MeetacyUsernameAlreadyOccupiedException(message, cause)
         else -> MeetacyInternalException(message, cause)
     }
 

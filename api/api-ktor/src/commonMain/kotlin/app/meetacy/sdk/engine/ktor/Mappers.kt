@@ -19,6 +19,9 @@ import dev.icerock.moko.network.generated.models.Location as GeneratedLocation
 import dev.icerock.moko.network.generated.models.Meeting as GeneratedMeeting
 import dev.icerock.moko.network.generated.models.User as GeneratedUser
 
+internal fun GeneratedUser.mapToSelfUser(): SelfUser = mapToUser() as SelfUser
+internal fun GeneratedUser.mapToRegularUser(): RegularUser = mapToUser() as RegularUser
+
 @OptIn(UnsafeConstructor::class)
 internal fun GeneratedUser.mapToUser(): User = if (isSelf) {
     SelfUser(
@@ -26,6 +29,7 @@ internal fun GeneratedUser.mapToUser(): User = if (isSelf) {
         nickname = nickname,
         email = email?.let(::Email),
         emailVerified = emailVerified ?: error("Self user must always return emailVerified parameter"),
+        username = username?.let(::Username),
         avatarId = avatarId?.let(::FileId)
     )
 } else {
@@ -33,6 +37,7 @@ internal fun GeneratedUser.mapToUser(): User = if (isSelf) {
         id = UserId(id),
         nickname = nickname,
         avatarId = avatarId?.let(::FileId),
+        username = username?.let(::Username),
         relationship = relationship?.mapToRelationship() ?: error("Regular user should always return relationship parameter")
     )
 }
