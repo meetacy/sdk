@@ -4,17 +4,18 @@ import app.meetacy.sdk.engine.MeetacyRequestsEngine
 import app.meetacy.sdk.engine.ktor.requests.auth.AuthEngine
 import app.meetacy.sdk.engine.ktor.requests.files.FilesEngine
 import app.meetacy.sdk.engine.ktor.requests.friends.FriendsEngine
+import app.meetacy.sdk.engine.ktor.requests.invitations.InvitationsEngine
 import app.meetacy.sdk.engine.ktor.requests.meetings.MeetingsEngine
 import app.meetacy.sdk.engine.ktor.requests.users.UsersEngine
 import app.meetacy.sdk.engine.ktor.response.ErrorResponse
 import app.meetacy.sdk.engine.requests.*
-import app.meetacy.sdk.exception.MeetacyUnauthorizedException
 import app.meetacy.sdk.exception.MeetacyConnectionException
 import app.meetacy.sdk.exception.MeetacyInternalException
+import app.meetacy.sdk.exception.MeetacyUsernameAlreadyOccupiedException
+import app.meetacy.sdk.exception.MeetacyUnauthorizedException
 import app.meetacy.sdk.types.file.FileId
 import app.meetacy.sdk.types.url.Url
 import app.meetacy.sdk.types.url.parametersOf
-import app.meetacy.sdk.types.url.url
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.*
@@ -31,6 +32,10 @@ public class KtorMeetacyEngine(
     json: Json = Json,
 ) : MeetacyRequestsEngine {
 
+    private val json = Json(json) {
+        ignoreUnknownKeys = true
+    }
+
     private val httpClient = httpClient.config {
         expectSuccess = true
 
@@ -38,11 +43,12 @@ public class KtorMeetacyEngine(
         install(RSocketSupport)
     }
 
-    private val auth = AuthEngine(baseUrl, this.httpClient, json)
-    private val users = UsersEngine(baseUrl, this.httpClient, json)
-    private val friends = FriendsEngine(baseUrl, this.httpClient, json)
-    private val meetings = MeetingsEngine(baseUrl, this.httpClient, json)
+    private val auth = AuthEngine(baseUrl, this.httpClient, this.json)
+    private val users = UsersEngine(baseUrl, this.httpClient, this.json)
+    private val friends = FriendsEngine(baseUrl, this.httpClient, this.json)
+    private val meetings = MeetingsEngine(baseUrl, this.httpClient, this.json)
     private val files = FilesEngine(baseUrl, this.httpClient)
+    private val invitations = InvitationsEngine(baseUrl, httpClient, this.json)
 
     override fun getFileUrl(
         id: FileId
@@ -73,6 +79,13 @@ public class KtorMeetacyEngine(
             // files
             is GetFileRequest -> files.get(request) as T
             is UploadFileRequest -> files.upload(request) as T
+            // invitations
+            is CreateInvitationRequest -> invitations.create(request) as T
+            is ReadInvitationRequest -> invitations.read(request) as T
+            is AcceptInvitationRequest -> invitations.accept(request) as T
+            is DenyInvitationRequest -> invitations.deny(request) as T
+            is CancelInvitationRequest -> invitations.cancel(request) as T
+            is UpdateInvitationRequest -> invitations.update(request) as T
             // not yet supported
             is LinkEmailRequest -> notSupported()
             is ConfirmEmailRequest -> notSupported()
@@ -105,6 +118,7 @@ public class KtorMeetacyEngine(
         cause: Throwable
     ): Throwable = when (code) {
         MeetacyUnauthorizedException.CODE -> MeetacyUnauthorizedException(message, cause)
+        MeetacyUsernameAlreadyOccupiedException.CODE -> MeetacyUsernameAlreadyOccupiedException(message, cause)
         else -> MeetacyInternalException(message, cause)
     }
 
