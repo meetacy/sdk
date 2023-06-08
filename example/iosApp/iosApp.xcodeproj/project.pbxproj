@@ -7,13 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		455798FF2A316B2F0018F36B /* shared.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 455798FD2A316B280018F36B /* shared.xcframework */; };
+		455799002A316B2F0018F36B /* shared.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 455798FD2A316B280018F36B /* shared.xcframework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		45BDEC8D2A2B1751000786E2 /* iosAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BDEC8C2A2B1751000786E2 /* iosAppApp.swift */; };
 		45BDEC912A2B1751000786E2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 45BDEC902A2B1751000786E2 /* Assets.xcassets */; };
 		45BDEC952A2B1751000786E2 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 45BDEC942A2B1751000786E2 /* Preview Assets.xcassets */; };
 		45BDECA52A2B26E7000786E2 /* AuthScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BDECA42A2B26E7000786E2 /* AuthScreen.swift */; };
 		45BDECA72A2B2779000786E2 /* FilesScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BDECA62A2B2779000786E2 /* FilesScreen.swift */; };
 		45BDECAD2A2BBA26000786E2 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BDECAC2A2BBA26000786E2 /* ActivityIndicator.swift */; };
-		45BDECB32A2C84CB000786E2 /* shared.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45BDECB22A2C84CB000786E2 /* shared.xcframework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -23,6 +24,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				455799002A316B2F0018F36B /* shared.xcframework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -30,6 +32,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		455798FD2A316B280018F36B /* shared.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = shared.xcframework; path = ../shared/build/xcode/shared.xcframework; sourceTree = "<group>"; };
 		45BDEC892A2B1751000786E2 /* iosApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iosApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		45BDEC8C2A2B1751000786E2 /* iosAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iosAppApp.swift; sourceTree = "<group>"; };
 		45BDEC902A2B1751000786E2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -38,7 +41,6 @@
 		45BDECA42A2B26E7000786E2 /* AuthScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthScreen.swift; sourceTree = "<group>"; };
 		45BDECA62A2B2779000786E2 /* FilesScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilesScreen.swift; sourceTree = "<group>"; };
 		45BDECAC2A2BBA26000786E2 /* ActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
-		45BDECB22A2C84CB000786E2 /* shared.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = shared.xcframework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,7 +48,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				45BDECB32A2C84CB000786E2 /* shared.xcframework in Frameworks */,
+				455798FF2A316B2F0018F36B /* shared.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -56,7 +58,7 @@
 		45BDEC802A2B1751000786E2 = {
 			isa = PBXGroup;
 			children = (
-				45BDECB22A2C84CB000786E2 /* shared.xcframework */,
+				455798FD2A316B280018F36B /* shared.xcframework */,
 				45BDEC8B2A2B1751000786E2 /* iosApp */,
 				45BDEC8A2A2B1751000786E2 /* Products */,
 				45BDECA02A2B24DC000786E2 /* Frameworks */,
@@ -107,6 +109,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 45BDEC982A2B1751000786E2 /* Build configuration list for PBXNativeTarget "iosApp" */;
 			buildPhases = (
+				455798FC2A316A8D0018F36B /* Compile Kotlin */,
 				45BDEC852A2B1751000786E2 /* Sources */,
 				45BDEC862A2B1751000786E2 /* Frameworks */,
 				45BDEC872A2B1751000786E2 /* Resources */,
@@ -165,6 +168,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		455798FC2A316A8D0018F36B /* Compile Kotlin */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Compile Kotlin";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\ncd ..\ncd ..\n./gradlew example:shared:$COMPILE_KOTLIN_GRADLE_TASK\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		45BDEC852A2B1751000786E2 /* Sources */ = {
@@ -297,6 +322,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = iosApp/iosApp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
+				COMPILE_KOTLIN_GRADLE_TASK = syncSharedDebugXCFramework;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"iosApp/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
@@ -335,6 +361,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = iosApp/iosApp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
+				COMPILE_KOTLIN_GRADLE_TASK = syncSharedReleaseXCFramework;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"iosApp/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
