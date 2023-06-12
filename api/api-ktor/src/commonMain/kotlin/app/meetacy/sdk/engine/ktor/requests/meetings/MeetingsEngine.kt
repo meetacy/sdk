@@ -73,6 +73,26 @@ internal class MeetingsEngine(
         return ListActiveMeetingsRequest.Response(paging)
     }
 
+    suspend fun listPastMeetings(
+        request: ListPastMeetingsRequest
+    ): ListPastMeetingsRequest.Response = with(request) {
+        val response = base.meetingsHistoryPastGet(
+            listMeetingsRequest = ListMeetingsRequest(
+                token = token.string,
+                amount = amount.int,
+                pagingId = pagingId?.string
+            ),
+            apiVersion = request.apiVersion.int.toString()
+        )
+
+        val paging = PagingResponse(
+            nextPagingId = response.result.nextPagingId?.let(::PagingId),
+            data = response.result.data.map(GeneratedMeeting::mapToMeeting)
+        )
+
+        return ListPastMeetingsRequest.Response(paging)
+    }
+
     suspend fun listMeetingsMap(
         request: ListMeetingsMapRequest
     ): ListMeetingsMapRequest.Response = with (request) {
