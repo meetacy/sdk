@@ -12,10 +12,6 @@ import app.meetacy.sdk.types.paging.PagingResponse
 import app.meetacy.sdk.types.url.Url
 import dev.icerock.moko.network.generated.apis.MeetingsApiImpl
 import dev.icerock.moko.network.generated.models.*
-import dev.icerock.moko.network.generated.models.AccessMeetingIdRequest
-import dev.icerock.moko.network.generated.models.ListMapMeetingsRequest
-import dev.icerock.moko.network.generated.models.ListMeetingsRequest
-import dev.icerock.moko.network.generated.models.Location
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
@@ -55,6 +51,26 @@ internal class MeetingsEngine(
         )
 
         return ListMeetingsHistoryRequest.Response(paging)
+    }
+
+    suspend fun listActiveMeetings(
+        request: ListActiveMeetingsRequest
+    ): ListActiveMeetingsRequest.Response = with(request) {
+        val response = base.meetingsHistoryActiveGet(
+            listMeetingsRequest = ListMeetingsRequest(
+                token = token.string,
+                amount = amount.int,
+                pagingId = pagingId?.string
+            ),
+            apiVersion = request.apiVersion.int.toString()
+        )
+
+        val paging = PagingResponse(
+            nextPagingId = response.result.nextPagingId?.let(::PagingId),
+            data = response.result.data.map(GeneratedMeeting::mapToMeeting)
+        )
+
+        return ListActiveMeetingsRequest.Response(paging)
     }
 
     suspend fun listMeetingsMap(
