@@ -724,6 +724,76 @@ paths:
               examples:
                 InvalidAccessIdentity:
                   $ref: '#/components/examples/InvalidToken'
+  /meetings/history/active:
+    parameters:
+      - name: Api-Version
+        in: header
+        description: The version of API to invoke request with
+        required: true
+        schema:
+          type: string
+    get:
+      summary: Getting a list of active meetings
+      tags:
+        - meetings
+      description: "Getting a list of meetings by token"
+      requestBody:
+        description: response with an token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListMeetingsRequest'
+      responses:
+        "200":
+          description: An example of a successful generated response with an token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListMeetingsResponse'
+        "400":
+          description: An example of a successful generated response with an token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidResponse'
+              examples:
+                InvalidAccessIdentity:
+                  $ref: '#/components/examples/InvalidToken'
+  /meetings/history/past:
+    parameters:
+      - name: Api-Version
+        in: header
+        description: The version of API to invoke request with
+        required: true
+        schema:
+          type: string
+    get:
+      summary: Getting a list of active meetings
+      tags:
+        - meetings
+      description: "Getting a list of meetings by token"
+      requestBody:
+        description: response with an token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListMeetingsRequest'
+      responses:
+        "200":
+          description: An example of a successful generated response with an token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListMeetingsResponse'
+        "400":
+          description: An example of a successful generated response with an token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidResponse'
+              examples:
+                InvalidAccessIdentity:
+                  $ref: '#/components/examples/InvalidToken'
   /meetings/map/list:
     parameters:
       - name: Api-Version
