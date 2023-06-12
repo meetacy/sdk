@@ -3,6 +3,7 @@ package app.meetacy.sdk.meetings.history
 import app.meetacy.sdk.MeetacyApi
 import app.meetacy.sdk.engine.requests.ListActiveMeetingsRequest
 import app.meetacy.sdk.engine.requests.ListMeetingsHistoryRequest
+import app.meetacy.sdk.engine.requests.ListPastMeetingsRequest
 import app.meetacy.sdk.meetings.MeetingRepository
 import app.meetacy.sdk.types.amount.Amount
 import app.meetacy.sdk.types.auth.Token
@@ -34,6 +35,19 @@ public class MeetingsHistoryApi(private val api: MeetacyApi) {
     ) { currentAmount, currentPagingId ->
         api.engine.execute(
             request = ListActiveMeetingsRequest(token, currentAmount, currentPagingId)
+        ).paging.mapItems { meeting ->
+            MeetingRepository(meeting, api)
+        }
+    }
+    public suspend fun past(
+            token: Token,
+            amount: Amount,
+            pagingId: PagingId? = null
+    ): PagingRepository<MeetingRepository> = PagingRepository(
+        amount, pagingId
+    ) { currentAmount, currentPagingId ->
+        api.engine.execute(
+            request = ListPastMeetingsRequest(token, currentAmount, currentPagingId)
         ).paging.mapItems { meeting ->
             MeetingRepository(meeting, api)
         }
