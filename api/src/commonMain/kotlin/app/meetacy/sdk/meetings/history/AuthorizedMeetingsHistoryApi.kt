@@ -31,6 +31,15 @@ public class AuthorizedMeetingsHistoryApi(private val api: AuthorizedMeetacyApi)
             AuthorizedMeetingRepository(meeting.data, api)
         }
 
+    public suspend fun past(
+        amount: Amount,
+        pagingId: PagingId? = null
+    ): PagingRepository<AuthorizedMeetingRepository> = base
+        .past(token, amount, pagingId)
+        .mapItems { meeting ->
+            AuthorizedMeetingRepository(meeting.data, api)
+        }
+
     public fun paging(
         chunkSize: Amount,
         startPagingId: PagingId? = null,
