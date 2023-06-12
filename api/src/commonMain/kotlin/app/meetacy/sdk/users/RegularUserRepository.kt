@@ -6,6 +6,7 @@ import app.meetacy.sdk.types.auth.Token
 import app.meetacy.sdk.types.user.RegularUser
 import app.meetacy.sdk.types.user.Relationship
 import app.meetacy.sdk.types.user.UserId
+import app.meetacy.sdk.types.user.Username
 
 public class RegularUserRepository(
     override val data: RegularUser,
@@ -15,6 +16,7 @@ public class RegularUserRepository(
     public val nickname: String get() = data.nickname
     public val avatar: FileRepository? get() = FileRepository(data.avatarId, api)
     public val isFriend: Relationship get() = data.relationship
+    public val username: Username? get() = data.username
 
     public suspend fun addFriend(token: Token) {
         api.friends.add(token, data.id)
