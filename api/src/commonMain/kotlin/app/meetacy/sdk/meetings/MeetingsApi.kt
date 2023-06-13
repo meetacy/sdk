@@ -32,7 +32,8 @@ public class MeetingsApi(private val api: MeetacyApi) {
         date: Date,
         location: Location,
         description: String? = null,
-        visibility: Meeting.Visibility = Meeting.Visibility.Private
+        visibility: Meeting.Visibility = Meeting.Visibility.Private,
+        fileId: FileId? = null
     ): MeetingRepository {
         val meeting = api.engine.execute(
             request = CreateMeetingRequest(
@@ -41,7 +42,8 @@ public class MeetingsApi(private val api: MeetacyApi) {
                 date = date,
                 location = location,
                 description = description,
-                visibility = visibility
+                visibility = visibility,
+                fileId = fileId
             )
         ).meeting
 
