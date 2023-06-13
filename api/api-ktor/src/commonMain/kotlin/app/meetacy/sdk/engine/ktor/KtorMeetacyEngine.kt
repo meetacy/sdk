@@ -11,15 +11,15 @@ import app.meetacy.sdk.engine.ktor.response.ErrorResponse
 import app.meetacy.sdk.engine.requests.*
 import app.meetacy.sdk.exception.MeetacyConnectionException
 import app.meetacy.sdk.exception.MeetacyInternalException
-import app.meetacy.sdk.exception.MeetacyUsernameAlreadyOccupiedException
 import app.meetacy.sdk.exception.MeetacyUnauthorizedException
+import app.meetacy.sdk.exception.MeetacyUsernameAlreadyOccupiedException
 import app.meetacy.sdk.types.file.FileId
 import app.meetacy.sdk.types.url.Url
 import app.meetacy.sdk.types.url.parametersOf
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.*
-import io.ktor.client.plugins.websocket.WebSockets
+import io.ktor.client.plugins.websocket.*
 import io.ktor.utils.io.errors.*
 import io.rsocket.kotlin.ktor.client.RSocketSupport
 import kotlinx.serialization.decodeFromString
@@ -70,6 +70,8 @@ public class KtorMeetacyEngine(
             is EditUserRequest -> users.editUser(request) as T
             // meetings
             is ListMeetingsHistoryRequest -> meetings.listMeetingsHistory(request) as T
+            is ListActiveMeetingsRequest -> meetings.listActiveMeetings(request) as T
+            is ListPastMeetingsRequest -> meetings.listPastMeetings(request) as T
             is ListMeetingsMapRequest -> meetings.listMeetingsMap(request) as T
             is CreateMeetingRequest -> meetings.createMeeting(request) as T
             is ParticipateMeetingRequest -> meetings.participateMeeting(request) as T
