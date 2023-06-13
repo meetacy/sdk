@@ -17,7 +17,7 @@ public class AuthorizedRegularUserRepository(
     public val nickname: String get() = data.nickname
     public val avatar: FileRepository? get() = FileRepository(data.avatarId, api)
     public val username: Username? get() = data.username
-    public val isFriend: Relationship get() = data.relationship
+    public val relationship: Relationship get() = data.relationship
 
     public suspend fun addFriend() {
         api.friends.add(data.id)
