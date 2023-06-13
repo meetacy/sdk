@@ -29,7 +29,8 @@ public class AuthorizedMeetingsApi(
         date: Date,
         location: Location,
         description: String? = null,
-        visibility: Meeting.Visibility = Meeting.Visibility.Private
+        visibility: Meeting.Visibility = Meeting.Visibility.Private,
+        fileId: FileId? = null
     ): AuthorizedMeetingRepository {
         val repository = base.create(
             token = api.token,
@@ -37,7 +38,8 @@ public class AuthorizedMeetingsApi(
             date = date,
             location = location,
             description = description,
-            visibility = visibility
+            visibility = visibility,
+            fileId = fileId
         )
 
         return AuthorizedMeetingRepository(repository.data, api)

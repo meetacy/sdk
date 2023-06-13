@@ -12,10 +12,6 @@ import app.meetacy.sdk.types.paging.PagingResponse
 import app.meetacy.sdk.types.url.Url
 import dev.icerock.moko.network.generated.apis.MeetingsApiImpl
 import dev.icerock.moko.network.generated.models.*
-import dev.icerock.moko.network.generated.models.AccessMeetingIdRequest
-import dev.icerock.moko.network.generated.models.ListMapMeetingsRequest
-import dev.icerock.moko.network.generated.models.ListMeetingsRequest
-import dev.icerock.moko.network.generated.models.Location
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
@@ -92,7 +88,8 @@ internal class MeetingsEngine(
                 visibility = when (request.visibility) {
                     Meeting.Visibility.Public -> GeneratedCreateMeetingRequest.Visibility.PUBLIC
                     Meeting.Visibility.Private -> GeneratedCreateMeetingRequest.Visibility.PRIVATE
-                }
+                },
+                avatarId = request.fileId?.string
             ),
             apiVersion = request.apiVersion.int.toString()
         ).result
