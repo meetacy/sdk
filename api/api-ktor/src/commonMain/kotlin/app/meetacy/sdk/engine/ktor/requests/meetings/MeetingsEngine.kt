@@ -36,7 +36,7 @@ internal class MeetingsEngine(
     suspend fun listMeetingsHistory(
         request: ListMeetingsHistoryRequest
     ): ListMeetingsHistoryRequest.Response = with(request) {
-        val response = base.meetingsHistoryListPost(
+        val response = base.meetingsHistoryListGet(
             listMeetingsRequest = ListMeetingsRequest(
                 token = token.string,
                 amount = amount.int,
@@ -96,7 +96,7 @@ internal class MeetingsEngine(
     suspend fun listMeetingsMap(
         request: ListMeetingsMapRequest
     ): ListMeetingsMapRequest.Response = with (request) {
-        val response = base.meetingsMapListPost(
+        val response = base.meetingsMapListGet(
             listMapMeetingsRequest = ListMapMeetingsRequest(
                 token = token.string,
                 location = Location(
@@ -186,7 +186,7 @@ internal class MeetingsEngine(
     suspend fun listMeetingParticipants(
         request: ListMeetingParticipantsRequest
     ): ListMeetingParticipantsRequest.Response {
-        val response = base.meetingsParticipantsListPost(
+        val response = base.meetingsParticipantsListGet(
             apiVersion = request.apiVersion.int.toString(),
             listMeetingParticipantsRequest = GeneratedListMeetingParticipantsRequest(
                 amount = request.amount.int,
@@ -214,7 +214,7 @@ internal class MeetingsEngine(
     }
 
     suspend fun getMeeting(request: GetMeetingRequest): GetMeetingRequest.Response {
-        val response = base.meetingsGetPost(
+        val response = base.meetingsGetGet(
             accessMeetingIdRequest = AccessMeetingIdRequest(
                 token = request.token.string,
                 meetingId = request.meetingId.string

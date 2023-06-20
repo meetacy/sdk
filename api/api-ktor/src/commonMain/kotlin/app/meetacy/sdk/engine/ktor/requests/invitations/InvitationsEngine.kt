@@ -15,8 +15,8 @@ import dev.icerock.moko.network.generated.models.ReadInvitationRequest as Genera
 import dev.icerock.moko.network.generated.models.UpdateInvitationRequest as GeneratedUpdateInvitationRequest
 
 internal class InvitationsEngine(
-    private val baseUrl: Url,
-    private val httpClient: HttpClient,
+    baseUrl: Url,
+    httpClient: HttpClient,
     json: Json
 ) {
     private val base: InvitationsApi = InvitationsApiImpl(baseUrl.string, httpClient, json)
@@ -64,7 +64,7 @@ internal class InvitationsEngine(
     suspend fun cancel(
         request: CancelInvitationRequest
     ) {
-        base.invitationsCancelPost(
+        base.invitationsCancelDelete(
             apiVersion = request.apiVersion.int.toString(),
             cancelInvitationRequest = GeneratedCancelInvitationRequest(
                 id = request.invitationId.string,
@@ -91,7 +91,7 @@ internal class InvitationsEngine(
     suspend fun update(
         request: UpdateInvitationRequest
     ): UpdateInvitationRequest.Response {
-        val response = base.invitationsUpdatePost(
+        val response = base.invitationsUpdatePatch(
             apiVersion = request.apiVersion.int.toString(),
             updateInvitationRequest = GeneratedUpdateInvitationRequest(
                 token = request.token.string,

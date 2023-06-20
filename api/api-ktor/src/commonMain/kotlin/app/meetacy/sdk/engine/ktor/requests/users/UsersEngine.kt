@@ -31,7 +31,7 @@ internal class UsersEngine(
     private val base: UserApi = UserApiImpl(baseUrl.string, httpClient, json)
 
     suspend fun getMe(request: GetMeRequest): GetMeRequest.Response {
-        val response = base.usersGetPost(
+        val response = base.usersGetGet(
             getUserRequest = GeneratedGetUserRequest(
                 token = request.token.string
             ),
@@ -45,7 +45,7 @@ internal class UsersEngine(
     }
 
     suspend fun getUser(request: GetUserRequest): GetUserRequest.Response {
-        val response = base.usersGetPost(
+        val response = base.usersGetGet(
             getUserRequest = GeneratedGetUserRequest(
                 token = request.token.string,
                 id = request.userId.string,

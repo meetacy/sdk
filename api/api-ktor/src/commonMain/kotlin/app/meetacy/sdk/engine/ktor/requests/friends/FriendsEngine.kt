@@ -2,11 +2,8 @@
 
 package app.meetacy.sdk.engine.ktor.requests.friends
 
-import app.meetacy.sdk.engine.ktor.mapToRegularUser
-import app.meetacy.sdk.engine.ktor.mapToSelfUser
-import app.meetacy.sdk.engine.ktor.mapToUser
 import app.meetacy.sdk.engine.ktor.mapToLocation
-import app.meetacy.sdk.engine.ktor.mapToRelationship
+import app.meetacy.sdk.engine.ktor.mapToRegularUser
 import app.meetacy.sdk.engine.ktor.mapToUser
 import app.meetacy.sdk.engine.requests.AddFriendRequest
 import app.meetacy.sdk.engine.requests.DeleteFriendRequest
@@ -14,14 +11,12 @@ import app.meetacy.sdk.engine.requests.EmitFriendsLocationRequest
 import app.meetacy.sdk.engine.requests.ListFriendsRequest
 import app.meetacy.sdk.types.annotation.UnsafeConstructor
 import app.meetacy.sdk.types.datetime.DateTime
-import app.meetacy.sdk.types.file.FileId
 import app.meetacy.sdk.types.location.Location
 import app.meetacy.sdk.types.paging.PagingId
 import app.meetacy.sdk.types.paging.PagingResponse
 import app.meetacy.sdk.types.url.Url
 import app.meetacy.sdk.types.url.UrlProtocol
 import app.meetacy.sdk.types.user.RegularUser
-import app.meetacy.sdk.types.user.UserId
 import app.meetacy.sdk.types.user.UserLocationSnapshot
 import dev.icerock.moko.network.generated.apis.FriendsApi
 import dev.icerock.moko.network.generated.apis.FriendsApiImpl
@@ -60,7 +55,7 @@ internal class FriendsEngine(
     }
 
     suspend fun delete(request: DeleteFriendRequest) {
-        base.friendsDeletePost(
+        base.friendsDeleteDelete(
             accessFriendRequest = AccessFriendRequest(
                 token = request.token.string,
                 friendId = request.friendId.string
@@ -70,7 +65,7 @@ internal class FriendsEngine(
     }
 
     suspend fun list(request: ListFriendsRequest): ListFriendsRequest.Response {
-        val response = base.friendsListPost(
+        val response = base.friendsListGet(
             listFriendsRequest = GeneratedListFriendsRequest(
                 token = request.token.string,
                 amount = request.amount.int,

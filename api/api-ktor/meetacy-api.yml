@@ -261,7 +261,7 @@ paths:
         required: true
         schema:
           type: string
-    post:
+    delete:
       summary: Delete friend
       tags:
         - friends
@@ -298,7 +298,7 @@ paths:
         required: true
         schema:
           type: string
-    post:
+    get:
       summary: Get list of friends
       tags:
         - friends
@@ -366,7 +366,7 @@ paths:
         required: true
         schema:
           type: string
-    post:
+    patch:
       summary: Update an invitation
       tags:
         - invitations
@@ -437,7 +437,7 @@ paths:
         required: true
         schema:
           type: string
-    post:
+    delete:
       summary: Cancel an invitation
       tags:
         - invitations
@@ -544,7 +544,7 @@ paths:
         required: true
         schema:
           type: string
-    post:
+    patch:
       summary: Edit parameters in meeting
       tags:
         - meetings
@@ -623,7 +623,7 @@ paths:
         required: true
         schema:
           type: string
-    post:
+    delete:
       summary: Deleting a meeting
       tags:
         - meetings
@@ -660,7 +660,7 @@ paths:
         required: true
         schema:
           type: string
-    post:
+    get:
       summary: Getting meeting information
       tags:
         - meetings
@@ -697,7 +697,7 @@ paths:
         required: true
         schema:
           type: string
-    post:
+    get:
       summary: Getting a list of meetings
       tags:
         - meetings
@@ -802,7 +802,7 @@ paths:
         required: true
         schema:
           type: string
-    post:
+    get:
       summary: "Meetings on Map"
       tags:
         - meetings
@@ -836,7 +836,7 @@ paths:
         required: true
         schema:
           type: string
-    post:
+    get:
       summary: Participate meeting
       tags:
         - meetings
@@ -912,7 +912,7 @@ paths:
         required: true
         schema:
           type: string
-    post:
+    get:
       tags:
         - notifications
       description: ""
@@ -940,7 +940,7 @@ paths:
         required: true
         schema:
           type: string
-    post:
+    get:
       tags:
         - notifications
       description: ""
@@ -970,7 +970,7 @@ paths:
         required: true
         schema:
           type: string
-    post:
+    get:
       summary: Getting user object
       tags:
         - user
@@ -1020,7 +1020,7 @@ paths:
         required: true
         schema:
           type: string
-    post:
+    patch:
       summary: Editing user object
       tags:
         - user
