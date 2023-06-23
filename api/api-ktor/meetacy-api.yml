@@ -188,7 +188,7 @@ paths:
                 token:
                   type: string
                 file:
-                  type: file
+                  type: string
                   format: binary
               required:
                 - "token"
@@ -904,7 +904,7 @@ paths:
                   $ref: '#/components/examples/InvalidMeetingId'
                 MeetingAlreadyParticipate:
                   $ref: '#/components/examples/MeetingAlreadyParticipate'
-  /notifications/get:
+  /notifications/list:
     parameters:
       - name: Api-Version
         in: header
@@ -913,6 +913,12 @@ paths:
         schema:
           type: string
     post:
+      summary: "List past notifications"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListNotificationsRequest'
       tags:
         - notifications
       description: ""
@@ -920,9 +926,9 @@ paths:
         "200":
           description: "OK"
           content:
-            '*/*':
+            application/json:
               schema:
-                type: "object"
+                $ref: "#/components/schemas/ListNotificationsResponse"
         "400":
           description: An example of a successful generated response with an token
           content:
@@ -943,14 +949,19 @@ paths:
     post:
       tags:
         - notifications
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReadNotificationRequest"
       description: ""
       responses:
         "200":
           description: "OK"
           content:
-            '*/*':
+            application/json:
               schema:
-                type: "object"
+                $ref: "#/components/schemas/StatusTrueResponse"
         "400":
           description: An example of a successful generated response with an token
           content:
@@ -1814,3 +1825,76 @@ components:
       required:
         - status
         - result
+    ReadNotificationRequest:
+      type: "object"
+      properties:
+        token:
+          type: string
+          example: "7:jiNM2w0xhtIxfmBsHiQ8Ai3tkexOA9715hxlmahXLxvnrSJGybv9oMDvJ8PvxHOMJNqgtAVFU7C4VHiDFDyvIPxUux1R1MLJxRF1xK5cJp0B7U0hEHChtkhc1nuIhcIDRt4fFFwcYCGc1ugmd6m8cYeaGev5ZbnffAQua4Bkz3Clu2hjqNWA5Z5tnEoBlvGYrpbYD3YW1KwemrZPqDo58dQh5DDDBrXGXvFo0vkRsgERiW8rUVxl5eEszb2iIgnH"
+        lastNotificationId:
+          type: string
+          example: "8"
+      required:
+        - "token"
+        - "amount"
+    ListNotificationsRequest:
+      type: "object"
+      properties:
+        token:
+          type: string
+          example: "7:jiNM2w0xhtIxfmBsHiQ8Ai3tkexOA9715hxlmahXLxvnrSJGybv9oMDvJ8PvxHOMJNqgtAVFU7C4VHiDFDyvIPxUux1R1MLJxRF1xK5cJp0B7U0hEHChtkhc1nuIhcIDRt4fFFwcYCGc1ugmd6m8cYeaGev5ZbnffAQua4Bkz3Clu2hjqNWA5Z5tnEoBlvGYrpbYD3YW1KwemrZPqDo58dQh5DDDBrXGXvFo0vkRsgERiW8rUVxl5eEszb2iIgnH"
+        pagingId:
+          type: string
+          example: "8"
+        amount:
+          type: integer
+          example: 3
+      required:
+        - "token"
+        - "amount"
+    ListNotificationsResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+          example: true
+        result:
+          type: object
+          properties:
+            nextPagingId:
+              type: string
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/Notification'
+          required:
+            - "data"
+      required:
+        - "result"
+    Notification:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - "subscription"
+            - "meeting_invitation"
+        id:
+          type: string
+        isNew:
+          type: boolean
+        date:
+          type: string
+        # Subscription
+        subscriber:
+          $ref: "#/components/schemas/User"
+        # Invitation
+        meeting:
+          $ref: "#/components/schemas/Meeting"
+        inviter:
+          $ref: "#/components/schemas/User"
+      required:
+        - "type"
+        - "id"
+        - "isNew"
+        - "date"
