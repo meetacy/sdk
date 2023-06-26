@@ -13,9 +13,8 @@ public class InvitationsRepository(
     private val api: MeetacyApi
 ) {
     public val id: InvitationId get() = data.id
-    public val expiryDate: DateTime get() = data.expiryDate
     public val invitedUser: User get() = data.invitedUser
-    public val invitorUser: User get() = data.invitorUser
+    public val invitorUser: User get() = data.inviterUser
     public val meeting: Meeting get() = data.meeting
 
     public suspend fun accept(token: Token) {

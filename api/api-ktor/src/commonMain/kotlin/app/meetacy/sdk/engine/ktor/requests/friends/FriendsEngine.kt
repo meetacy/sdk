@@ -3,25 +3,19 @@
 package app.meetacy.sdk.engine.ktor.requests.friends
 
 import app.meetacy.sdk.engine.ktor.mapToRegularUser
-import app.meetacy.sdk.engine.ktor.mapToSelfUser
 import app.meetacy.sdk.engine.ktor.mapToUser
 import app.meetacy.sdk.engine.ktor.mapToLocation
-import app.meetacy.sdk.engine.ktor.mapToRelationship
-import app.meetacy.sdk.engine.ktor.mapToUser
 import app.meetacy.sdk.engine.requests.AddFriendRequest
 import app.meetacy.sdk.engine.requests.DeleteFriendRequest
 import app.meetacy.sdk.engine.requests.EmitFriendsLocationRequest
 import app.meetacy.sdk.engine.requests.ListFriendsRequest
 import app.meetacy.sdk.types.annotation.UnsafeConstructor
 import app.meetacy.sdk.types.datetime.DateTime
-import app.meetacy.sdk.types.file.FileId
 import app.meetacy.sdk.types.location.Location
 import app.meetacy.sdk.types.paging.PagingId
 import app.meetacy.sdk.types.paging.PagingResponse
 import app.meetacy.sdk.types.url.Url
-import app.meetacy.sdk.types.url.UrlProtocol
 import app.meetacy.sdk.types.user.RegularUser
-import app.meetacy.sdk.types.user.UserId
 import app.meetacy.sdk.types.user.UserLocationSnapshot
 import dev.icerock.moko.network.generated.apis.FriendsApi
 import dev.icerock.moko.network.generated.apis.FriendsApiImpl
@@ -45,7 +39,7 @@ import dev.icerock.moko.network.generated.models.User as GeneratedUser
 internal class FriendsEngine(
     private val baseUrl: Url,
     private val httpClient: HttpClient,
-    json: Json
+    private val json: Json
 ) {
     private val base: FriendsApi = FriendsApiImpl(baseUrl.string, httpClient, json)
 
@@ -88,17 +82,11 @@ internal class FriendsEngine(
     }
 
     suspend fun streamFriendsLocation(request: EmitFriendsLocationRequest) {
-        val newProtocol = when {
-            baseUrl.protocol.isHttp -> UrlProtocol.Ws
-            baseUrl.protocol.isHttps -> UrlProtocol.Wss
-            else -> error("Cannot convert url to websocket protocol")
-        }
-
-        val url = baseUrl.replaceProtocol(newProtocol) / "friends" / "location" / "stream"
+        val url = baseUrl.replaceProtocolWithWebsocket() / "friends" / "location" / "stream"
 
         val socket = httpClient.rSocket(
             urlString = url.string,
-            secure = newProtocol.isWss
+            secure = url.protocol.isWss
         )
 
         val flow = socket.requestChannel(
@@ -106,7 +94,7 @@ internal class FriendsEngine(
             payloads = request.selfLocation.map { location -> location.encodeToPayload() }
         ).map { payload ->
             EmitFriendsLocationRequest.Update(
-                user = payload.decodeToUserOnMap()
+                user = payload.decodeToUserLocationSnapshot(json)
             )
         }
 
@@ -136,14 +124,14 @@ private fun Location.encodeToPayload(): Payload = buildPayload {
 }
 
 @Serializable
-private data class UserOnMapSerializable(
+private data class UserLocationSnapshotSerializable(
     val user: GeneratedUser,
     val location: GeneratedLocation,
     val capturedAt: String
 )
 
-private fun Payload.decodeToUserOnMap(): UserLocationSnapshot {
-    val deserialized = Json.decodeFromString<UserOnMapSerializable>(data.readText())
+private fun Payload.decodeToUserLocationSnapshot(json: Json): UserLocationSnapshot {
+    val deserialized = json.decodeFromString<UserLocationSnapshotSerializable>(data.readText())
 
     return UserLocationSnapshot(
         user = deserialized.user.mapToUser() as RegularUser,

@@ -14,15 +14,13 @@ import kotlin.jvm.JvmName
 public class InvitationsApi(private val api: MeetacyApi) {
     public suspend fun create(
         token: Token,
-        invitedUser: User,
-        expiryDate: DateTime,
+        userId: UserId,
         meetingId: MeetingId
     ): InvitationsRepository {
         val invitation = api.engine.execute(
             request = CreateInvitationRequest(
                 token,
-                invitedUser,
-                expiryDate,
+                userId,
                 meetingId
             )
         ).invitation
@@ -49,77 +47,5 @@ public class InvitationsApi(private val api: MeetacyApi) {
         invitationId: InvitationId
     ) {
         api.engine.execute(request = CancelInvitationRequest(token, invitationId))
-    }
-
-    public suspend fun read(
-        token: Token
-    ): List<InvitationsRepository> {
-        val invitations = api.engine.execute(
-            request = ReadInvitationRequest(
-                token
-            )
-        ).result
-
-        return invitations.map { InvitationsRepository(it, api) }
-    }
-
-    public suspend fun read(
-        token: Token,
-        ids: List<InvitationId>
-    ): List<InvitationsRepository> {
-        val invitations = api.engine.execute(
-            request = ReadInvitationRequest(token, ids = ids)
-        ).result
-
-        return invitations.map { InvitationsRepository(it, api) }
-    }
-
-    @JvmName("readFrom-id")
-    public suspend fun read(
-        token: Token,
-        from: List<UserId>
-    ): List<InvitationsRepository> {
-        val invitations = api.engine.execute(
-            request = ReadInvitationRequest(token, from)
-        ).result
-
-        return invitations.map { InvitationsRepository(it, api) }
-    }
-
-    @JvmName("readFrom-user")
-    public suspend fun read(
-        token: Token,
-        from: List<User>
-    ): List<InvitationsRepository> {
-        val invitations = api.engine.execute(
-            request = ReadInvitationRequest(token, from.map { it.id })
-        ).result
-
-        return invitations.map { InvitationsRepository(it, api) }
-    }
-
-    @JvmName("readFrom-userRepo")
-    public suspend fun read(
-        token: Token,
-        from: List<UserRepository>
-    ): List<InvitationsRepository> {
-        val invitations = api.engine.execute(
-            request = ReadInvitationRequest(token, from.map { it.data.id })
-        ).result
-
-        return invitations.map { InvitationsRepository(it, api) }
-    }
-
-    public suspend fun update(
-        token: Token,
-        id: InvitationId,
-        expiryDate: DateTime? = null,
-        meetingId: MeetingId? = null
-    ): InvitationsRepository {
-        val invitation = api.engine.execute(
-            request = UpdateInvitationRequest(token, id, expiryDate, meetingId)
-        ).result
-
-        return InvitationsRepository(invitation, api)
     }
 }

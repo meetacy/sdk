@@ -4,7 +4,6 @@ package app.meetacy.sdk.engine.ktor
 
 import app.meetacy.sdk.types.annotation.UnsafeConstructor
 import app.meetacy.sdk.types.datetime.Date
-import app.meetacy.sdk.types.datetime.DateTime
 import app.meetacy.sdk.types.email.Email
 import app.meetacy.sdk.types.file.FileId
 import app.meetacy.sdk.types.invitation.AcceptationState
@@ -51,8 +50,7 @@ internal fun GeneratedInvitation.toInvitation(): Invitation = Invitation(
     id = identity.let(::InvitationId),
     meeting = meeting.mapToMeeting(),
     invitedUser = invitedUser.mapToUser(),
-    invitorUser = invitorUser.mapToUser(),
-    expiryDate = DateTime(expiryDate),
+    inviterUser = inviterUser.mapToUser(),
     isAccepted = when (isAccepted) {
         null -> AcceptationState.Waiting
         true -> AcceptationState.Accepted

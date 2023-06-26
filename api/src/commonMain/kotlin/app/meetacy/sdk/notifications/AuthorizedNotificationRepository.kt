@@ -1,14 +1,19 @@
 package app.meetacy.sdk.notifications
 
+import app.meetacy.sdk.AuthorizedMeetacyApi
+import app.meetacy.sdk.meetings.AuthorizedMeetingRepository
 import app.meetacy.sdk.types.auth.Token
 import app.meetacy.sdk.types.datetime.Date
 import app.meetacy.sdk.types.meeting.Meeting
 import app.meetacy.sdk.types.notification.Notification
 import app.meetacy.sdk.types.notification.NotificationId
 import app.meetacy.sdk.types.user.User
+import app.meetacy.sdk.users.AuthorizedRegularUserRepository
+import app.meetacy.sdk.users.RegularUserRepository
+import app.meetacy.sdk.users.UserRepository
 
 public sealed class AuthorizedNotificationRepository {
-    protected abstract val api: AuthorizedNotificationsApi
+    protected abstract val api: AuthorizedMeetacyApi
     public abstract val data: Notification
     public abstract val base: NotificationRepository
 
@@ -19,34 +24,37 @@ public sealed class AuthorizedNotificationRepository {
     public val date: Date get() = data.date
 
     public suspend fun read() {
-        api.read(id)
+        api.notifications.read(id)
     }
 
     public data class Subscription(
         override val data: Notification.Subscription,
-        override val api: AuthorizedNotificationsApi
+        override val api: AuthorizedMeetacyApi
     ) : AuthorizedNotificationRepository() {
         override val base: NotificationRepository.Subscription
             get() = NotificationRepository.Subscription(data, api.base)
 
-        public val subscriber: User get() = data.subscriber
+        public val subscriber: AuthorizedRegularUserRepository
+            get() = AuthorizedRegularUserRepository(data.subscriber, api)
     }
 
     public data class Invitation(
         override val data: Notification.Invitation,
-        override val api: AuthorizedNotificationsApi
+        override val api: AuthorizedMeetacyApi
     ) : AuthorizedNotificationRepository() {
         override val base: NotificationRepository.Invitation
             get() = NotificationRepository.Invitation(data, api.base)
 
-        public val meeting: Meeting get() = data.meeting
-        public val inviter: User get() = data.inviter
+        public val meeting: AuthorizedMeetingRepository
+            get() = AuthorizedMeetingRepository(data.meeting, api)
+        public val inviter: AuthorizedRegularUserRepository
+            get() = AuthorizedRegularUserRepository(data.inviter, api)
     }
 
     public companion object {
         public fun of(
             data: Notification,
-            api: AuthorizedNotificationsApi
+            api: AuthorizedMeetacyApi
         ): AuthorizedNotificationRepository = when (data) {
             is Notification.Subscription -> Subscription(data, api)
             is Notification.Invitation -> Invitation(data, api)

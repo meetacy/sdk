@@ -13,11 +13,11 @@ public class AuthorizedFriendsLocationApi(
     public val token: Token get() = api.token
     public val base: FriendsLocationApi get() = api.base.friends.location
 
-    public fun stream(selfLocation: Flow<Location>): Flow<AuthorizedUserOnMapRepository> {
+    public fun flow(selfLocation: Flow<Location>): Flow<AuthorizedUserLocationSnapshotRepository> {
         return api.base.friends.location
-            .stream(api.token, selfLocation)
+            .flow(api.token, selfLocation)
             .map { userOnMap ->
-                AuthorizedUserOnMapRepository(
+                AuthorizedUserLocationSnapshotRepository(
                     user = AuthorizedRegularUserRepository(
                         data = userOnMap.user.data,
                         api = api

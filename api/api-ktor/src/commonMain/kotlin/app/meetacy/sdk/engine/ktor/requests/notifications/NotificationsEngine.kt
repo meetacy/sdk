@@ -19,7 +19,7 @@ internal class NotificationsEngine(
 ) {
     private val base = NotificationsApiImpl(baseUrl.string, httpClient, json)
 
-    suspend fun listNotifications(
+    suspend fun list(
         request: ListNotificationsRequest
     ): ListNotificationsRequest.Response = with (request) {
         val response = base.notificationsListPost(

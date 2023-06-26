@@ -33,7 +33,7 @@ public class NotificationsApi(
                 pagingId = currentPagingId
             )
         ).paging.mapItems { notification ->
-            NotificationRepository.of(notification, base = this)
+            NotificationRepository.of(notification, api)
         }
     }
 

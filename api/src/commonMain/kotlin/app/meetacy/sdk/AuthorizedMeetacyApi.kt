@@ -7,6 +7,7 @@ import app.meetacy.sdk.meetings.AuthorizedMeetingsApi
 import app.meetacy.sdk.notifications.AuthorizedNotificationsApi
 import app.meetacy.sdk.types.annotation.UnsafeConstructor
 import app.meetacy.sdk.types.auth.Token
+import app.meetacy.sdk.updates.AuthorizedUpdatesApi
 import app.meetacy.sdk.users.AuthorizedSelfUserRepository
 import app.meetacy.sdk.users.AuthorizedUsersApi
 
@@ -30,6 +31,7 @@ public class AuthorizedMeetacyApi @UnsafeConstructor constructor(
     public val meetings: AuthorizedMeetingsApi = AuthorizedMeetingsApi(api = this)
     public val invitations: AuthorizedInvitationsApi = AuthorizedInvitationsApi(api = this)
     public val notifications: AuthorizedNotificationsApi = AuthorizedNotificationsApi(api = this)
+    public val updates: AuthorizedUpdatesApi = AuthorizedUpdatesApi(api = this)
 
     public suspend fun getMe(): AuthorizedSelfUserRepository =
         AuthorizedSelfUserRepository(

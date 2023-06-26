@@ -29,7 +29,7 @@ public class AuthorizedNotificationsApi(
         return base.list(token, amount, pagingId).mapItems { notification ->
             AuthorizedNotificationRepository.of(
                 data = notification.data,
-                api = this
+                api = api
             )
         }
     }

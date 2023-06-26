@@ -6,6 +6,8 @@ import app.meetacy.sdk.engine.ktor.requests.files.FilesEngine
 import app.meetacy.sdk.engine.ktor.requests.friends.FriendsEngine
 import app.meetacy.sdk.engine.ktor.requests.invitations.InvitationsEngine
 import app.meetacy.sdk.engine.ktor.requests.meetings.MeetingsEngine
+import app.meetacy.sdk.engine.ktor.requests.notifications.NotificationsEngine
+import app.meetacy.sdk.engine.ktor.requests.updates.UpdatesEngine
 import app.meetacy.sdk.engine.ktor.requests.users.UsersEngine
 import app.meetacy.sdk.engine.ktor.response.ErrorResponse
 import app.meetacy.sdk.engine.requests.*
@@ -48,7 +50,9 @@ public class KtorMeetacyEngine(
     private val friends = FriendsEngine(baseUrl, this.httpClient, this.json)
     private val meetings = MeetingsEngine(baseUrl, this.httpClient, this.json)
     private val files = FilesEngine(baseUrl, this.httpClient)
-    private val invitations = InvitationsEngine(baseUrl, httpClient, this.json)
+    private val invitations = InvitationsEngine(baseUrl, this.httpClient, this.json)
+    private val notifications = NotificationsEngine(baseUrl, this.httpClient, this.json)
+    private val updates = UpdatesEngine(baseUrl, this.httpClient, this.json)
 
     override fun getFileUrl(
         id: FileId
@@ -83,11 +87,14 @@ public class KtorMeetacyEngine(
             is UploadFileRequest -> files.upload(request) as T
             // invitations
             is CreateInvitationRequest -> invitations.create(request) as T
-            is ReadInvitationRequest -> invitations.read(request) as T
             is AcceptInvitationRequest -> invitations.accept(request) as T
             is DenyInvitationRequest -> invitations.deny(request) as T
             is CancelInvitationRequest -> invitations.cancel(request) as T
-            is UpdateInvitationRequest -> invitations.update(request) as T
+            // notifications
+            is ReadNotificationRequest -> notifications.read(request) as T
+            is ListNotificationsRequest -> notifications.list(request) as T
+            // updates
+            is EmitUpdatesRequest -> updates.stream(request) as T
             // not yet supported
             is LinkEmailRequest -> notSupported()
             is ConfirmEmailRequest -> notSupported()

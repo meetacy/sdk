@@ -7,6 +7,7 @@ import app.meetacy.sdk.files.FileRepository
 import app.meetacy.sdk.friends.AuthorizedFriendsApi
 import app.meetacy.sdk.invitations.AuthorizedInvitationsApi
 import app.meetacy.sdk.meetings.AuthorizedMeetingsApi
+import app.meetacy.sdk.notifications.AuthorizedNotificationsApi
 import app.meetacy.sdk.types.auth.Token
 import app.meetacy.sdk.types.email.Email
 import app.meetacy.sdk.types.file.FileId
@@ -14,12 +15,13 @@ import app.meetacy.sdk.types.optional.Optional
 import app.meetacy.sdk.types.user.SelfUser
 import app.meetacy.sdk.types.user.UserId
 import app.meetacy.sdk.types.user.Username
+import app.meetacy.sdk.updates.AuthorizedUpdatesApi
 
 public class AuthorizedSelfUserRepository(
     override val data: SelfUser,
     public val api: AuthorizedMeetacyApi
 ) : AuthorizedUserRepository {
-    override val base: SelfUserRepository get() = SelfUserRepository(data, api)
+    override val base: SelfUserRepository get() = SelfUserRepository(data, api.base)
 
     public val id: UserId get() = data.id
     public val email: Email? get() = data.email
@@ -35,6 +37,8 @@ public class AuthorizedSelfUserRepository(
     public val users: AuthorizedUsersApi get() = api.users
     public val meetings: AuthorizedMeetingsApi get() = api.meetings
     public val invitations: AuthorizedInvitationsApi get() = api.invitations
+    public val notifications: AuthorizedNotificationsApi get() = api.notifications
+    public val updates: AuthorizedUpdatesApi get() = api.updates
 
     public suspend fun edited(
         nickname: String,
