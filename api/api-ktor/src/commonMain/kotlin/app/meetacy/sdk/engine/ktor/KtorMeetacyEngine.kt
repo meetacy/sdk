@@ -56,7 +56,7 @@ public class KtorMeetacyEngine(
 
     override fun getFileUrl(
         id: FileId
-    ): Url = baseUrl / "files" / "download" + parametersOf("fileIdentity" to id.string)
+    ): Url = baseUrl / "files" / "download" + parametersOf("fileId" to id.string)
 
     @Suppress("UNCHECKED_CAST")
     override suspend fun <T> execute(request: MeetacyRequest<T>): T = handleMeetacyExceptions {
