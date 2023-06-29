@@ -5,7 +5,7 @@ import app.meetacy.sdk.engine.ktor.mapToUser
 import app.meetacy.sdk.engine.requests.EditUserRequest
 import app.meetacy.sdk.engine.requests.GetMeRequest
 import app.meetacy.sdk.engine.requests.GetUserRequest
-import app.meetacy.sdk.types.exception.meetacyApiError
+import app.meetacy.sdk.exception.meetacyApiError
 import app.meetacy.sdk.types.optional.ifPresent
 import app.meetacy.sdk.types.url.Url
 import app.meetacy.sdk.types.user.SelfUser
@@ -17,7 +17,6 @@ import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.content.*
 import io.ktor.http.*
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put

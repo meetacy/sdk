@@ -4,7 +4,6 @@ package app.meetacy.sdk.engine.ktor
 
 import app.meetacy.sdk.types.annotation.UnsafeConstructor
 import app.meetacy.sdk.types.datetime.Date
-import app.meetacy.sdk.types.datetime.DateTime
 import app.meetacy.sdk.types.email.Email
 import app.meetacy.sdk.types.file.FileId
 import app.meetacy.sdk.types.invitation.AcceptationState
@@ -13,10 +12,15 @@ import app.meetacy.sdk.types.invitation.InvitationId
 import app.meetacy.sdk.types.location.Location
 import app.meetacy.sdk.types.meeting.Meeting
 import app.meetacy.sdk.types.meeting.MeetingId
+import app.meetacy.sdk.types.notification.Notification
+import app.meetacy.sdk.types.notification.NotificationId
 import app.meetacy.sdk.types.user.*
+import dev.icerock.moko.network.generated.models.Notification.Type.MEETING_INVITATION
+import dev.icerock.moko.network.generated.models.Notification.Type.SUBSCRIPTION
 import dev.icerock.moko.network.generated.models.Invitation as GeneratedInvitation
 import dev.icerock.moko.network.generated.models.Location as GeneratedLocation
 import dev.icerock.moko.network.generated.models.Meeting as GeneratedMeeting
+import dev.icerock.moko.network.generated.models.Notification as GeneratedNotification
 import dev.icerock.moko.network.generated.models.User as GeneratedUser
 
 internal fun GeneratedUser.mapToSelfUser(): SelfUser = mapToUser() as SelfUser
@@ -46,8 +50,7 @@ internal fun GeneratedInvitation.toInvitation(): Invitation = Invitation(
     id = identity.let(::InvitationId),
     meeting = meeting.mapToMeeting(),
     invitedUser = invitedUser.mapToUser(),
-    invitorUser = invitorUser.mapToUser(),
-    expiryDate = DateTime(expiryDate),
+    inviterUser = inviterUser.mapToUser(),
     isAccepted = when (isAccepted) {
         null -> AcceptationState.Waiting
         true -> AcceptationState.Accepted
@@ -85,3 +88,19 @@ internal fun GeneratedMeeting.mapToMeeting(): Meeting = Meeting(
 
 internal fun GeneratedLocation.mapToLocation(): Location =
     Location(latitude, longitude)
+
+internal fun GeneratedNotification.mapToNotification(): Notification = when (this.type) {
+    SUBSCRIPTION -> Notification.Subscription(
+        id = NotificationId(id),
+        isNew = isNew,
+        date = Date(date),
+        subscriber = subscriber!!.mapToRegularUser()
+    )
+    MEETING_INVITATION -> Notification.Invitation(
+        id = NotificationId(id),
+        isNew = isNew,
+        date = Date(date),
+        meeting = meeting!!.mapToMeeting(),
+        inviter = inviter!!.mapToRegularUser()
+    )
+}
