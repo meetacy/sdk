@@ -1,4 +1,4 @@
-name: Library Deploy
+name: Library Release Deploy
 
 on:
   push:
