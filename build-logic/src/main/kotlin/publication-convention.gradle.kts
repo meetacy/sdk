@@ -32,7 +32,7 @@ publishing {
                     append(attempt)
                 }
             }
-            println(version)
+            this@withType.version = version
         }
     }
 }
