@@ -20,6 +20,12 @@ dependencies {
     jvmTestImplementation(libs.ktorClientCio)
 }
 
+kotlin.sourceSets.all {
+    languageSettings {
+        optIn("app.meetacy.sdk.types.annotation.UnstableApi")
+    }
+}
+
 mokoNetwork {
     spec("meetacyApi") {
         inputSpec = file("meetacy-api.yml")

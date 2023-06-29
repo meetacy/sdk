@@ -27,9 +27,7 @@ public class MeetingParticipantsApi(private val api: MeetacyApi) {
                 amount = currentAmount,
                 pagingId = currentPagingId
             )
-        ).paging.mapItems { user ->
-            UserRepository.of(token, user, api)
-        }
+        ).paging.mapItems { user -> UserRepository.of(user, api) }
     }
 
     public suspend fun paging(

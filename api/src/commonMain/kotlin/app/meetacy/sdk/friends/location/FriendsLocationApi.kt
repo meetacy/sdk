@@ -12,10 +12,10 @@ import kotlinx.coroutines.flow.map
 public class FriendsLocationApi(
     private val api: MeetacyApi
 ) {
-    public fun stream(
+    public fun flow(
         token: Token,
         selfLocation: Flow<Location>,
-    ): Flow<UserOnMapRepository> =
+    ): Flow<UserLocationSnapshotRepository> =
         flow {
             val request = EmitFriendsLocationRequest(
                 token = token,
@@ -26,7 +26,7 @@ public class FriendsLocationApi(
         }.map { response ->
             val userOnMap = response.user
 
-            UserOnMapRepository(
+            UserLocationSnapshotRepository(
                 user = RegularUserRepository(
                     data = userOnMap.user,
                     api = api

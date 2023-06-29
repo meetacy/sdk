@@ -15,11 +15,10 @@ public class AuthorizedInvitationsApi(private val api: AuthorizedMeetacyApi) {
     public val base: InvitationsApi = api.base.invitations
 
     public suspend fun create(
-        invitedUser: User,
-        expiryDate: DateTime,
+        userId: UserId,
         meetingId: MeetingId
     ): AuthorizedInvitationRepository {
-        val invitation = base.create(token, invitedUser, expiryDate, meetingId).data
+        val invitation = base.create(token, userId, meetingId).data
 
         return AuthorizedInvitationRepository(invitation, api)
     }
@@ -34,42 +33,5 @@ public class AuthorizedInvitationsApi(private val api: AuthorizedMeetacyApi) {
 
     public suspend fun cancel(invitationId: InvitationId) {
         base.cancel(token, invitationId)
-    }
-
-    public suspend fun read(): List<AuthorizedInvitationRepository> {
-        val invitations = base.read(token).map { it.data }
-        return invitations.map { AuthorizedInvitationRepository(it, api) }
-    }
-
-    public suspend fun read(ids: List<InvitationId>): List<AuthorizedInvitationRepository> {
-        val invitations = base.read(token, ids).map { it.data }
-        return invitations.map { AuthorizedInvitationRepository(it, api) }
-    }
-
-    @JvmName("readFrom-id")
-    public suspend fun read(from: List<UserId>): List<AuthorizedInvitationRepository> {
-        val invitations = base.read(token, from).map { it.data }
-        return invitations.map { AuthorizedInvitationRepository(it, api) }
-    }
-
-    @JvmName("readFrom-user")
-    public suspend fun read(from: List<User>): List<AuthorizedInvitationRepository> {
-        val invitations = base.read(token, from).map { it.data }
-        return invitations.map { AuthorizedInvitationRepository(it, api) }
-    }
-
-    @JvmName("readFrom-userRepo")
-    public suspend fun read(from: List<UserRepository>): List<AuthorizedInvitationRepository> {
-        val invitations = base.read(token, from).map { it.data }
-        return invitations.map { AuthorizedInvitationRepository(it, api) }
-    }
-
-    public suspend fun update(
-        id: InvitationId,
-        expiryDate: DateTime? = null,
-        meetingId: MeetingId? = null
-    ): AuthorizedInvitationRepository {
-        val invitation = base.update(token, id, expiryDate, meetingId).data
-        return AuthorizedInvitationRepository(invitation, api)
     }
 }

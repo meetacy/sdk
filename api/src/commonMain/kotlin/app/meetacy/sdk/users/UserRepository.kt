@@ -12,16 +12,10 @@ public sealed interface UserRepository {
 
     public companion object {
         public fun of(
-            token: Token,
             data: User,
             api: MeetacyApi
-        ): UserRepository = of(data, api.authorized(token))
-
-        public fun of(
-            data: User,
-            api: AuthorizedMeetacyApi
         ): UserRepository = when (data) {
-            is RegularUser -> RegularUserRepository(data, api.base)
+            is RegularUser -> RegularUserRepository(data, api)
             is SelfUser -> SelfUserRepository(data, api)
         }
     }
