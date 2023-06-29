@@ -17,4 +17,4 @@ jobs:
           distribution: 'corretto'
           java-version: '11'
           cache: 'gradle'
-      - run: ./gradlew publish --no-daemon -Psnapshot=true -Pcommit ${{ github.sha }} -Pattempt ${{ github.run_attempt }}
+      - run: ./gradlew publish --no-daemon -Psnapshot=true -Pcommit=${{ github.sha }} -Pattempt=${{ github.run_attempt }}
