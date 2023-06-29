@@ -1,6 +1,10 @@
 package app.meetacy.sdk.engine.ktor.requests.updates
 
+import app.meetacy.sdk.engine.ktor.exception.getException
+import app.meetacy.sdk.engine.ktor.handleRSocketExceptions
 import app.meetacy.sdk.engine.ktor.mapToNotification
+import app.meetacy.sdk.engine.ktor.response.ServerResponse
+import app.meetacy.sdk.engine.ktor.response.decodeToEmptyServerResponse
 import app.meetacy.sdk.engine.requests.EmitUpdatesRequest
 import app.meetacy.sdk.types.update.Update
 import app.meetacy.sdk.types.update.UpdateId
@@ -11,9 +15,12 @@ import io.rsocket.kotlin.payload.Payload
 import io.rsocket.kotlin.payload.buildPayload
 import io.rsocket.kotlin.payload.data
 import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
@@ -24,8 +31,8 @@ internal class UpdatesEngine(
     private val httpClient: HttpClient,
     private val json: Json
 ) {
-    suspend fun stream(request: EmitUpdatesRequest) {
-        val url = baseUrl.replaceProtocolWithWebsocket() / "friends" / "location" / "stream"
+    suspend fun stream(request: EmitUpdatesRequest) = handleRSocketExceptions(json) {
+        val url = baseUrl.replaceProtocolWithWebsocket() / "updates" / "stream"
 
         val socket = httpClient.rSocket(
             urlString = url.string,
@@ -33,7 +40,7 @@ internal class UpdatesEngine(
         )
 
         val flow = socket.requestStream(
-            payload = request.encodeToPayload()
+            payload = request.encodeToPayload(json)
         ).map { payload ->
             EmitUpdatesRequest.Update(
                 update = payload.decodeToUpdate(json)
@@ -44,19 +51,22 @@ internal class UpdatesEngine(
     }
 }
 
-private fun EmitUpdatesRequest.encodeToPayload(): Payload = buildPayload {
-    val initString = buildJsonObject {
+private fun EmitUpdatesRequest.encodeToPayload(json: Json): Payload = buildPayload {
+    val initObject = buildJsonObject {
         put("token", token.string)
+        put("fromId", fromId?.string)
         put("apiVersion", apiVersion.int)
-    }.toString()
+    }
 
-    data(initString)
+    data(json.encodeToString(initObject))
 }
 
 @Serializable
 private sealed interface UpdateSerializable {
     val id: String
 
+    @SerialName("notification")
+    @Serializable
     data class Notification(
         override val id: String,
         val notification: GeneratedNotification
@@ -65,7 +75,7 @@ private sealed interface UpdateSerializable {
 
 private fun Payload.decodeToUpdate(json: Json): Update {
     return when (
-        val deserialized = json.decodeFromString<UpdateSerializable>(data.readText())
+        val deserialized = json.decodeFromString<UpdateSerializable>(data.readText().apply { println("STRING: $this") })
     ) {
         is UpdateSerializable.Notification -> Update.Notification(
             id = UpdateId(deserialized.id),

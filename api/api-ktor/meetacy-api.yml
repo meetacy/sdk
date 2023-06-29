@@ -1649,14 +1649,14 @@ components:
       properties:
         token:
           type: string
-        meeting:
+        meetingId:
           type: string
           example: "6:EBnp2woyRmY4snRvZaiEtuOIfk4eEXgWdzy8psVPL60Mz92Ts8qIdaoAHVTpvl9hTygMpfUYjNHJpjwpK0txBKRWl7EqCgmnZjm57pIWnlRIo2WoH856AibK8xmCdgOlENPUsmBGLPa7EVOtd43rnGVdeC3wUfHSNV9PT3S0Q3mXCpHF0tOfssQTnKKbBSy9V19Euo7VzpjS4WXI82ILzPVfLqTaRGEUabXw9issiVZhK97zZhBXrV3CFO26pAZa"
         userId:
           type: string
       required:
         - token
-        - meeting
+        - meetingId
         - userId
     CreateInvitationResponse:
       type: object

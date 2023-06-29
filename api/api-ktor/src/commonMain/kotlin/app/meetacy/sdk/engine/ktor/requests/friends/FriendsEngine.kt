@@ -2,6 +2,7 @@
 
 package app.meetacy.sdk.engine.ktor.requests.friends
 
+import app.meetacy.sdk.engine.ktor.handleRSocketExceptions
 import app.meetacy.sdk.engine.ktor.mapToRegularUser
 import app.meetacy.sdk.engine.ktor.mapToUser
 import app.meetacy.sdk.engine.ktor.mapToLocation
@@ -29,6 +30,7 @@ import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
@@ -81,7 +83,7 @@ internal class FriendsEngine(
         return ListFriendsRequest.Response(paging)
     }
 
-    suspend fun streamFriendsLocation(request: EmitFriendsLocationRequest) {
+    suspend fun streamFriendsLocation(request: EmitFriendsLocationRequest) = handleRSocketExceptions(json) {
         val url = baseUrl.replaceProtocolWithWebsocket() / "friends" / "location" / "stream"
 
         val socket = httpClient.rSocket(
@@ -90,7 +92,7 @@ internal class FriendsEngine(
         )
 
         val flow = socket.requestChannel(
-            initPayload = request.encodeToPayload(),
+            initPayload = request.encodeToPayload(json),
             payloads = request.selfLocation.map { location -> location.encodeToPayload() }
         ).map { payload ->
             EmitFriendsLocationRequest.Update(
@@ -102,13 +104,13 @@ internal class FriendsEngine(
     }
 }
 
-private fun EmitFriendsLocationRequest.encodeToPayload(): Payload = buildPayload {
-    val initString = buildJsonObject {
+private fun EmitFriendsLocationRequest.encodeToPayload(json: Json): Payload = buildPayload {
+    val initObject = buildJsonObject {
         put("token", token.string)
         put("apiVersion", apiVersion.int)
-    }.toString()
+    }
 
-    data(initString)
+    data(json.encodeToString(initObject))
 }
 
 private fun Location.encodeToPayload(): Payload = buildPayload {

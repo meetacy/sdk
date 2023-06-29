@@ -6,7 +6,7 @@ meetacySdk = "0.0.50"
 
 # kotlinx
 kotlinxCoroutines = "1.6.4"
-kotlinxSerialization = "1.4.1"
+kotlinxSerialization = "1.5.1"
 kotlinxDateTime = "0.4.0"
 mokoNetwork = "0.20.1"
 rsocket = "0.15.4"

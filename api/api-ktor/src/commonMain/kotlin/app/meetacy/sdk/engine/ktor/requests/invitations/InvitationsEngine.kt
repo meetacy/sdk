@@ -25,7 +25,7 @@ internal class InvitationsEngine(
         val response = base.invitationsCreatePost(
             createInvitationRequest = GeneratedCreateInvitationRequest(
                 token = request.token.string,
-                meeting = request.meetingId.string,
+                meetingId = request.meetingId.string,
                 userId = request.userId.string
             ),
             apiVersion = request.apiVersion.int.toString()
