@@ -16,7 +16,7 @@ jobs:
       ORG_GRADLE_PROJECT_attempt: ${{ github.run_attempt }}
     steps:
       - uses: actions/checkout@v3
-      - name: Gradle Setup
+      - name: Gradle Cache Setup
         uses: gradle/gradle-build-action@v2
       - name: Gradle Sync
         run: ./gradlew

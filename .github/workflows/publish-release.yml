@@ -13,7 +13,7 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v3
-      - name: Gradle Setup
+      - name: Gradle Cache Setup
         uses: gradle/gradle-build-action@v2
       - name: Publish Release Libary
         run: ./gradlew publish
