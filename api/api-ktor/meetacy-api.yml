@@ -998,6 +998,30 @@ paths:
                   $ref: '#/components/examples/InvalidFileId'
                 InvalidNickname:
                   $ref: '#/components/examples/InvalidNickname'
+  /validate:
+    parameters:
+      - name: Api-Version
+        in: header
+        description: The version of API to invoke request with
+        required: true
+        schema:
+          type: string
+    post:
+      summary: Validating a username
+      tags:
+        - user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ValidateUsernameRequest"
+      responses:
+        "200":
+          description: An example of a passed validation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidateUsernameResponse"
 components:
   examples:
     ExpiredLink:
@@ -1772,3 +1796,27 @@ components:
         - "id"
         - "isNew"
         - "date"
+    ValidateUsernameRequest:
+      type: object
+      properties:
+        username:
+          type: string
+      required:
+        - username
+    ValidateUsernameResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+          example: true
+        result:
+          type: object
+          properties:
+            username:
+              type: string
+              example: bpavuk
+          required:
+            - username
+      required:
+        - result
+        - status
