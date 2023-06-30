@@ -21,6 +21,11 @@ jobs:
         uses: gradle/gradle-build-action@v2
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/dev' }}
+      - name: Konan Cache Setup
+        uses: actions/cache@v3
+        with:
+          path: ~/.konan
+          key: konan-cache
       - name: Gradle Sycn
         run: ./gradlew
       - name: Add Sdk Version to Env
