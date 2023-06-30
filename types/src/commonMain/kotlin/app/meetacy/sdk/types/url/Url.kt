@@ -1,9 +1,12 @@
+@file:OptIn(UnsafeConstructor::class, UnstableApi::class)
+
 package app.meetacy.sdk.types.url
 
 import app.meetacy.sdk.types.annotation.UnsafeConstructor
+import app.meetacy.sdk.types.annotation.UnstableApi
 import kotlin.jvm.JvmInline
 
-@OptIn(UnsafeConstructor::class)
+@UnstableApi
 @JvmInline
 public value class Url @UnsafeConstructor constructor(public val string: String) {
 
@@ -17,6 +20,10 @@ public value class Url @UnsafeConstructor constructor(public val string: String)
 
     public fun replaceProtocol(newProtocol: UrlProtocol): Url {
         return Url(string = string.replaceFirst(protocol.string, newProtocol.string))
+    }
+
+    public fun replaceProtocolWithWebsocket(): Url {
+        return replaceProtocol(protocol.toWebSocket())
     }
 
     public fun replaceProtocol(newProtocol: String): Url {

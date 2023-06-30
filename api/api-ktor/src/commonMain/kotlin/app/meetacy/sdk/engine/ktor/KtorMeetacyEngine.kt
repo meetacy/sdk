@@ -1,18 +1,20 @@
 package app.meetacy.sdk.engine.ktor
 
 import app.meetacy.sdk.engine.MeetacyRequestsEngine
+import app.meetacy.sdk.engine.ktor.exception.getException
 import app.meetacy.sdk.engine.ktor.requests.auth.AuthEngine
 import app.meetacy.sdk.engine.ktor.requests.files.FilesEngine
 import app.meetacy.sdk.engine.ktor.requests.friends.FriendsEngine
 import app.meetacy.sdk.engine.ktor.requests.invitations.InvitationsEngine
 import app.meetacy.sdk.engine.ktor.requests.meetings.MeetingsEngine
+import app.meetacy.sdk.engine.ktor.requests.notifications.NotificationsEngine
+import app.meetacy.sdk.engine.ktor.requests.updates.UpdatesEngine
 import app.meetacy.sdk.engine.ktor.requests.users.UsersEngine
-import app.meetacy.sdk.engine.ktor.response.ErrorResponse
+import app.meetacy.sdk.engine.ktor.response.ServerResponse
 import app.meetacy.sdk.engine.requests.*
 import app.meetacy.sdk.exception.MeetacyConnectionException
+import app.meetacy.sdk.exception.MeetacyException
 import app.meetacy.sdk.exception.MeetacyInternalException
-import app.meetacy.sdk.exception.MeetacyUnauthorizedException
-import app.meetacy.sdk.exception.MeetacyUsernameAlreadyOccupiedException
 import app.meetacy.sdk.types.file.FileId
 import app.meetacy.sdk.types.url.Url
 import app.meetacy.sdk.types.url.parametersOf
@@ -22,9 +24,8 @@ import io.ktor.client.plugins.*
 import io.ktor.client.plugins.websocket.*
 import io.ktor.utils.io.errors.*
 import io.rsocket.kotlin.ktor.client.RSocketSupport
-import kotlinx.serialization.decodeFromString
+import kotlinx.coroutines.CancellationException
 import kotlinx.serialization.json.Json
-import kotlin.coroutines.cancellation.CancellationException
 
 public class KtorMeetacyEngine(
     private val baseUrl: Url,
@@ -48,11 +49,13 @@ public class KtorMeetacyEngine(
     private val friends = FriendsEngine(baseUrl, this.httpClient, this.json)
     private val meetings = MeetingsEngine(baseUrl, this.httpClient, this.json)
     private val files = FilesEngine(baseUrl, this.httpClient)
-    private val invitations = InvitationsEngine(baseUrl, httpClient, this.json)
+    private val invitations = InvitationsEngine(baseUrl, this.httpClient, this.json)
+    private val notifications = NotificationsEngine(baseUrl, this.httpClient, this.json)
+    private val updates = UpdatesEngine(baseUrl, this.httpClient, this.json)
 
     override fun getFileUrl(
         id: FileId
-    ): Url = baseUrl / "files" / "download" + parametersOf("fileIdentity" to id.string)
+    ): Url = baseUrl / "files" / "download" + parametersOf("fileId" to id.string)
 
     @Suppress("UNCHECKED_CAST")
     override suspend fun <T> execute(request: MeetacyRequest<T>): T = handleMeetacyExceptions {
@@ -83,11 +86,14 @@ public class KtorMeetacyEngine(
             is UploadFileRequest -> files.upload(request) as T
             // invitations
             is CreateInvitationRequest -> invitations.create(request) as T
-            is ReadInvitationRequest -> invitations.read(request) as T
             is AcceptInvitationRequest -> invitations.accept(request) as T
             is DenyInvitationRequest -> invitations.deny(request) as T
             is CancelInvitationRequest -> invitations.cancel(request) as T
-            is UpdateInvitationRequest -> invitations.update(request) as T
+            // notifications
+            is ReadNotificationRequest -> notifications.read(request) as T
+            is ListNotificationsRequest -> notifications.list(request) as T
+            // updates
+            is EmitUpdatesRequest -> updates.stream(request) as T
             // not yet supported
             is LinkEmailRequest -> notSupported()
             is ConfirmEmailRequest -> notSupported()
@@ -99,29 +105,20 @@ public class KtorMeetacyEngine(
             block()
         } catch (exception: ResponseException) {
             val response = try {
-                Json.decodeFromString<ErrorResponse>(exception.response.body<String>())
+                json.decodeFromString<ServerResponse.Error>(exception.response.body())
             } catch (exception: Throwable) {
                 throw MeetacyInternalException(cause = exception)
             }
-            throw getException(response.errorCode, response.errorMessage, cause = exception)
+            throw getException(response)
         } catch (exception: IOException) {
             throw MeetacyConnectionException(cause = exception)
+        } catch (exception: MeetacyException) {
+            throw exception
+        } catch (exception: CancellationException) {
+            throw exception
         } catch (exception: RuntimeException) {
-            throw when (exception) {
-                is CancellationException -> exception
-                else -> MeetacyInternalException(cause = exception)
-            }
+            throw MeetacyInternalException(cause = exception)
         }
-    }
-
-    private fun getException(
-        code: Int,
-        message: String,
-        cause: Throwable
-    ): Throwable = when (code) {
-        MeetacyUnauthorizedException.CODE -> MeetacyUnauthorizedException(message, cause)
-        MeetacyUsernameAlreadyOccupiedException.CODE -> MeetacyUsernameAlreadyOccupiedException(message, cause)
-        else -> MeetacyInternalException(message, cause)
     }
 
     private fun notSupported(): Nothing = TODO("This request is not supported yet!")

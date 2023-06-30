@@ -1,0 +1,31 @@
+name: Library Release Deploy
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  library-deploy:
+    runs-on: macos-latest
+    env:
+      GITHUB_USERNAME: "meetacy"
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'corretto'
+          java-version: '11'
+          cache: 'gradle'
+      - name: Publish Release Libary
+        run: ./gradlew publish --no-daemon
+      - name: Add Sdk Version to Env
+        run: |
+          release_version=$(./gradlew printSdkVersion -q --no-daemon)
+          echo "release_version=$release_version" >> $GITHUB_ENV
+      - name: Create Release
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{ env.release_version }}
+          release_name: Release ${{ env.release_version }}

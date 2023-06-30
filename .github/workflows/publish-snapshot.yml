@@ -1,8 +1,8 @@
-name: Library Deploy
+name: Library Snapshot Deploy
 
 on:
   push:
-    branches: [ "main" ]
+    branches-ignore: [ "main" ]
   workflow_dispatch:
 
 jobs:
@@ -18,4 +18,4 @@ jobs:
           distribution: 'corretto'
           java-version: '11'
           cache: 'gradle'
-      - run: ./gradlew publish --no-daemon
+      - run: ./gradlew publish --no-daemon -Psnapshot=true -Pcommit=${{ github.sha }} -Pattempt=${{ github.run_attempt }}
