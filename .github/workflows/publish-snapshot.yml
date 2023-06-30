@@ -26,7 +26,7 @@ jobs:
         with:
           path: ~/.konan
           key: konan-cache
-      - name: Gradle Sync
+      - name: Gradle Syn
         run: ./gradlew
       - name: Add Sdk Version to Env
         run: |
