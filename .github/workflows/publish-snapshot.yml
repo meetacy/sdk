@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  library-deploy:
+  snapshot-deploy:
     runs-on: macos-latest
     env:
       GITHUB_USERNAME: "meetacy"
@@ -18,4 +18,9 @@ jobs:
           distribution: 'corretto'
           java-version: '11'
           cache: 'gradle'
-      - run: ./gradlew publish --no-daemon -Psnapshot=true -Pcommit=${{ github.sha }} -Pattempt=${{ github.run_attempt }}
+      - name: Add Sdk Version to Env
+        run: |
+          release_version=$(./gradlew printSdkVersion -q --no-daemon)
+          echo "release_version=$release_version" >> $GITHUB_ENV
+      - name: Publish ${{ env.release_version }}
+        run: ./gradlew publish --no-daemon -Psnapshot=true -Pcommit=${{ github.sha }} -Pattempt=${{ github.run_attempt }}

@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  library-deploy:
+  release-deploy:
     runs-on: macos-latest
     env:
       GITHUB_USERNAME: "meetacy"
