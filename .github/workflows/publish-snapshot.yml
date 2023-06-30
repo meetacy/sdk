@@ -11,6 +11,7 @@ jobs:
     env:
       GITHUB_USERNAME: "meetacy"
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
       ORG_GRADLE_PROJECT_snapshot: true
       ORG_GRADLE_PROJECT_commit: ${{ github.sha }}
       ORG_GRADLE_PROJECT_attempt: ${{ github.run_attempt }}
@@ -26,7 +27,9 @@ jobs:
           path: |
             sdk/build
             sdk/.gradle
-          key: ${{ runner.os }}-project-build
+          key: ${{ runner.os }}-${{ env.BRANCH_NAME }}-project-build
+          restore-keys: |
+            ${{ runner.os }}-project-build
       - name: Gradle Sync
         run: ./gradlew
       - name: Add Sdk Version to Env
