@@ -18,9 +18,11 @@ jobs:
           distribution: 'corretto'
           java-version: '11'
           cache: 'gradle'
+      - name: Gradle Sync
+        run: ./gradlew
       - name: Add Sdk Version to Env
         run: |
-          release_version=$(./gradlew printSdkVersion -q --no-daemon)
-          echo "release_version=$release_version" >> $GITHUB_ENV
-      - name: Publish ${{ env.release_version }}
+          snapshot_version=$(./gradlew printSdkVersion -q --no-daemon -Psnapshot=true -Pcommit=${{ github.sha }} -Pattempt=${{ github.run_attempt }})
+          echo "snapshot_version=$snapshot_version" >> $GITHUB_ENV
+      - name: Publish ${{ env.snapshot_version }}
         run: ./gradlew publish --no-daemon -Psnapshot=true -Pcommit=${{ github.sha }} -Pattempt=${{ github.run_attempt }}
