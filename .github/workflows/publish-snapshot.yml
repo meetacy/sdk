@@ -21,15 +21,15 @@ jobs:
         uses: gradle/gradle-build-action@v2
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/dev' }}
-      - name: Project Cahe Setup
+      - name: Project Cache Setup
         uses: actions/cache@v2
         with:
           path: |
-            sdk/build
-            sdk/.gradle
+            build
+            .gradle
           key: ${{ runner.os }}-${{ env.BRANCH_NAME }}-project-build
           restore-keys: |
-            ${{ runner.os }}-project-build
+            ${{ runner.os }}-dev-project-build
       - name: Gradle Sync
         run: ./gradlew
       - name: Add Sdk Version to Env
@@ -38,7 +38,7 @@ jobs:
           echo "snapshot_version=$snapshot_version" >> $GITHUB_ENV
       - name: Publish Jvm Platform ${{ env.snapshot_version }}
         run: ./gradlew publishJvmPublicationToMeetacySdkRepository publishKotlinMultiplatformPublicationToMeetacySdkRepository
-      - name: Publish Remaining ${{ env.snapshot_version }}
-        run: |
-          ./gradlew publishJsPublicationToMeetacySdkRepository publishIosX64PublicationToMeetacySdkRepository \
-                    publishIosSimulatorArm64PublicationToMeetacySdkRepository publishIosArm64PublicationToMeetacySdkRepository
+#      - name: Publish Remaining ${{ env.snapshot_version }}
+#        run: |
+#          ./gradlew publishJsPublicationToMeetacySdkRepository publishIosX64PublicationToMeetacySdkRepository \
+#                    publishIosSimulatorArm64PublicationToMeetacySdkRepository publishIosArm64PublicationToMeetacySdkRepository
