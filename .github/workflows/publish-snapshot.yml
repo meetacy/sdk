@@ -69,7 +69,7 @@ jobs:
   deploy-konan:
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v3
+      - uoses: actions/checkout@v3
       - name: Gradle Cache Setup
         uses: gradle/gradle-build-action@v2
         with:
