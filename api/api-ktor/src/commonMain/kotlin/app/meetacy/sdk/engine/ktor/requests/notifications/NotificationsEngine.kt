@@ -22,7 +22,7 @@ internal class NotificationsEngine(
     suspend fun list(
         request: ListNotificationsRequest
     ): ListNotificationsRequest.Response = with (request) {
-        val response = base.notificationsListPost(
+        val response = base.notificationsListGet(
             apiVersion = apiVersion.int.toString(),
             listNotificationsRequest = GeneratedListNotificationsRequest(
                 token = token.string,
@@ -40,7 +40,7 @@ internal class NotificationsEngine(
     }
 
     suspend fun read(request: ReadNotificationRequest) = with (request) {
-        base.notificationsReadPost(
+        base.notificationsReadGet(
             apiVersion = apiVersion.int.toString(),
             readNotificationRequest = GeneratedReadNotificationRequest(
                 token = token.string,
