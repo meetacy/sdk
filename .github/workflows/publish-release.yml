@@ -92,10 +92,6 @@ jobs:
       - deploy-js
       - deploy-konan
     steps:
-      - name: Add Sdk Version to Env
-        run: |
-          release_version=$(./gradlew printSdkVersion -q)
-          echo "release_version=$release_version" >> $GITHUB_ENV
       - name: Create Release
         uses: actions/create-release@v1
         with:
