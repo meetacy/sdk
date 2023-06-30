@@ -5,16 +5,69 @@ on:
     branches-ignore: [ "main" ]
   workflow_dispatch:
 
+env:
+  GITHUB_USERNAME: "meetacy"
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+  ORG_GRADLE_PROJECT_snapshot: true
+  ORG_GRADLE_PROJECT_commit: ${{ github.sha }}
+  ORG_GRADLE_PROJECT_attempt: ${{ github.run_attempt }}
+
 jobs:
-  snapshot-deploy:
-    runs-on: macos-latest
-    env:
-      GITHUB_USERNAME: "meetacy"
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
-      ORG_GRADLE_PROJECT_snapshot: true
-      ORG_GRADLE_PROJECT_commit: ${{ github.sha }}
-      ORG_GRADLE_PROJECT_attempt: ${{ github.run_attempt }}
+
+  deploy-multiplatform:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Gradle Cache Setup
+        uses: gradle/gradle-build-action@v2
+        with:
+          cache-read-only: ${{ github.ref != 'refs/heads/dev' }}
+      - name: Gradle Sync
+        run: ./gradlew
+      - name: Add Sdk Version to Env
+        run: |
+          snapshot_version=$(./gradlew printSdkVersion -q)
+          echo "snapshot_version=$snapshot_version" >> $GITHUB_ENV
+      - name: Publish ${{ env.snapshot_version }}
+        run: ./gradlew publishKotlinMultiplatformPublicationToMeetacySdkRepository
+
+  deploy-jvm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Gradle Cache Setup
+        uses: gradle/gradle-build-action@v2
+        with:
+          cache-read-only: ${{ github.ref != 'refs/heads/dev' }}
+      - name: Gradle Sync
+        run: ./gradlew
+      - name: Add Sdk Version to Env
+        run: |
+          snapshot_version=$(./gradlew printSdkVersion -q)
+          echo "snapshot_version=$snapshot_version" >> $GITHUB_ENV
+      - name: Publish ${{ env.snapshot_version }}
+        run: ./gradlew publishJvmPublicationToMeetacySdkRepository publishKotlinMultiplatformPublicationToMeetacySdkRepository
+
+  deploy-js:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Gradle Cache Setup
+        uses: gradle/gradle-build-action@v2
+        with:
+          cache-read-only: ${{ github.ref != 'refs/heads/dev' }}
+      - name: Gradle Sync
+        run: ./gradlew
+      - name: Add Sdk Version to Env
+        run: |
+          snapshot_version=$(./gradlew printSdkVersion -q)
+          echo "snapshot_version=$snapshot_version" >> $GITHUB_ENV
+      - name: Publish ${{ env.snapshot_version }}
+        run: ./gradlew publishJsPublicationToMeetacySdkRepository
+
+  deploy-konan:
+    runs-on: macos-latest-xl
     steps:
       - uses: actions/checkout@v3
       - name: Gradle Cache Setup
@@ -32,9 +85,5 @@ jobs:
         run: |
           snapshot_version=$(./gradlew printSdkVersion -q)
           echo "snapshot_version=$snapshot_version" >> $GITHUB_ENV
-      - name: Publish Jvm Platform ${{ env.snapshot_version }}
-        run: ./gradlew publishJvmPublicationToMeetacySdkRepository publishKotlinMultiplatformPublicationToMeetacySdkRepository
-      - name: Publish Remaining ${{ env.snapshot_version }}
-        run: |
-          ./gradlew publishJsPublicationToMeetacySdkRepository publishIosX64PublicationToMeetacySdkRepository \
-                    publishIosSimulatorArm64PublicationToMeetacySdkRepository publishIosArm64PublicationToMeetacySdkRepository
+      - name: Publish ${{ env.snapshot_version }}
+        run: ./gradlew publishIosX64PublicationToMeetacySdkRepository publishIosSimulatorArm64PublicationToMeetacySdkRepository publishIosArm64PublicationToMeetacySdkRepository
