@@ -75,7 +75,8 @@ jobs:
           echo "release_version=$release_version" >> $GITHUB_ENV
       - name: Publish ${{ env.release_version }}
         run: ./gradlew publishIosX64PublicationToMeetacySdkRepository \
-          publishIosSimulatorArm64PublicationToMeetacySdkRepository publishIosArm64PublicationToMeetacySdkRepository
+             publishIosSimulatorArm64PublicationToMeetacySdkRepository \
+             publishIosArm64PublicationToMeetacySdkRepository
 
   create-release:
     runs-on: ubuntu-latest

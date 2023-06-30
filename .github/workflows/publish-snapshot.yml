@@ -87,4 +87,5 @@ jobs:
           echo "snapshot_version=$snapshot_version" >> $GITHUB_ENV
       - name: Publish ${{ env.snapshot_version }}
         run: ./gradlew publishIosX64PublicationToMeetacySdkRepository \
-             publishIosSimulatorArm64PublicationToMeetacySdkRepository publishIosArm64PublicationToMeetacySdkRepository
+             publishIosSimulatorArm64PublicationToMeetacySdkRepository \
+             publishIosArm64PublicationToMeetacySdkRepository
