@@ -30,7 +30,7 @@ jobs:
           key: ${{ runner.os }}-${{ env.BRANCH_NAME }}-project-build
           restore-keys: |
             ${{ runner.os }}-dev-project-build
-      - name: Gradle Sync
+      - name: Gradle Syn
         run: ./gradlew
       - name: Add Sdk Version to Env
         run: |
