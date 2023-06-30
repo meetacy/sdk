@@ -19,10 +19,10 @@ jobs:
           java-version: '11'
           cache: 'gradle'
       - name: Publish Release Libary
-        run: ./gradlew publish --no-daemon
+        run: ./gradlew publish
       - name: Add Sdk Version to Env
         run: |
-          release_version=$(./gradlew printSdkVersion -q --no-daemon)
+          release_version=$(./gradlew printSdkVersion -q)
           echo "release_version=$release_version" >> $GITHUB_ENV
       - name: Create Release
         uses: actions/create-release@v1

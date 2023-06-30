@@ -7,7 +7,7 @@ tasks {
         group = "CI"
 
         doFirst {
-            versionFromProperties(::println)
+            println(versionFromProperties())
         }
     }
 }

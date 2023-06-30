@@ -22,7 +22,7 @@ jobs:
         run: ./gradlew
       - name: Add Sdk Version to Env
         run: |
-          snapshot_version=$(./gradlew printSdkVersion -q --no-daemon -Psnapshot=true -Pcommit=${{ github.sha }} -Pattempt=${{ github.run_attempt }})
+          snapshot_version=$(./gradlew printSdkVersion -q -Psnapshot=true -Pcommit=${{ github.sha }} -Pattempt=${{ github.run_attempt }})
           echo "snapshot_version=$snapshot_version" >> $GITHUB_ENV
       - name: Publish ${{ env.snapshot_version }}
-        run: ./gradlew publish --no-daemon -Psnapshot=true -Pcommit=${{ github.sha }} -Pattempt=${{ github.run_attempt }}
+        run: ./gradlew publish -Psnapshot=true -Pcommit=${{ github.sha }} -Pattempt=${{ github.run_attempt }}
