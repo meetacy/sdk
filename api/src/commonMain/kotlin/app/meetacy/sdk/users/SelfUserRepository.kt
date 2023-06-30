@@ -50,4 +50,10 @@ public class SelfUserRepository(
         username: Optional<Username?> = Optional.Undefined,
         avatarId: Optional<FileId?> = Optional.Undefined
     ): SelfUserRepository = api.users.edit(token, nickname, username, avatarId)
+
+    public suspend fun validateUsername(
+        username: String
+    ): Username {
+        return api.users.validateUsername(username)
+    }
 }

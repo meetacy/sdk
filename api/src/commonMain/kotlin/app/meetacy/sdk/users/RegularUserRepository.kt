@@ -25,4 +25,10 @@ public class RegularUserRepository(
     public suspend fun deleteFriend(token: Token) {
         api.friends.delete(token, data.id)
     }
+
+    public suspend fun validateUsername(
+        username: String
+    ): Username {
+        return api.users.validateUsername(username)
+    }
 }
