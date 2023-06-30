@@ -13,6 +13,8 @@ jobs:
 
   deploy-multiplatform:
     runs-on: ubuntu-latest
+    outputs:
+      release_version: ${{ steps.output_version.release_version }}
     steps:
       - uses: actions/checkout@v3
       - name: Gradle Cache Setup
@@ -25,6 +27,9 @@ jobs:
           echo "release_version=$release_version" >> $GITHUB_ENV
       - name: Publish ${{ env.release_version }}
         run: ./gradlew publishKotlinMultiplatformPublicationToMeetacySdkRepository
+      - name: Add Sdk Version to Output
+        id: output_version
+        run: echo "release_version=${{ env.release_version }}" >> "$GITHUB_OUTPUT"
 
   deploy-jvm:
     runs-on: ubuntu-latest
@@ -94,5 +99,5 @@ jobs:
       - name: Create Release
         uses: actions/create-release@v1
         with:
-          tag_name: ${{ env.release_version }}
-          release_name: Release ${{ env.release_version }}
+          tag_name: ${{ needs.deploy-multiplatform.outputs.release_version }}
+          release_name: Release ${{ needs.deploy-multiplatform.outputs.release_version }}
