@@ -34,7 +34,7 @@ jobs:
           echo "snapshot_version=$snapshot_version" >> $GITHUB_ENV
       - name: Publish Jvm Platform ${{ env.snapshot_version }}
         run: ./gradlew publishJvmPublicationToMeetacySdkRepository publishKotlinMultiplatformPublicationToMeetacySdkRepository
-#      - name: Publish Remaining ${{ env.snapshot_version }}
-#        run: |
-#          ./gradlew publishJsPublicationToMeetacySdkRepository publishIosX64PublicationToMeetacySdkRepository \
-#                    publishIosSimulatorArm64PublicationToMeetacySdkRepository publishIosArm64PublicationToMeetacySdkRepository
+      - name: Publish Remaining ${{ env.snapshot_version }}
+        run: |
+          ./gradlew publishJsPublicationToMeetacySdkRepository publishIosX64PublicationToMeetacySdkRepository \
+                    publishIosSimulatorArm64PublicationToMeetacySdkRepository publishIosArm64PublicationToMeetacySdkRepository
