@@ -47,7 +47,7 @@ jobs:
           snapshot_version=$(./gradlew printSdkVersion -q)
           echo "snapshot_version=$snapshot_version" >> $GITHUB_ENV
       - name: Publish ${{ env.snapshot_version }}
-        run: ./gradlew publishJvmPublicationToMeetacySdkRepository publishKotlinMultiplatformPublicationToMeetacySdkRepository
+        run: ./gradlew publishJvmPublicationToMeetacySdkRepository
 
   deploy-js:
     runs-on: ubuntu-latest
