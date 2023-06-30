@@ -29,7 +29,7 @@ jobs:
         run: ./gradlew publishKotlinMultiplatformPublicationToMeetacySdkRepository
       - name: Add Sdk Version to Output
         id: output_version
-        run: echo "release_version=${{ env.release_version }}" >> "$GITHUB_OUTPUT"
+        run: echo "release_version=${{ env.release_version }}" >> $GITHUB_OUTPUT
 
   deploy-jvm:
     runs-on: ubuntu-latest
