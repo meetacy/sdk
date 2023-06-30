@@ -13,11 +13,8 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-java@v3
-        with:
-          distribution: 'corretto'
-          java-version: '11'
-          cache: 'gradle'
+      - name: Gradle Setup
+        uses: gradle/gradle-build-action@v2
       - name: Publish Release Libary
         run: ./gradlew publish
       - name: Add Sdk Version to Env
