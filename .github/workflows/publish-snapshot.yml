@@ -20,6 +20,13 @@ jobs:
         uses: gradle/gradle-build-action@v2
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/dev' }}
+      - name: Project Cahe Setup
+        uses: actions/cache@v2
+        with:
+          path: |
+            sdk/build
+            sdk/.gradle
+          key: ${{ runner.os }}-project-build
       - name: Gradle Sync
         run: ./gradlew
       - name: Add Sdk Version to Env
