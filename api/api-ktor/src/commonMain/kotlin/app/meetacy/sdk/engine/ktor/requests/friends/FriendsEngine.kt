@@ -3,9 +3,9 @@
 package app.meetacy.sdk.engine.ktor.requests.friends
 
 import app.meetacy.sdk.engine.ktor.handleRSocketExceptions
+import app.meetacy.sdk.engine.ktor.mapToLocation
 import app.meetacy.sdk.engine.ktor.mapToRegularUser
 import app.meetacy.sdk.engine.ktor.mapToUser
-import app.meetacy.sdk.engine.ktor.mapToLocation
 import app.meetacy.sdk.engine.requests.AddFriendRequest
 import app.meetacy.sdk.engine.requests.DeleteFriendRequest
 import app.meetacy.sdk.engine.requests.EmitFriendsLocationRequest
@@ -29,7 +29,6 @@ import io.rsocket.kotlin.payload.data
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.buildJsonObject
