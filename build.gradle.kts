@@ -1,10 +1,5 @@
-@file:Suppress("UNUSED_VARIABLE")
-
-tasks {
-    val printSdkVersion by creating {
-        group = "terminal"
-        doFirst {
-            println(libs.versions.meetacySdk.get())
-        }
-    }
+plugins {
+    id("print-sdk-version-convention")
 }
+
+version = libs.versions.meetacySdk.get()
