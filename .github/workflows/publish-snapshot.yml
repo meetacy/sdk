@@ -18,6 +18,8 @@ jobs:
       - uses: actions/checkout@v3
       - name: Gradle Cache Setup
         uses: gradle/gradle-build-action@v2
+        with:
+          cache-read-only: ${{ github.ref != 'refs/heads/dev' }}
       - name: Gradle Sync
         run: ./gradlew
       - name: Add Sdk Version to Env
