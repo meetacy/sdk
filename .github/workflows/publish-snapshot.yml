@@ -67,7 +67,7 @@ jobs:
         run: ./gradlew publishJsPublicationToMeetacySdkRepository
 
   deploy-konan:
-    runs-on: macos-latest-xl
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
       - name: Gradle Cache Setup
