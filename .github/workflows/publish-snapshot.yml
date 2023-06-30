@@ -15,7 +15,7 @@ env:
 
 jobs:
 
-  deploy-multiplatform:
+  deploy-multiplatforml:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
