@@ -21,7 +21,7 @@ jobs:
         uses: gradle/gradle-build-action@v2
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/dev' }}
-      - name: Gradle Syn
+      - name: Gradle Sycn
         run: ./gradlew
       - name: Add Sdk Version to Env
         run: |
