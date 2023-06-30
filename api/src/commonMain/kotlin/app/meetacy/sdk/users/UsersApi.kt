@@ -3,10 +3,11 @@ package app.meetacy.sdk.users
 import app.meetacy.sdk.MeetacyApi
 import app.meetacy.sdk.engine.requests.EditUserRequest
 import app.meetacy.sdk.engine.requests.GetUserRequest
+import app.meetacy.sdk.engine.requests.ValidateUsernameRequest
+import app.meetacy.sdk.types.annotation.UnsafeConstructor
 import app.meetacy.sdk.types.auth.Token
 import app.meetacy.sdk.types.file.FileId
 import app.meetacy.sdk.types.optional.Optional
-import app.meetacy.sdk.types.user.SelfUser
 import app.meetacy.sdk.types.user.User
 import app.meetacy.sdk.types.user.UserId
 import app.meetacy.sdk.types.user.Username
@@ -46,5 +47,14 @@ public class UsersApi(private val api: MeetacyApi) {
             data = user,
             api = api
         )
+    }
+
+    @OptIn(UnsafeConstructor::class)
+    public suspend fun validateUsername(
+        username: String
+    ): Username {
+        val result = api.engine.execute(ValidateUsernameRequest(username = Username(username)))
+
+        return result.username
     }
 }
