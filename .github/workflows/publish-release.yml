@@ -14,7 +14,7 @@ jobs:
   deploy-multiplatform:
     runs-on: ubuntu-latest
     outputs:
-      release_version: ${{ steps.output_version.release_version }}
+      release_version: ${{ steps.output_version.outputs.release_version }}
     steps:
       - uses: actions/checkout@v3
       - name: Gradle Cache Setup
