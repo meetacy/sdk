@@ -1029,12 +1029,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/InvalidResponse'
               examples:
-                InvalidAccessIdentity:
-                  $ref: '#/components/examples/InvalidToken'
-                InvalidAvatarIdentity:
-                  $ref: '#/components/examples/InvalidFileId'
-                InvalidNickname:
-                  $ref: '#/components/examples/InvalidNickname'
+                InvalidUtf8String:
+                  $ref: '#/components/examples/InvalidUtf8String'
+                UsernameAlreadyOccupied:
+                  $ref: '#/components/examples/UsernameAlreadyOccupied'
 
 components:
   examples:
@@ -1067,6 +1065,7 @@ components:
       value:
         status: false
         errorCode: 6
+        errorMessage: "Username already occupied. Please provide another username."
     NullEditParameters:
       value:
         status: false
