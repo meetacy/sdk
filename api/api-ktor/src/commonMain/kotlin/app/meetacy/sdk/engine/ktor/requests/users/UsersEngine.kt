@@ -94,7 +94,7 @@ internal class UsersEngine(
 
     @OptIn(UnsafeConstructor::class)
     suspend fun validateUsername(request: ValidateUsernameRequest): ValidateUsernameRequest.Response {
-        val response = base.validatePost(
+        val response = base.usersValidatePost(
             validateUsernameRequest = GeneratedValidateUsernameRequest(
                 username = request.username.string
             ),
