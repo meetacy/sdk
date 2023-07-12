@@ -996,8 +996,12 @@ paths:
                   $ref: '#/components/examples/InvalidToken'
                 InvalidAvatarIdentity:
                   $ref: '#/components/examples/InvalidFileId'
-                InvalidNickname:
-                  $ref: '#/components/examples/InvalidNickname'
+                InvalidUtf8String:
+                  $ref: '#/components/examples/InvalidUtf8String'
+                UsernameAlreadyOccupied:
+                  $ref: '#/components/examples/UsernameAlreadyOccupied'
+                NullEditParameters:
+                  $ref: '#/components/examples/NullEditParameters'
   /users/validate:
     parameters:
       - name: Api-Version
