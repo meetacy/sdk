@@ -1002,7 +1002,7 @@ paths:
                   $ref: '#/components/examples/UsernameAlreadyOccupied'
                 NullEditParameters:
                   $ref: '#/components/examples/NullEditParameters'
-  /users/validate:
+  /users/username/validate:
     parameters:
       - name: Api-Version
         in: header
