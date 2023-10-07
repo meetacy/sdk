@@ -3,9 +3,9 @@
 package app.meetacy.sdk.engine.ktor.requests.friends
 
 import app.meetacy.sdk.engine.ktor.handleRSocketExceptions
+import app.meetacy.sdk.engine.ktor.mapToLocation
 import app.meetacy.sdk.engine.ktor.mapToRegularUser
 import app.meetacy.sdk.engine.ktor.mapToUser
-import app.meetacy.sdk.engine.ktor.mapToLocation
 import app.meetacy.sdk.engine.requests.AddFriendRequest
 import app.meetacy.sdk.engine.requests.DeleteFriendRequest
 import app.meetacy.sdk.engine.requests.EmitFriendsLocationRequest
@@ -29,7 +29,6 @@ import io.rsocket.kotlin.payload.data
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.buildJsonObject
@@ -48,31 +47,31 @@ internal class FriendsEngine(
     suspend fun add(request: AddFriendRequest) {
         base.friendsAddPost(
             accessFriendRequest = AccessFriendRequest(
-                token = request.token.string,
                 friendId = request.friendId.string
             ),
-            apiVersion = request.apiVersion.int.toString()
+            apiVersion = request.apiVersion.int.toString(),
+            token = request.token.string
         )
     }
 
     suspend fun delete(request: DeleteFriendRequest) {
         base.friendsDeletePost(
             accessFriendRequest = AccessFriendRequest(
-                token = request.token.string,
                 friendId = request.friendId.string
             ),
-            apiVersion = request.apiVersion.int.toString()
+            apiVersion = request.apiVersion.int.toString(),
+            token = request.token.string
         )
     }
 
     suspend fun list(request: ListFriendsRequest): ListFriendsRequest.Response {
         val response = base.friendsListPost(
             listFriendsRequest = GeneratedListFriendsRequest(
-                token = request.token.string,
                 amount = request.amount.int,
                 pagingId = request.pagingId?.string
             ),
-            apiVersion = request.apiVersion.int.toString()
+            apiVersion = request.apiVersion.int.toString(),
+            token = request.token.string
         )
 
         val paging = PagingResponse(

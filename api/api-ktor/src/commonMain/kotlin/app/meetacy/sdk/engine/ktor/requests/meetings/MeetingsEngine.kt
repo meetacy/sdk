@@ -17,7 +17,6 @@ import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.content.*
 import io.ktor.http.*
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
@@ -38,11 +37,11 @@ internal class MeetingsEngine(
     ): ListMeetingsHistoryRequest.Response = with(request) {
         val response = base.meetingsHistoryListPost(
             listMeetingsRequest = ListMeetingsRequest(
-                token = token.string,
                 amount = amount.int,
                 pagingId = pagingId?.string
             ),
-            apiVersion = request.apiVersion.int.toString()
+            apiVersion = request.apiVersion.int.toString(),
+            token = request.token.string
         )
 
         val paging = PagingResponse(
@@ -58,11 +57,11 @@ internal class MeetingsEngine(
     ): ListActiveMeetingsRequest.Response = with(request) {
         val response = base.meetingsHistoryActiveGet(
             listMeetingsRequest = ListMeetingsRequest(
-                token = token.string,
                 amount = amount.int,
                 pagingId = pagingId?.string
             ),
-            apiVersion = request.apiVersion.int.toString()
+            apiVersion = request.apiVersion.int.toString(),
+            token = request.token.string
         )
 
         val paging = PagingResponse(
@@ -78,11 +77,11 @@ internal class MeetingsEngine(
     ): ListPastMeetingsRequest.Response = with(request) {
         val response = base.meetingsHistoryPastGet(
             listMeetingsRequest = ListMeetingsRequest(
-                token = token.string,
                 amount = amount.int,
                 pagingId = pagingId?.string
             ),
-            apiVersion = request.apiVersion.int.toString()
+            apiVersion = request.apiVersion.int.toString(),
+            token = request.token.string
         )
 
         val paging = PagingResponse(
@@ -98,13 +97,13 @@ internal class MeetingsEngine(
     ): ListMeetingsMapRequest.Response = with (request) {
         val response = base.meetingsMapListPost(
             listMapMeetingsRequest = ListMapMeetingsRequest(
-                token = token.string,
                 location = Location(
                     latitude = location.latitude,
                     longitude = location.longitude
                 )
             ),
-            apiVersion = request.apiVersion.int.toString()
+            apiVersion = request.apiVersion.int.toString(),
+            token = request.token.string
         )
 
         val data = response.result.map(GeneratedMeeting::mapToMeeting)
@@ -117,7 +116,6 @@ internal class MeetingsEngine(
     ): CreateMeetingRequest.Response {
         val response = base.meetingsCreatePost(
             createMeetingRequest = GeneratedCreateMeetingRequest(
-                token = request.token.string,
                 title = request.title,
                 date = request.date.iso8601,
                 location = Location(
@@ -131,7 +129,8 @@ internal class MeetingsEngine(
                 },
                 avatarId = request.fileId?.string
             ),
-            apiVersion = request.apiVersion.int.toString()
+            apiVersion = request.apiVersion.int.toString(),
+            token = request.token.string
         ).result
 
         val meeting = response.mapToMeeting()
@@ -187,12 +186,12 @@ internal class MeetingsEngine(
         request: ListMeetingParticipantsRequest
     ): ListMeetingParticipantsRequest.Response {
         val response = base.meetingsParticipantsListPost(
-            apiVersion = request.apiVersion.int.toString(),
             listMeetingParticipantsRequest = GeneratedListMeetingParticipantsRequest(
                 amount = request.amount.int,
-                token = request.token.string,
                 meetingId = request.meetingId.string
-            )
+            ),
+            apiVersion = request.apiVersion.int.toString(),
+            token = request.token.string
         )
 
         val paging = PagingResponse(
@@ -206,20 +205,20 @@ internal class MeetingsEngine(
     suspend fun participateMeeting(request: ParticipateMeetingRequest) {
         base.meetingsParticipatePost(
             accessMeetingIdRequest = AccessMeetingIdRequest(
-                token = request.token.string,
                 meetingId = request.meetingId.string
             ),
-            apiVersion = request.apiVersion.int.toString()
+            apiVersion = request.apiVersion.int.toString(),
+            token = request.token.string
         )
     }
 
     suspend fun getMeeting(request: GetMeetingRequest): GetMeetingRequest.Response {
         val response = base.meetingsGetPost(
             accessMeetingIdRequest = AccessMeetingIdRequest(
-                token = request.token.string,
                 meetingId = request.meetingId.string
             ),
-            apiVersion = request.apiVersion.int.toString()
+            apiVersion = request.apiVersion.int.toString(),
+            token = request.token.string
         )
 
         val meeting = response.result.mapToMeeting()

@@ -24,11 +24,11 @@ internal class InvitationsEngine(
     ): CreateInvitationRequest.Response {
         val response = base.invitationsCreatePost(
             createInvitationRequest = GeneratedCreateInvitationRequest(
-                token = request.token.string,
                 meetingId = request.meetingId.string,
                 userId = request.userId.string
             ),
-            apiVersion = request.apiVersion.int.toString()
+            apiVersion = request.apiVersion.int.toString(),
+            token = request.token.string
         ).result
 
         return CreateInvitationRequest.Response(response.toInvitation())
@@ -38,11 +38,11 @@ internal class InvitationsEngine(
         request: AcceptInvitationRequest
     ) {
         base.invitationsAcceptPost(
-            apiVersion = request.apiVersion.int.toString(),
             acceptInvitationRequest = GeneratedAcceptInvitationRequest(
-                token = request.token.string,
                 id = request.invitationId.string
-            )
+            ),
+            apiVersion = request.apiVersion.int.toString(),
+            token = request.token.string
         )
     }
 
@@ -50,11 +50,11 @@ internal class InvitationsEngine(
         request: DenyInvitationRequest
     ) {
         base.invitationsDenyPost(
-            apiVersion = request.apiVersion.int.toString(),
             denyInvitationRequest = GeneratedDenyInvitationRequest(
-                token = request.token.string,
                 id = request.invitationId.string
-            )
+            ),
+            apiVersion = request.apiVersion.int.toString(),
+            token = request.token.string
         )
     }
 
@@ -62,11 +62,11 @@ internal class InvitationsEngine(
         request: CancelInvitationRequest
     ) {
         base.invitationsCancelPost(
-            apiVersion = request.apiVersion.int.toString(),
             cancelInvitationRequest = GeneratedCancelInvitationRequest(
-                id = request.invitationId.string,
-                token = request.token.string
-            )
+                id = request.invitationId.string
+            ),
+            apiVersion = request.apiVersion.int.toString(),
+            token = request.token.string
         )
     }
 }

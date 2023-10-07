@@ -3,23 +3,21 @@ package app.meetacy.sdk.engine.ktor.requests.files
 import app.meetacy.sdk.engine.requests.GetFileRequest
 import app.meetacy.sdk.engine.requests.UploadFileRequest
 import app.meetacy.sdk.files.DownloadableFile
-import app.meetacy.sdk.io.*
+import app.meetacy.sdk.io.Input
+import app.meetacy.sdk.io.InputSource
+import app.meetacy.sdk.io.asKtorChannelProvider
+import app.meetacy.sdk.io.asMeetacyInput
 import app.meetacy.sdk.types.file.FileId
 import app.meetacy.sdk.types.url.Url
 import app.meetacy.sdk.types.url.parametersOf
 import dev.icerock.moko.network.generated.models.GenerateIdentityResponse
 import io.ktor.client.*
-import io.ktor.client.call.*
-import io.ktor.client.plugins.*
 import io.ktor.client.request.*
 import io.ktor.client.request.forms.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
-import io.ktor.utils.io.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
 internal class FilesEngine(
@@ -62,7 +60,6 @@ internal class FilesEngine(
         val string = httpClient.submitFormWithBinaryData(
             url = url.string,
             formData = formData {
-                append("token", request.token.string)
                 append(
                     key = "file",
                     value = request.file.input.asKtorChannelProvider(
@@ -77,6 +74,7 @@ internal class FilesEngine(
             }
         ) {
             header("Api-Version", request.apiVersion.int)
+            header("Token", request.token.string)
         }.bodyAsText()
 
         val response = Json.decodeFromString<GenerateIdentityResponse>(string)

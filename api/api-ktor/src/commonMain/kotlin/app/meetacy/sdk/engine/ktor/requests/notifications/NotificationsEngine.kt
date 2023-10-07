@@ -23,12 +23,12 @@ internal class NotificationsEngine(
         request: ListNotificationsRequest
     ): ListNotificationsRequest.Response = with (request) {
         val response = base.notificationsListPost(
-            apiVersion = apiVersion.int.toString(),
             listNotificationsRequest = GeneratedListNotificationsRequest(
-                token = token.string,
                 amount = amount.int,
                 pagingId = pagingId?.string
-            )
+            ),
+            apiVersion = apiVersion.int.toString(),
+            token = request.token.string
         ).result
 
         val paging = PagingResponse(
@@ -41,11 +41,11 @@ internal class NotificationsEngine(
 
     suspend fun read(request: ReadNotificationRequest) = with (request) {
         base.notificationsReadPost(
-            apiVersion = apiVersion.int.toString(),
             readNotificationRequest = GeneratedReadNotificationRequest(
-                token = token.string,
                 lastNotificationId = lastNotificationId.string
-            )
+            ),
+            apiVersion = apiVersion.int.toString(),
+            token = request.token.string
         )
     }
 }

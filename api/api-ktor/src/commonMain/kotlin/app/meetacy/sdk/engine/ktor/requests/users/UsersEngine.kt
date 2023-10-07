@@ -36,9 +36,9 @@ internal class UsersEngine(
     suspend fun getMe(request: GetMeRequest): GetMeRequest.Response {
         val response = base.usersGetPost(
             getUserRequest = GeneratedGetUserRequest(
-                token = request.token.string
             ),
-            apiVersion = request.apiVersion.int.toString()
+            apiVersion = request.apiVersion.int.toString(),
+            token = request.token.string
         )
 
         return GetMeRequest.Response(
@@ -50,10 +50,10 @@ internal class UsersEngine(
     suspend fun getUser(request: GetUserRequest): GetUserRequest.Response {
         val response = base.usersGetPost(
             getUserRequest = GeneratedGetUserRequest(
-                token = request.token.string,
                 id = request.userId.string,
             ),
-            apiVersion = request.apiVersion.int.toString()
+            apiVersion = request.apiVersion.int.toString(),
+            token = request.token.string
         )
 
         return GetUserRequest.Response(
@@ -94,13 +94,13 @@ internal class UsersEngine(
 
     @OptIn(UnsafeConstructor::class)
     suspend fun validateUsername(request: ValidateUsernameRequest): ValidateUsernameRequest.Response {
-        val response = base.usersUsernameValidatePost(
+        val response = base.usersValidatePost(
             validateUsernameRequest = GeneratedValidateUsernameRequest(
                 username = request.username.string
             ),
             apiVersion = request.apiVersion.int.toString()
         )
 
-        return ValidateUsernameRequest.Response(username = Username(response.result.username))
+        return ValidateUsernameRequest.Response(username = Username(response.username))
     }
 }
