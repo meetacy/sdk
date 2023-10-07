@@ -74,7 +74,7 @@ internal class FilesEngine(
             }
         ) {
             header("Api-Version", request.apiVersion.int)
-            header("Token", request.token.string)
+            header("Authorization", request.token.string)
         }.bodyAsText()
 
         val response = Json.decodeFromString<GenerateIdentityResponse>(string)

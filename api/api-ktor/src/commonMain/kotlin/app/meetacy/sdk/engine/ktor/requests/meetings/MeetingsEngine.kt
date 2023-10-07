@@ -142,7 +142,6 @@ internal class MeetingsEngine(
         val url = baseUrl / "meetings" / "edit"
 
         val jsonObject = buildJsonObject {
-            put("token", token.string)
             put("meetingId", meetingId.string)
 
             title.ifPresent { title ->
@@ -175,6 +174,7 @@ internal class MeetingsEngine(
                     contentType = ContentType.Application.Json
                 )
             )
+            header("Authorization", token)
         }.body<String>()
 
         val meeting = Json.decodeFromString<EditMeetingResponse>(string).result

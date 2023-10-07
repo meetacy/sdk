@@ -65,8 +65,6 @@ internal class UsersEngine(
         val url = baseUrl / "users" / "edit"
 
         val jsonObject = buildJsonObject {
-            put("token", token.string)
-
             nickname.ifPresent { nickname ->
                 put("nickname", nickname)
             }
@@ -85,6 +83,7 @@ internal class UsersEngine(
                     contentType = ContentType.Application.Json
                 )
             )
+            header("Authorization", token)
         }.body<String>()
 
         val user = Json.decodeFromString<EditUserResponse>(string).result
