@@ -41,7 +41,7 @@ internal class MeetingsEngine(
                 pagingId = pagingId?.string
             ),
             apiVersion = request.apiVersion.int.toString(),
-            token = request.token.string
+            authorization = request.token.string
         )
 
         val paging = PagingResponse(
@@ -61,7 +61,7 @@ internal class MeetingsEngine(
                 pagingId = pagingId?.string
             ),
             apiVersion = request.apiVersion.int.toString(),
-            token = request.token.string
+            authorization = request.token.string
         )
 
         val paging = PagingResponse(
@@ -81,7 +81,7 @@ internal class MeetingsEngine(
                 pagingId = pagingId?.string
             ),
             apiVersion = request.apiVersion.int.toString(),
-            token = request.token.string
+            authorization = request.token.string
         )
 
         val paging = PagingResponse(
@@ -103,7 +103,7 @@ internal class MeetingsEngine(
                 )
             ),
             apiVersion = request.apiVersion.int.toString(),
-            token = request.token.string
+            authorization = request.token.string
         )
 
         val data = response.result.map(GeneratedMeeting::mapToMeeting)
@@ -130,7 +130,7 @@ internal class MeetingsEngine(
                 avatarId = request.fileId?.string
             ),
             apiVersion = request.apiVersion.int.toString(),
-            token = request.token.string
+            authorization = request.token.string
         ).result
 
         val meeting = response.mapToMeeting()
@@ -191,7 +191,7 @@ internal class MeetingsEngine(
                 meetingId = request.meetingId.string
             ),
             apiVersion = request.apiVersion.int.toString(),
-            token = request.token.string
+            authorization = request.token.string
         )
 
         val paging = PagingResponse(
@@ -208,7 +208,7 @@ internal class MeetingsEngine(
                 meetingId = request.meetingId.string
             ),
             apiVersion = request.apiVersion.int.toString(),
-            token = request.token.string
+            authorization = request.token.string
         )
     }
 
@@ -218,7 +218,7 @@ internal class MeetingsEngine(
                 meetingId = request.meetingId.string
             ),
             apiVersion = request.apiVersion.int.toString(),
-            token = request.token.string
+            authorization = request.token.string
         )
 
         val meeting = response.result.mapToMeeting()

@@ -70,7 +70,7 @@ paths:
         required: true
         schema:
           type: string
-      - name: Token
+      - name: Authorization
         in: header
         description: Token auth
         required: true
@@ -180,7 +180,7 @@ paths:
         required: true
         schema:
           type: string
-      - name: Token
+      - name: Authorization
         in: header
         description: Token auth
         required: true
@@ -232,7 +232,7 @@ paths:
         required: true
         schema:
           type: string
-      - name: Token
+      - name: Authorization
         in: header
         description: Token auth
         required: true
@@ -277,7 +277,7 @@ paths:
         required: true
         schema:
           type: string
-      - name: Token
+      - name: Authorization
         in: header
         description: Token auth
         required: true
@@ -320,7 +320,7 @@ paths:
         required: true
         schema:
           type: string
-      - name: Token
+      - name: Authorization
         in: header
         description: Token auth
         required: true
@@ -358,7 +358,7 @@ paths:
         required: true
         schema:
           type: string
-      - name: Token
+      - name: Authorization
         in: header
         description: Token auth
         required: true
@@ -400,7 +400,7 @@ paths:
         required: true
         schema:
           type: string
-      - name: Token
+      - name: Authorization
         in: header
         description: Token auth
         required: true
@@ -443,7 +443,7 @@ paths:
         required: true
         schema:
           type: string
-      - name: Token
+      - name: Authorization
         in: header
         description: Token auth
         required: true
@@ -486,7 +486,7 @@ paths:
         required: true
         schema:
           type: string
-      - name: Token
+      - name: Authorization
         in: header
         description: Token auth
         required: true
@@ -528,7 +528,7 @@ paths:
         required: true
         schema:
           type: string
-      - name: Token
+      - name: Authorization
         in: header
         description: Token auth
         required: true
@@ -576,7 +576,7 @@ paths:
         required: true
         schema:
           type: string
-      - name: Token
+      - name: Authorization
         in: header
         description: Token auth
         required: true
@@ -619,7 +619,7 @@ paths:
         required: true
         schema:
           type: string
-      - name: Token
+      - name: Authorization
         in: header
         description: Token auth
         required: true
@@ -662,7 +662,7 @@ paths:
         required: true
         schema:
           type: string
-      - name: Token
+      - name: Authorization
         in: header
         description: Token auth
         required: true
@@ -705,7 +705,7 @@ paths:
         required: true
         schema:
           type: string
-      - name: Token
+      - name: Authorization
         in: header
         description: Token auth
         required: true
@@ -746,7 +746,7 @@ paths:
         required: true
         schema:
           type: string
-      - name: Token
+      - name: Authorization
         in: header
         description: Token auth
         required: true
@@ -787,7 +787,7 @@ paths:
         required: true
         schema:
           type: string
-      - name: Token
+      - name: Authorization
         in: header
         description: Token auth
         required: true
@@ -828,7 +828,7 @@ paths:
         required: true
         schema:
           type: string
-      - name: Token
+      - name: Authorization
         in: header
         description: Token auth
         required: true
@@ -868,7 +868,7 @@ paths:
         required: true
         schema:
           type: string
-      - name: Token
+      - name: Authorization
         in: header
         description: Token auth
         required: true
@@ -911,7 +911,7 @@ paths:
         required: true
         schema:
           type: string
-      - name: Token
+      - name: Authorization
         in: header
         description: Token auth
         required: true
@@ -956,7 +956,7 @@ paths:
         required: true
         schema:
           type: string
-      - name: Token
+      - name: Authorization
         in: header
         description: Token auth
         required: true
@@ -996,7 +996,7 @@ paths:
         required: true
         schema:
           type: string
-      - name: Token
+      - name: Authorization
         in: header
         description: Token auth
         required: true
@@ -1037,7 +1037,7 @@ paths:
         required: true
         schema:
           type: string
-      - name: Token
+      - name: Authorization
         in: header
         description: Token auth
         required: true
@@ -1093,7 +1093,7 @@ paths:
         required: true
         schema:
           type: string
-      - name: Token
+      - name: Authorization
         in: header
         description: Token auth
         required: true

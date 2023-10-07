@@ -38,7 +38,7 @@ internal class UsersEngine(
             getUserRequest = GeneratedGetUserRequest(
             ),
             apiVersion = request.apiVersion.int.toString(),
-            token = request.token.string
+            authorization = request.token.string
         )
 
         return GetMeRequest.Response(
@@ -53,7 +53,7 @@ internal class UsersEngine(
                 id = request.userId.string,
             ),
             apiVersion = request.apiVersion.int.toString(),
-            token = request.token.string
+            authorization = request.token.string
         )
 
         return GetUserRequest.Response(

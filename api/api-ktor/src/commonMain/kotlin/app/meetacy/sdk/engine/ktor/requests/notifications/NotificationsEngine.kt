@@ -28,7 +28,7 @@ internal class NotificationsEngine(
                 pagingId = pagingId?.string
             ),
             apiVersion = apiVersion.int.toString(),
-            token = request.token.string
+            authorization = request.token.string
         ).result
 
         val paging = PagingResponse(
@@ -45,7 +45,7 @@ internal class NotificationsEngine(
                 lastNotificationId = lastNotificationId.string
             ),
             apiVersion = apiVersion.int.toString(),
-            token = request.token.string
+            authorization = request.token.string
         )
     }
 }

@@ -28,7 +28,7 @@ internal class InvitationsEngine(
                 userId = request.userId.string
             ),
             apiVersion = request.apiVersion.int.toString(),
-            token = request.token.string
+            authorization = request.token.string
         ).result
 
         return CreateInvitationRequest.Response(response.toInvitation())
@@ -42,7 +42,7 @@ internal class InvitationsEngine(
                 id = request.invitationId.string
             ),
             apiVersion = request.apiVersion.int.toString(),
-            token = request.token.string
+            authorization = request.token.string
         )
     }
 
@@ -54,7 +54,7 @@ internal class InvitationsEngine(
                 id = request.invitationId.string
             ),
             apiVersion = request.apiVersion.int.toString(),
-            token = request.token.string
+            authorization = request.token.string
         )
     }
 
@@ -66,7 +66,7 @@ internal class InvitationsEngine(
                 id = request.invitationId.string
             ),
             apiVersion = request.apiVersion.int.toString(),
-            token = request.token.string
+            authorization = request.token.string
         )
     }
 }
