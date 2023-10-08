@@ -113,24 +113,24 @@ internal class MeetingsEngine(
 
     suspend fun createMeeting(
         request: CreateMeetingRequest
-    ): CreateMeetingRequest.Response {
+    ): CreateMeetingRequest.Response = with(request){
         val response = base.meetingsCreatePost(
             createMeetingRequest = GeneratedCreateMeetingRequest(
-                title = request.title,
-                date = request.date.iso8601,
+                title = title,
+                date = date.iso8601,
                 location = Location(
-                    latitude = request.location.latitude,
-                    longitude = request.location.longitude
+                    latitude = location.latitude,
+                    longitude = location.longitude
                 ),
-                description = request.description,
-                visibility = when (request.visibility) {
+                description = description,
+                visibility = when (visibility) {
                     Meeting.Visibility.Public -> GeneratedCreateMeetingRequest.Visibility.PUBLIC
                     Meeting.Visibility.Private -> GeneratedCreateMeetingRequest.Visibility.PRIVATE
                 },
-                avatarId = request.fileId?.string
+                avatarId = fileId?.string
             ),
-            apiVersion = request.apiVersion.int.toString(),
-            authorization = request.token.string
+            apiVersion = apiVersion.int.toString(),
+            authorization = token.string
         ).result
 
         val meeting = response.mapToMeeting()

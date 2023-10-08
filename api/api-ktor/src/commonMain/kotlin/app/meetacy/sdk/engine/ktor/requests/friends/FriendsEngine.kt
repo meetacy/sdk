@@ -106,6 +106,7 @@ internal class FriendsEngine(
 private fun EmitFriendsLocationRequest.encodeToPayload(json: Json): Payload = buildPayload {
     val initObject = buildJsonObject {
         put("apiVersion", apiVersion.int)
+        put("token", this@encodeToPayload.token.string)
     }
 
     data(json.encodeToString(initObject))
