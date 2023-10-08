@@ -168,13 +168,15 @@ internal class MeetingsEngine(
         }
 
         val string = httpClient.post(url.string) {
+            headers {
+                append("Authorization", token.string)
+            }
             setBody(
                 TextContent(
                     text = jsonObject.toString(),
                     contentType = ContentType.Application.Json
                 )
             )
-            header("Authorization", token)
         }.body<String>()
 
         val meeting = Json.decodeFromString<EditMeetingResponse>(string).result
