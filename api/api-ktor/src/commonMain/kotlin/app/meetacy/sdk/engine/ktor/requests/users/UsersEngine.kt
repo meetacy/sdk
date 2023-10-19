@@ -5,7 +5,7 @@ import app.meetacy.sdk.engine.ktor.mapToUser
 import app.meetacy.sdk.engine.requests.EditUserRequest
 import app.meetacy.sdk.engine.requests.GetMeRequest
 import app.meetacy.sdk.engine.requests.GetUserRequest
-import app.meetacy.sdk.engine.requests.ValidateUsernameRequest
+import app.meetacy.sdk.engine.requests.UsernameAvailableRequest
 import app.meetacy.sdk.exception.meetacyApiError
 import app.meetacy.sdk.types.annotation.UnsafeConstructor
 import app.meetacy.sdk.types.optional.ifPresent
@@ -85,7 +85,6 @@ internal class UsersEngine(
                     text = jsonObject.toString(),
                     contentType = ContentType.Application.Json
                 )
-
             )
 
         }.body<String>()
@@ -96,7 +95,7 @@ internal class UsersEngine(
     }
 
     @OptIn(UnsafeConstructor::class)
-    suspend fun validateUsername(request: ValidateUsernameRequest): ValidateUsernameRequest.Response {
+    suspend fun usernameAvailable(request: UsernameAvailableRequest): UsernameAvailableRequest.Response {
         val response = base.usersValidatePost(
             validateUsernameRequest = GeneratedValidateUsernameRequest(
                 username = request.username.string
@@ -104,6 +103,6 @@ internal class UsersEngine(
             apiVersion = request.apiVersion.int.toString()
         )
 
-        return ValidateUsernameRequest.Response(username = Username(response.username))
+        return UsernameAvailableRequest.Response(username = Username(response.username))
     }
 }

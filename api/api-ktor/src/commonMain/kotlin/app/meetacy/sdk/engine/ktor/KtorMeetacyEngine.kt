@@ -71,7 +71,7 @@ public class KtorMeetacyEngine(
             is GetMeRequest -> users.getMe(request) as T
             is GetUserRequest -> users.getUser(request) as T
             is EditUserRequest -> users.editUser(request) as T
-            is ValidateUsernameRequest -> users.validateUsername(request) as T
+            is UsernameAvailableRequest -> users.usernameAvailable(request) as T
             // meetings
             is ListMeetingsHistoryRequest -> meetings.listMeetingsHistory(request) as T
             is ListActiveMeetingsRequest -> meetings.listActiveMeetings(request) as T

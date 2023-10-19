@@ -41,9 +41,7 @@ public class AuthorizedUsersApi(private val api: AuthorizedMeetacyApi) {
         )
     }
 
-    public suspend fun validateUsername(
-        username: String
-    ): Username {
-        return base.validateUsername(username)
+    public suspend fun usernameAvailable(username: Username): Username {
+        return base.usernameAvailable(username)
     }
 }

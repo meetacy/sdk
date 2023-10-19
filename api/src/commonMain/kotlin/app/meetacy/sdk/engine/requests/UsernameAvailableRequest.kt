@@ -2,8 +2,8 @@ package app.meetacy.sdk.engine.requests
 
 import app.meetacy.sdk.types.user.Username
 
-public data class ValidateUsernameRequest(
+public data class UsernameAvailableRequest(
     val username: Username
-) : MeetacyRequest<ValidateUsernameRequest.Response> {
+) : MeetacyRequest<UsernameAvailableRequest.Response> {
     public data class Response(val username: Username)
 }

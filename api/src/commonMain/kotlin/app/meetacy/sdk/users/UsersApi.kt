@@ -3,8 +3,7 @@ package app.meetacy.sdk.users
 import app.meetacy.sdk.MeetacyApi
 import app.meetacy.sdk.engine.requests.EditUserRequest
 import app.meetacy.sdk.engine.requests.GetUserRequest
-import app.meetacy.sdk.engine.requests.ValidateUsernameRequest
-import app.meetacy.sdk.types.annotation.UnsafeConstructor
+import app.meetacy.sdk.engine.requests.UsernameAvailableRequest
 import app.meetacy.sdk.types.auth.Token
 import app.meetacy.sdk.types.file.FileId
 import app.meetacy.sdk.types.optional.Optional
@@ -49,12 +48,8 @@ public class UsersApi(private val api: MeetacyApi) {
         )
     }
 
-    @OptIn(UnsafeConstructor::class)
-    public suspend fun validateUsername(
-        username: String
-    ): Username {
-        val result = api.engine.execute(ValidateUsernameRequest(username = Username(username)))
-
+    public suspend fun usernameAvailable(username: Username): Username {
+        val result = api.engine.execute(UsernameAvailableRequest(username))
         return result.username
     }
 }
