@@ -77,16 +77,13 @@ internal class UsersEngine(
         }
 
         val string = httpClient.post(url.string) {
-            headers {
-                append("Authorization", token.string)
-            }
             setBody(
                 TextContent(
                     text = jsonObject.toString(),
                     contentType = ContentType.Application.Json
                 )
             )
-
+            header("Authorization", token.string)
         }.body<String>()
 
         val user = Json.decodeFromString<EditUserResponse>(string).result

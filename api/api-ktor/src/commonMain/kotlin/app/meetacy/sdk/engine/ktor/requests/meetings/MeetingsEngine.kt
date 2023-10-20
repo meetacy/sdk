@@ -2,6 +2,8 @@ package app.meetacy.sdk.engine.ktor.requests.meetings
 
 import app.meetacy.sdk.engine.ktor.mapToMeeting
 import app.meetacy.sdk.engine.ktor.mapToUser
+import app.meetacy.sdk.engine.ktor.response.models.CreateMeetingResponse
+import app.meetacy.sdk.engine.ktor.response.models.ListMeetingsResponse
 import app.meetacy.sdk.engine.requests.*
 import app.meetacy.sdk.engine.requests.CreateMeetingRequest
 import app.meetacy.sdk.engine.requests.EditMeetingRequest
@@ -23,6 +25,7 @@ import kotlinx.serialization.json.put
 import kotlinx.serialization.json.putJsonObject
 import dev.icerock.moko.network.generated.models.ListMeetingParticipantsRequest as GeneratedListMeetingParticipantsRequest
 import dev.icerock.moko.network.generated.models.Meeting as GeneratedMeeting
+import app.meetacy.sdk.engine.ktor.response.models.Meeting as LolMeeting
 
 internal class MeetingsEngine(
     private val baseUrl: Url,
@@ -34,18 +37,28 @@ internal class MeetingsEngine(
     suspend fun listMeetingsHistory(
         request: ListMeetingsHistoryRequest
     ): ListMeetingsHistoryRequest.Response = with(request) {
-        val response = base.meetingsHistoryListPost(
-            listMeetingsRequest = ListMeetingsRequest(
-                amount = amount.int,
-                pagingId = pagingId?.string
-            ),
-            apiVersion = request.apiVersion.int.toString(),
-            authorization = request.token.string
-        )
+        val url = baseUrl / "meetings" / "history" / "list"
+
+        val jsonObject = buildJsonObject {
+            put("amount", amount.int)
+            put("pagingId", pagingId?.string)
+        }
+
+        val string = httpClient.post(url.string) {
+            setBody(
+                TextContent(
+                    text = jsonObject.toString(),
+                    contentType = ContentType.Application.Json
+                )
+            )
+            header("Authorization", token.string)
+        }.body<String>()
+
+        val response = Json.decodeFromString<ListMeetingsResponse>(string)
 
         val paging = PagingResponse(
             nextPagingId = response.result.nextPagingId?.let(::PagingId),
-            data = response.result.data.map(GeneratedMeeting::mapToMeeting)
+            data = response.result.data.map(LolMeeting::mapToMeeting)
         )
 
         return ListMeetingsHistoryRequest.Response(paging)
@@ -128,15 +141,13 @@ internal class MeetingsEngine(
         }
 
         val string = httpClient.post(url.string) {
-            headers {
-                append("Authorization", token.string)
-            }
             setBody(
                 TextContent(
                     text = jsonObject.toString(),
                     contentType = ContentType.Application.Json
                 )
             )
+            header("Authorization", token.string)
         }.body<String>()
 
         val meeting = Json.decodeFromString<CreateMeetingResponse>(string).result
@@ -174,15 +185,13 @@ internal class MeetingsEngine(
         }
 
         val string = httpClient.post(url.string) {
-            headers {
-                append("Authorization", token.string)
-            }
             setBody(
                 TextContent(
                     text = jsonObject.toString(),
                     contentType = ContentType.Application.Json
                 )
             )
+            header("Authorization", token.string)
         }.body<String>()
 
         val meeting = Json.decodeFromString<EditMeetingResponse>(string).result
