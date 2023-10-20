@@ -3,9 +3,9 @@ package app.meetacy.sdk.engine.ktor.requests.meetings
 import app.meetacy.sdk.engine.ktor.mapToMeeting
 import app.meetacy.sdk.engine.ktor.mapToUser
 import app.meetacy.sdk.engine.requests.*
+import app.meetacy.sdk.engine.requests.CreateMeetingRequest
 import app.meetacy.sdk.engine.requests.EditMeetingRequest
 import app.meetacy.sdk.engine.requests.ListMeetingParticipantsRequest
-import app.meetacy.sdk.types.meeting.Meeting
 import app.meetacy.sdk.types.optional.ifPresent
 import app.meetacy.sdk.types.paging.PagingId
 import app.meetacy.sdk.types.paging.PagingResponse
@@ -21,7 +21,6 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import kotlinx.serialization.json.putJsonObject
-import dev.icerock.moko.network.generated.models.CreateMeetingRequest as GeneratedCreateMeetingRequest
 import dev.icerock.moko.network.generated.models.ListMeetingParticipantsRequest as GeneratedListMeetingParticipantsRequest
 import dev.icerock.moko.network.generated.models.Meeting as GeneratedMeeting
 
@@ -114,28 +113,35 @@ internal class MeetingsEngine(
     suspend fun createMeeting(
         request: CreateMeetingRequest
     ): CreateMeetingRequest.Response = with(request){
-        val response = base.meetingsCreatePost(
-            createMeetingRequest = GeneratedCreateMeetingRequest(
-                title = title,
-                date = date.iso8601,
-                location = Location(
-                    latitude = location.latitude,
-                    longitude = location.longitude
-                ),
-                description = description,
-                visibility = when (visibility) {
-                    Meeting.Visibility.Public -> GeneratedCreateMeetingRequest.Visibility.PUBLIC
-                    Meeting.Visibility.Private -> GeneratedCreateMeetingRequest.Visibility.PRIVATE
-                },
-                avatarId = fileId?.string
-            ),
-            apiVersion = apiVersion.int.toString(),
-            authorization = token.string
-        ).result
+        val url = baseUrl / "meetings" / "create"
 
-        val meeting = response.mapToMeeting()
+        val jsonObject = buildJsonObject {
+            put("title", title)
+            put("date", date.iso8601)
+            putJsonObject("location") {
+                put("latitude", location.latitude)
+                put("longitude", location.longitude)
+            }
+            put("description", description)
+            put("visibility", visibility.name.lowercase())
+            put("fileId", fileId?.string)
+        }
 
-        return CreateMeetingRequest.Response(meeting)
+        val string = httpClient.post(url.string) {
+            headers {
+                append("Authorization", token.string)
+            }
+            setBody(
+                TextContent(
+                    text = jsonObject.toString(),
+                    contentType = ContentType.Application.Json
+                )
+            )
+        }.body<String>()
+
+        val meeting = Json.decodeFromString<CreateMeetingResponse>(string).result
+
+        return CreateMeetingRequest.Response(meeting.mapToMeeting())
     }
 
     suspend fun editMeeting(request: EditMeetingRequest): EditMeetingRequest.Response = with(request) {
