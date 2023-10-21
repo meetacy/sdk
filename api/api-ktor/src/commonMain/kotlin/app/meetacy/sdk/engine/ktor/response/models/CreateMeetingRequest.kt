@@ -11,7 +11,6 @@
 */
 package app.meetacy.sdk.engine.ktor.response.models
 
-import dev.icerock.moko.network.generated.models.Location
 import kotlinx.serialization.Serializable
 
 

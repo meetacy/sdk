@@ -4,6 +4,6 @@ import app.meetacy.sdk.types.auth.Token
 
 public data class GenerateAuthRequest(
     val nickname: String
-) : MeetacyRequest<GenerateAuthRequest.Response> {
+) : MeetacyRequest<GenerateAuthRequest.Response>, TokenProviderEmpty<GenerateAuthRequest.Response> {
     public data class Response(val token: Token)
 }
