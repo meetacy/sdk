@@ -98,6 +98,7 @@ public class KtorMeetacyEngine(
             // not yet supported
             is LinkEmailRequest -> notSupported()
             is ConfirmEmailRequest -> notSupported()
+            is TokenProviderEmpty -> notSupported()
         }
     }
 

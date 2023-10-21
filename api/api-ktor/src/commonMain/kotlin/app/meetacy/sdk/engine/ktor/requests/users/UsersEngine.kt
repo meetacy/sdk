@@ -86,7 +86,7 @@ internal class UsersEngine(
             header("Api-Version", apiVersion.int.toString())
         }.body<String>()
 
-        val user = Json.decodeFromString<EditUserResponse>(string).result
+        val user = Json.decodeFromString<app.meetacy.sdk.engine.ktor.response.models.EditUserResponse>(string).result
 
         return EditUserRequest.Response(user = user.mapToSelfUser())
     }
