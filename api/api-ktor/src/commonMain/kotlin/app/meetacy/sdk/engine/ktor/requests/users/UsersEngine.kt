@@ -35,8 +35,7 @@ internal class UsersEngine(
 
     suspend fun getMe(request: GetMeRequest): GetMeRequest.Response {
         val response = base.usersGetPost(
-            getUserRequest = GeneratedGetUserRequest(
-            ),
+            getUserRequest = GeneratedGetUserRequest(),
             apiVersion = request.apiVersion.int.toString(),
             authorization = request.token.string
         )
@@ -84,6 +83,7 @@ internal class UsersEngine(
                 )
             )
             header("Authorization", token.string)
+            header("Api-Version", apiVersion.int)
         }.body<String>()
 
         val user = Json.decodeFromString<EditUserResponse>(string).result

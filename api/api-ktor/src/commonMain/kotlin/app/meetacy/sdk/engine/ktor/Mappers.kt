@@ -24,6 +24,9 @@ import dev.icerock.moko.network.generated.models.Notification as GeneratedNotifi
 import dev.icerock.moko.network.generated.models.User as GeneratedUser
 import app.meetacy.sdk.engine.ktor.response.models.Meeting as LolMeeting
 import app.meetacy.sdk.engine.ktor.response.models.User as LolUser
+import app.meetacy.sdk.engine.ktor.response.models.Notification as LolNotification
+import app.meetacy.sdk.engine.ktor.response.models.Invitation as LolInvitation
+import app.meetacy.sdk.engine.ktor.response.models.Location as LolLocation
 
 internal fun GeneratedUser.mapToSelfUser(): SelfUser = mapToUser() as SelfUser
 internal fun GeneratedUser.mapToRegularUser(): RegularUser = mapToUser() as RegularUser
@@ -69,6 +72,18 @@ internal fun LolUser.mapToUser(): User = if (isSelf) {
 }
 
 internal fun GeneratedInvitation.toInvitation(): Invitation = Invitation(
+    id = identity.let(::InvitationId),
+    meeting = meeting.mapToMeeting(),
+    invitedUser = invitedUser.mapToUser(),
+    inviterUser = inviterUser.mapToUser(),
+    isAccepted = when (isAccepted) {
+        null -> AcceptationState.Waiting
+        true -> AcceptationState.Accepted
+        false -> AcceptationState.Declined
+    }
+)
+
+internal fun LolInvitation.toInvitation(): Invitation = Invitation(
     id = identity.let(::InvitationId),
     meeting = meeting.mapToMeeting(),
     invitedUser = invitedUser.mapToUser(),
@@ -139,6 +154,25 @@ internal fun GeneratedNotification.mapToNotification(): Notification = when (thi
         subscriber = subscriber!!.mapToRegularUser()
     )
     MEETING_INVITATION -> Notification.Invitation(
+        id = NotificationId(id),
+        isNew = isNew,
+        date = Date(date),
+        meeting = meeting!!.mapToMeeting(),
+        inviter = inviter!!.mapToRegularUser()
+    )
+}
+
+internal fun LolLocation.mapToLocation(): Location =
+    Location(latitude, longitude)
+
+internal fun LolNotification.mapToNotification(): Notification = when (this.type) {
+    app.meetacy.sdk.engine.ktor.response.models.Notification.Type.SUBSCRIPTION -> Notification.Subscription(
+        id = NotificationId(id),
+        isNew = isNew,
+        date = Date(date),
+        subscriber = subscriber!!.mapToRegularUser()
+    )
+    app.meetacy.sdk.engine.ktor.response.models.Notification.Type.MEETING_INVITATION -> Notification.Invitation(
         id = NotificationId(id),
         isNew = isNew,
         date = Date(date),
