@@ -31,6 +31,9 @@ import app.meetacy.sdk.engine.ktor.response.models.Location as LolLocation
 internal fun GeneratedUser.mapToSelfUser(): SelfUser = mapToUser() as SelfUser
 internal fun GeneratedUser.mapToRegularUser(): RegularUser = mapToUser() as RegularUser
 
+internal fun LolUser.mapToSelfUser(): SelfUser = mapToUser() as SelfUser
+internal fun LolUser.mapToRegularUser(): RegularUser = mapToUser() as RegularUser
+
 @OptIn(UnsafeConstructor::class)
 internal fun GeneratedUser.mapToUser(): User = if (isSelf) {
     SelfUser(

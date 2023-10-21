@@ -2,7 +2,9 @@ package app.meetacy.sdk.engine.ktor.requests.meetings
 
 import app.meetacy.sdk.engine.ktor.mapToMeeting
 import app.meetacy.sdk.engine.ktor.mapToUser
+import app.meetacy.sdk.engine.ktor.requests.extencion.post
 import app.meetacy.sdk.engine.ktor.response.models.CreateMeetingResponse
+import app.meetacy.sdk.engine.ktor.response.models.EditMeetingResponse
 import app.meetacy.sdk.engine.ktor.response.models.ListMeetingsResponse
 import app.meetacy.sdk.engine.requests.*
 import app.meetacy.sdk.engine.requests.CreateMeetingRequest
@@ -44,16 +46,7 @@ internal class MeetingsEngine(
             put("pagingId", pagingId?.string)
         }
 
-        val string = httpClient.post(url.string) {
-            setBody(
-                TextContent(
-                    text = jsonObject.toString(),
-                    contentType = ContentType.Application.Json
-                )
-            )
-            header("Authorization", token.string)
-            header("Api-Version", apiVersion.int.toString())
-        }.body<String>()
+        val string = post(url.string, jsonObject, httpClient, request)
 
         val response = Json.decodeFromString<ListMeetingsResponse>(string)
 

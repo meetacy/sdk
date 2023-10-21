@@ -11,14 +11,7 @@
 */
 package app.meetacy.sdk.engine.ktor.response.models
 
-import dev.icerock.moko.network.generated.models.User
 import kotlinx.serialization.Serializable
-
-
-
-
-
-
 import kotlinx.serialization.SerialName
 
 
