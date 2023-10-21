@@ -83,7 +83,7 @@ internal class UsersEngine(
                 )
             )
             header("Authorization", token.string)
-            header("Api-Version", apiVersion.int)
+            header("Api-Version", apiVersion.int.toString())
         }.body<String>()
 
         val user = Json.decodeFromString<EditUserResponse>(string).result

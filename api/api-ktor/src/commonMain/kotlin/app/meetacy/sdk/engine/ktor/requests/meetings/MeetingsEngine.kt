@@ -52,6 +52,7 @@ internal class MeetingsEngine(
                 )
             )
             header("Authorization", token.string)
+            header("Api-Version", apiVersion.int.toString())
         }.body<String>()
 
         val response = Json.decodeFromString<ListMeetingsResponse>(string)
@@ -148,6 +149,7 @@ internal class MeetingsEngine(
                 )
             )
             header("Authorization", token.string)
+            header("Api-Version", request.apiVersion.int.toString())
         }.body<String>()
 
         val meeting = Json.decodeFromString<CreateMeetingResponse>(string).result
@@ -192,6 +194,7 @@ internal class MeetingsEngine(
                 )
             )
             header("Authorization", token.string)
+            header("Api-Version", request.apiVersion.int.toString())
         }.body<String>()
 
         val meeting = Json.decodeFromString<EditMeetingResponse>(string).result
