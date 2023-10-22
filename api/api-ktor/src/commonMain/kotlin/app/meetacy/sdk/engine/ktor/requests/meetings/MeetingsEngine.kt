@@ -66,7 +66,15 @@ internal class MeetingsEngine(
             put("pagingId", pagingId?.string)
         }
 
-        val string = post(url.string, jsonObject, httpClient, request)
+        val string = httpClient.get(url.string) {
+            setBody(
+                TextContent(
+                    text = jsonObject.toString(),
+                    contentType = ContentType.Application.Json
+                )
+            )
+            header("Api-Version", request.apiVersion.int.toString())
+        }.body<String>()
 
         val response = Json.decodeFromString<ListMeetingsResponse>(string).result
 
@@ -204,6 +212,7 @@ internal class MeetingsEngine(
         val url = baseUrl / "meetings" / "participants" / "list"
 
         val jsonObject = buildJsonObject {
+            put("meetingId", request.meetingId.string)
             put("amount", request.amount.int)
             put("pagingId", request.pagingId?.string)
         }
