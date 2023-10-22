@@ -73,6 +73,7 @@ internal class MeetingsEngine(
                     contentType = ContentType.Application.Json
                 )
             )
+            header("Authorization", request.token.string)
             header("Api-Version", request.apiVersion.int.toString())
         }.body<String>()
 
