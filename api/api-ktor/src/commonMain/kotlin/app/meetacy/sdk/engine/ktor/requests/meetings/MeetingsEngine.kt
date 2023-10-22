@@ -7,15 +7,14 @@ import app.meetacy.sdk.engine.ktor.response.models.CreateMeetingResponse
 import app.meetacy.sdk.engine.ktor.response.models.EditMeetingResponse
 import app.meetacy.sdk.engine.ktor.response.models.ListMeetingsResponse
 import app.meetacy.sdk.engine.requests.*
-import app.meetacy.sdk.engine.requests.CreateMeetingRequest
-import app.meetacy.sdk.engine.requests.EditMeetingRequest
-import app.meetacy.sdk.engine.requests.ListMeetingParticipantsRequest
 import app.meetacy.sdk.types.optional.ifPresent
 import app.meetacy.sdk.types.paging.PagingId
 import app.meetacy.sdk.types.paging.PagingResponse
 import app.meetacy.sdk.types.url.Url
 import dev.icerock.moko.network.generated.apis.MeetingsApiImpl
-import dev.icerock.moko.network.generated.models.*
+import dev.icerock.moko.network.generated.models.ListMapMeetingsResponse
+import dev.icerock.moko.network.generated.models.ListMeetingParticipantsResponse
+import dev.icerock.moko.network.generated.models.User
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
@@ -25,9 +24,8 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import kotlinx.serialization.json.putJsonObject
-import dev.icerock.moko.network.generated.models.ListMeetingParticipantsRequest as GeneratedListMeetingParticipantsRequest
-import dev.icerock.moko.network.generated.models.Meeting as GeneratedMeeting
 import app.meetacy.sdk.engine.ktor.response.models.Meeting as LolMeeting
+import dev.icerock.moko.network.generated.models.Meeting as GeneratedMeeting
 
 internal class MeetingsEngine(
     private val baseUrl: Url,
@@ -61,18 +59,20 @@ internal class MeetingsEngine(
     suspend fun listActiveMeetings(
         request: ListActiveMeetingsRequest
     ): ListActiveMeetingsRequest.Response = with(request) {
-        val response = base.meetingsHistoryActiveGet(
-            listMeetingsRequest = ListMeetingsRequest(
-                amount = amount.int,
-                pagingId = pagingId?.string
-            ),
-            apiVersion = request.apiVersion.int.toString(),
-            authorization = request.token.string
-        )
+        val url = baseUrl / "meetings" / "history" / "active"
+
+        val jsonObject = buildJsonObject {
+            put("amount", amount.int)
+            put("pagingId", pagingId?.string)
+        }
+
+        val string = post(url.string, jsonObject, httpClient, request)
+
+        val response = Json.decodeFromString<ListMeetingsResponse>(string).result
 
         val paging = PagingResponse(
-            nextPagingId = response.result.nextPagingId?.let(::PagingId),
-            data = response.result.data.map(GeneratedMeeting::mapToMeeting)
+            nextPagingId = response.nextPagingId?.let(::PagingId),
+            data = response.data.map(LolMeeting::mapToMeeting)
         )
 
         return ListActiveMeetingsRequest.Response(paging)
@@ -81,18 +81,20 @@ internal class MeetingsEngine(
     suspend fun listPastMeetings(
         request: ListPastMeetingsRequest
     ): ListPastMeetingsRequest.Response = with(request) {
-        val response = base.meetingsHistoryPastGet(
-            listMeetingsRequest = ListMeetingsRequest(
-                amount = amount.int,
-                pagingId = pagingId?.string
-            ),
-            apiVersion = request.apiVersion.int.toString(),
-            authorization = request.token.string
-        )
+        val url = baseUrl / "meetings" / "history" / "past"
+
+        val jsonObject = buildJsonObject {
+            put("amount", amount.int)
+            put("pagingId", pagingId?.string)
+        }
+
+        val string = post(url.string, jsonObject, httpClient, request)
+
+        val response = Json.decodeFromString<ListMeetingsResponse>(string).result
 
         val paging = PagingResponse(
-            nextPagingId = response.result.nextPagingId?.let(::PagingId),
-            data = response.result.data.map(GeneratedMeeting::mapToMeeting)
+            nextPagingId = response.nextPagingId?.let(::PagingId),
+            data = response.data.map(LolMeeting::mapToMeeting)
         )
 
         return ListPastMeetingsRequest.Response(paging)
@@ -101,18 +103,19 @@ internal class MeetingsEngine(
     suspend fun listMeetingsMap(
         request: ListMeetingsMapRequest
     ): ListMeetingsMapRequest.Response = with (request) {
-        val response = base.meetingsMapListPost(
-            listMapMeetingsRequest = ListMapMeetingsRequest(
-                location = Location(
-                    latitude = location.latitude,
-                    longitude = location.longitude
-                )
-            ),
-            apiVersion = request.apiVersion.int.toString(),
-            authorization = request.token.string
-        )
+        val url = baseUrl / "meetings" / "map" / "list"
 
-        val data = response.result.map(GeneratedMeeting::mapToMeeting)
+        val jsonObject = buildJsonObject {
+            putJsonObject("location") {
+                put("latitude", location.latitude)
+                put("longitude", location.longitude)
+            }
+        }
+        val string = post(url.string, jsonObject, httpClient, request)
+
+        val response = Json.decodeFromString<ListMapMeetingsResponse>(string).result
+
+        val data = response.map(GeneratedMeeting::mapToMeeting)
 
         return ListMeetingsMapRequest.Response(data)
     }
@@ -187,7 +190,7 @@ internal class MeetingsEngine(
                 )
             )
             header("Authorization", token.string)
-            header("Api-Version", request.apiVersion.int.toString())
+            header("Api-Version", apiVersion.int.toString())
         }.body<String>()
 
         val meeting = Json.decodeFromString<EditMeetingResponse>(string).result
@@ -198,43 +201,47 @@ internal class MeetingsEngine(
     suspend fun listMeetingParticipants(
         request: ListMeetingParticipantsRequest
     ): ListMeetingParticipantsRequest.Response {
-        val response = base.meetingsParticipantsListPost(
-            listMeetingParticipantsRequest = GeneratedListMeetingParticipantsRequest(
-                amount = request.amount.int,
-                meetingId = request.meetingId.string
-            ),
-            apiVersion = request.apiVersion.int.toString(),
-            authorization = request.token.string
-        )
+        val url = baseUrl / "meetings" / "participants" / "list"
+
+        val jsonObject = buildJsonObject {
+            put("amount", request.amount.int)
+            put("pagingId", request.pagingId?.string)
+        }
+
+        val string = post(url.string, jsonObject, httpClient, request)
+
+        val response = Json.decodeFromString<ListMeetingParticipantsResponse>(string).result
 
         val paging = PagingResponse(
-            data = response.result.data.map(User::mapToUser),
-            nextPagingId = response.result.nextPagingId?.let(::PagingId)
+            data = response.data.map(User::mapToUser),
+            nextPagingId = response.nextPagingId?.let(::PagingId)
         )
 
         return ListMeetingParticipantsRequest.Response(paging)
     }
 
     suspend fun participateMeeting(request: ParticipateMeetingRequest) {
-        base.meetingsParticipatePost(
-            accessMeetingIdRequest = AccessMeetingIdRequest(
-                meetingId = request.meetingId.string
-            ),
-            apiVersion = request.apiVersion.int.toString(),
-            authorization = request.token.string
-        )
+        val url = baseUrl / "meetings" / "participate"
+
+        val jsonObject = buildJsonObject {
+            put("meetingId", request.meetingId.string)
+        }
+
+        post(url.string, jsonObject, httpClient, request)
     }
 
     suspend fun getMeeting(request: GetMeetingRequest): GetMeetingRequest.Response {
-        val response = base.meetingsGetPost(
-            accessMeetingIdRequest = AccessMeetingIdRequest(
-                meetingId = request.meetingId.string
-            ),
-            apiVersion = request.apiVersion.int.toString(),
-            authorization = request.token.string
-        )
+        val url = baseUrl / "meetings" / "get"
 
-        val meeting = response.result.mapToMeeting()
+        val jsonObject = buildJsonObject {
+            put("meetingId", request.meetingId.string)
+        }
+
+        val string = post(url.string, jsonObject, httpClient, request)
+
+        val response = Json.decodeFromString<CreateMeetingResponse>(string).result
+
+        val meeting = response.mapToMeeting()
 
         return GetMeetingRequest.Response(meeting)
     }

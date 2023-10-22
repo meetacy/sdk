@@ -14,6 +14,6 @@ public class CreateMeetingRequest(
     public val description: String?,
     public val visibility: Meeting.Visibility,
     public val fileId: FileId? = null
-) : MeetacyRequest<CreateMeetingRequest.Response>, MeRequestWithToken<CreateMeetingRequest.Response> {
+) : MeetacyRequest<CreateMeetingRequest.Response>, MeetacyRequestWithToken<CreateMeetingRequest.Response> {
     public data class Response(val meeting: Meeting)
 }

@@ -45,7 +45,7 @@ internal class NotificationsEngine(
                 lastNotificationId = lastNotificationId.string
             ),
             apiVersion = apiVersion.int.toString(),
-            authorization = request.token.string
+            authorization = token.string
         )
     }
 }

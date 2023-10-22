@@ -1,7 +1,6 @@
 package app.meetacy.sdk.engine.ktor.requests.extencion
 
-import app.meetacy.sdk.engine.requests.MeRequestWithToken
-import app.meetacy.sdk.engine.requests.MeetacyRequest
+import app.meetacy.sdk.engine.requests.MeetacyRequestWithToken
 import app.meetacy.sdk.engine.requests.TokenProviderEmpty
 import io.ktor.client.*
 import io.ktor.client.call.*
@@ -10,7 +9,7 @@ import io.ktor.http.*
 import io.ktor.http.content.*
 import kotlinx.serialization.json.JsonObject
 
-public suspend inline fun <T, R : MeRequestWithToken<T>> post(
+public suspend inline fun <T, R : MeetacyRequestWithToken<T>> post(
     urlString: String,
     jsonObject: JsonObject,
     httpClient: HttpClient,
