@@ -6,21 +6,22 @@ import app.meetacy.sdk.engine.ktor.handleRSocketExceptions
 import app.meetacy.sdk.engine.ktor.mapToLocation
 import app.meetacy.sdk.engine.ktor.mapToRegularUser
 import app.meetacy.sdk.engine.ktor.mapToUser
+import app.meetacy.sdk.engine.ktor.requests.extencion.post
+import app.meetacy.sdk.engine.ktor.response.models.ListFriendsResponse
+import app.meetacy.sdk.engine.ktor.response.models.Location
+import app.meetacy.sdk.engine.ktor.response.models.StatusTrueResponse
+import app.meetacy.sdk.engine.ktor.response.models.User
 import app.meetacy.sdk.engine.requests.AddFriendRequest
 import app.meetacy.sdk.engine.requests.DeleteFriendRequest
 import app.meetacy.sdk.engine.requests.EmitFriendsLocationRequest
 import app.meetacy.sdk.engine.requests.ListFriendsRequest
 import app.meetacy.sdk.types.annotation.UnsafeConstructor
 import app.meetacy.sdk.types.datetime.DateTime
-import app.meetacy.sdk.types.location.Location
 import app.meetacy.sdk.types.paging.PagingId
 import app.meetacy.sdk.types.paging.PagingResponse
 import app.meetacy.sdk.types.url.Url
 import app.meetacy.sdk.types.user.RegularUser
 import app.meetacy.sdk.types.user.UserLocationSnapshot
-import dev.icerock.moko.network.generated.apis.FriendsApi
-import dev.icerock.moko.network.generated.apis.FriendsApiImpl
-import dev.icerock.moko.network.generated.models.AccessFriendRequest
 import io.ktor.client.*
 import io.rsocket.kotlin.ktor.client.rSocket
 import io.rsocket.kotlin.payload.Payload
@@ -33,50 +34,52 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
-import dev.icerock.moko.network.generated.models.ListFriendsRequest as GeneratedListFriendsRequest
-import dev.icerock.moko.network.generated.models.Location as GeneratedLocation
-import dev.icerock.moko.network.generated.models.User as GeneratedUser
 
 internal class FriendsEngine(
     private val baseUrl: Url,
     private val httpClient: HttpClient,
     private val json: Json
 ) {
-    private val base: FriendsApi = FriendsApiImpl(baseUrl.string, httpClient, json)
 
-    suspend fun add(request: AddFriendRequest) {
-        base.friendsAddPost(
-            accessFriendRequest = AccessFriendRequest(
-                friendId = request.friendId.string
-            ),
-            apiVersion = request.apiVersion.int.toString(),
-            authorization = request.token.string
-        )
+    suspend fun add(request: AddFriendRequest): StatusTrueResponse {
+        val url = baseUrl / "friends" / "add"
+
+        val jsonObject = buildJsonObject {
+            put("friendId", request.friendId.string)
+        }
+
+        val string = post(url.string, jsonObject, httpClient, request)
+
+        return json.decodeFromString<StatusTrueResponse>(string)
     }
 
-    suspend fun delete(request: DeleteFriendRequest) {
-        base.friendsDeletePost(
-            accessFriendRequest = AccessFriendRequest(
-                friendId = request.friendId.string
-            ),
-            apiVersion = request.apiVersion.int.toString(),
-            authorization = request.token.string
-        )
+    suspend fun delete(request: DeleteFriendRequest): StatusTrueResponse {
+        val url = baseUrl / "friends" / "delete"
+
+        val jsonObject = buildJsonObject {
+            put("friendId", request.friendId.string)
+        }
+
+        val string = post(url.string, jsonObject, httpClient, request)
+
+        return json.decodeFromString<StatusTrueResponse>(string)
     }
 
     suspend fun list(request: ListFriendsRequest): ListFriendsRequest.Response {
-        val response = base.friendsListPost(
-            listFriendsRequest = GeneratedListFriendsRequest(
-                amount = request.amount.int,
-                pagingId = request.pagingId?.string
-            ),
-            apiVersion = request.apiVersion.int.toString(),
-            authorization = request.token.string
-        )
+        val url = baseUrl / "friends" / "list"
+
+        val jsonObject = buildJsonObject {
+            put("amount", request.amount.int.toString())
+            put("pagingId", request.pagingId?.string)
+        }
+
+        val string = post(url.string, jsonObject, httpClient, request)
+
+        val response = Json.decodeFromString<ListFriendsResponse>(string).result
 
         val paging = PagingResponse(
-            nextPagingId = response.result.nextPagingId?.let(::PagingId),
-            data = response.result.data.map { user -> user.mapToRegularUser() }
+            nextPagingId = response.nextPagingId?.let(::PagingId),
+            data = response.data.map { user -> user.mapToRegularUser() }
         )
 
         return ListFriendsRequest.Response(paging)
@@ -112,7 +115,7 @@ private fun EmitFriendsLocationRequest.encodeToPayload(json: Json): Payload = bu
     data(json.encodeToString(initObject))
 }
 
-private fun Location.encodeToPayload(): Payload = buildPayload {
+private fun app.meetacy.sdk.types.location.Location.encodeToPayload(): Payload = buildPayload {
     val locationString = buildJsonObject {
         val `object` = buildJsonObject {
             put("latitude", latitude)
@@ -125,14 +128,14 @@ private fun Location.encodeToPayload(): Payload = buildPayload {
 }
 
 @Serializable
-private data class UserLocationSnapshotSerializable(
-    val user: GeneratedUser,
-    val location: GeneratedLocation,
+private data class LolUserLocationSnapshotSerializable(
+    val user: User,
+    val location: Location, // TODO: изменить название класса после удаления зависимостей
     val capturedAt: String
 )
 
 private fun Payload.decodeToUserLocationSnapshot(json: Json): UserLocationSnapshot {
-    val deserialized = json.decodeFromString<UserLocationSnapshotSerializable>(data.readText())
+    val deserialized = json.decodeFromString<LolUserLocationSnapshotSerializable>(data.readText())
 
     return UserLocationSnapshot(
         user = deserialized.user.mapToUser() as RegularUser,

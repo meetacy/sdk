@@ -6,12 +6,12 @@ import app.meetacy.sdk.engine.ktor.requests.extencion.post
 import app.meetacy.sdk.engine.ktor.response.models.CreateMeetingResponse
 import app.meetacy.sdk.engine.ktor.response.models.EditMeetingResponse
 import app.meetacy.sdk.engine.ktor.response.models.ListMeetingsResponse
+import app.meetacy.sdk.engine.ktor.response.models.StatusTrueResponse
 import app.meetacy.sdk.engine.requests.*
 import app.meetacy.sdk.types.optional.ifPresent
 import app.meetacy.sdk.types.paging.PagingId
 import app.meetacy.sdk.types.paging.PagingResponse
 import app.meetacy.sdk.types.url.Url
-import dev.icerock.moko.network.generated.apis.MeetingsApiImpl
 import dev.icerock.moko.network.generated.models.ListMapMeetingsResponse
 import dev.icerock.moko.network.generated.models.ListMeetingParticipantsResponse
 import dev.icerock.moko.network.generated.models.User
@@ -32,7 +32,6 @@ internal class MeetingsEngine(
     private val httpClient: HttpClient,
     json: Json
 ) {
-    private val base = MeetingsApiImpl(baseUrl.string, httpClient, json)
 
     suspend fun listMeetingsHistory(
         request: ListMeetingsHistoryRequest
@@ -46,11 +45,11 @@ internal class MeetingsEngine(
 
         val string = post(url.string, jsonObject, httpClient, request)
 
-        val response = Json.decodeFromString<ListMeetingsResponse>(string)
+        val response = Json.decodeFromString<ListMeetingsResponse>(string).result
 
         val paging = PagingResponse(
-            nextPagingId = response.result.nextPagingId?.let(::PagingId),
-            data = response.result.data.map(LolMeeting::mapToMeeting)
+            nextPagingId = response.nextPagingId?.let(::PagingId),
+            data = response.data.map(LolMeeting::mapToMeeting)
         )
 
         return ListMeetingsHistoryRequest.Response(paging)
@@ -146,16 +145,7 @@ internal class MeetingsEngine(
             put("avatarId", fileId?.string)
         }
 
-        val string = httpClient.post(url.string) {
-            setBody(
-                TextContent(
-                    text = jsonObject.toString(),
-                    contentType = ContentType.Application.Json
-                )
-            )
-            header("Authorization", token.string)
-            header("Api-Version", request.apiVersion.int.toString())
-        }.body<String>()
+        val string = post(url.string, jsonObject, httpClient, request)
 
         val meeting = Json.decodeFromString<CreateMeetingResponse>(string).result
 
@@ -191,16 +181,7 @@ internal class MeetingsEngine(
             }
         }
 
-        val string = httpClient.post(url.string) {
-            setBody(
-                TextContent(
-                    text = jsonObject.toString(),
-                    contentType = ContentType.Application.Json
-                )
-            )
-            header("Authorization", token.string)
-            header("Api-Version", apiVersion.int.toString())
-        }.body<String>()
+        val string = post(url.string, jsonObject, httpClient, request)
 
         val meeting = Json.decodeFromString<EditMeetingResponse>(string).result
 
@@ -230,14 +211,16 @@ internal class MeetingsEngine(
         return ListMeetingParticipantsRequest.Response(paging)
     }
 
-    suspend fun participateMeeting(request: ParticipateMeetingRequest) {
+    suspend fun participateMeeting(request: ParticipateMeetingRequest): StatusTrueResponse {
         val url = baseUrl / "meetings" / "participate"
 
         val jsonObject = buildJsonObject {
             put("meetingId", request.meetingId.string)
         }
 
-        post(url.string, jsonObject, httpClient, request)
+        val string = post(url.string, jsonObject, httpClient, request)
+
+        return Json.decodeFromString<StatusTrueResponse>(string)
     }
 
     suspend fun getMeeting(request: GetMeetingRequest): GetMeetingRequest.Response {
