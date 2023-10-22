@@ -22,8 +22,8 @@ public suspend inline fun <T, R : MeetacyRequestWithToken<T>> post(
                 contentType = ContentType.Application.Json
             )
         )
-        header("Authorization", request.token)
-        header("Api-Version", request.apiVersion.toString())
+        header("Authorization", request.token.string)
+        header("Api-Version", request.apiVersion.int.toString())
     }.body<String>()
 }
 
@@ -40,6 +40,6 @@ public suspend inline fun <T, R : TokenProviderEmpty<T>> postWithoutToken(
                 contentType = ContentType.Application.Json
             )
         )
-        header("Api-Version", request.apiVersion.toString())
+        header("Api-Version", request.apiVersion.int.toString())
     }.body<String>()
 }
