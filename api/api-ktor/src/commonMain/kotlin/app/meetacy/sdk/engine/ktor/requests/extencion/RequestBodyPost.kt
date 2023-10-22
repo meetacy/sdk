@@ -14,8 +14,8 @@ public suspend inline fun <T, R : MeetacyRequestWithToken<T>> post(
     jsonObject: JsonObject,
     httpClient: HttpClient,
     request: R
-): String {
-    return httpClient.post(urlString) {
+): String =
+    httpClient.post(urlString) {
         setBody(
             TextContent(
                 text = jsonObject.toString(),
@@ -25,7 +25,7 @@ public suspend inline fun <T, R : MeetacyRequestWithToken<T>> post(
         header("Authorization", request.token.string)
         header("Api-Version", request.apiVersion.int.toString())
     }.body<String>()
-}
+
 
 public suspend inline fun <T, R : TokenProviderEmpty<T>> postWithoutToken(
     url: String,

@@ -40,7 +40,7 @@ internal class MeetingsEngine(
         val url = baseUrl / "meetings" / "history" / "list"
 
         val jsonObject = buildJsonObject {
-            put("amount", amount.int)
+            put("amount", amount.int.toString())
             put("pagingId", pagingId?.string)
         }
 
@@ -62,7 +62,7 @@ internal class MeetingsEngine(
         val url = baseUrl / "meetings" / "history" / "active"
 
         val jsonObject = buildJsonObject {
-            put("amount", amount.int)
+            put("amount", amount.int.toString())
             put("pagingId", pagingId?.string)
         }
 
@@ -84,7 +84,7 @@ internal class MeetingsEngine(
         val url = baseUrl / "meetings" / "history" / "past"
 
         val jsonObject = buildJsonObject {
-            put("amount", amount.int)
+            put("amount", amount.int.toString())
             put("pagingId", pagingId?.string)
         }
 
@@ -127,14 +127,14 @@ internal class MeetingsEngine(
 
         val jsonObject = buildJsonObject {
             put("title", title)
+            put("description", description)
             put("date", date.iso8601)
             putJsonObject("location") {
                 put("latitude", location.latitude)
                 put("longitude", location.longitude)
             }
-            put("description", description)
             put("visibility", visibility.name.lowercase())
-            put("fileId", fileId?.string)
+            put("avatarId", fileId?.string)
         }
 
         val string = httpClient.post(url.string) {
