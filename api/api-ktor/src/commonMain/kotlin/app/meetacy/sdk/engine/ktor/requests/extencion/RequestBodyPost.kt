@@ -22,7 +22,7 @@ public suspend inline fun <T, R : MeetacyRequestWithToken<T>> post(
                 contentType = ContentType.Application.Json
             )
         )
-        header("Token", request.token)
+        header("Authorization", request.token)
         header("Api-Version", request.apiVersion.toString())
     }.body<String>()
 }
