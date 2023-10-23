@@ -12,5 +12,4 @@ repositories {
 dependencies {
     api(libs.kotlinxSerializationPlugin)
     api(libs.kotlinPlugin)
-    api(libs.mokoNetworkPlugin)
 }
