@@ -1,35 +1,39 @@
 package app.meetacy.sdk.engine.ktor.requests.notifications
 
 import app.meetacy.sdk.engine.ktor.mapToNotification
+import app.meetacy.sdk.engine.ktor.requests.extencion.post
+import app.meetacy.sdk.engine.ktor.response.models.ListNotificationsResponse
+import app.meetacy.sdk.engine.ktor.response.models.StatusTrueResponse
 import app.meetacy.sdk.engine.requests.ListNotificationsRequest
 import app.meetacy.sdk.engine.requests.ReadNotificationRequest
 import app.meetacy.sdk.types.paging.PagingId
 import app.meetacy.sdk.types.paging.PagingResponse
 import app.meetacy.sdk.types.url.Url
-import dev.icerock.moko.network.generated.apis.NotificationsApiImpl
 import io.ktor.client.*
 import kotlinx.serialization.json.Json
-import dev.icerock.moko.network.generated.models.ListNotificationsRequest as GeneratedListNotificationsRequest
-import dev.icerock.moko.network.generated.models.ReadNotificationRequest as GeneratedReadNotificationRequest
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.put
 
 internal class NotificationsEngine(
     baseUrl: Url,
-    httpClient: HttpClient,
-    json: Json
+    private val httpClient: HttpClient,
+    private val json: Json
 ) {
-    private val base = NotificationsApiImpl(baseUrl.string, httpClient, json)
+    private val baseUrl = baseUrl / "notifications"
 
     suspend fun list(
         request: ListNotificationsRequest
     ): ListNotificationsRequest.Response = with (request) {
-        val response = base.notificationsListPost(
-            listNotificationsRequest = GeneratedListNotificationsRequest(
-                amount = amount.int,
-                pagingId = pagingId?.string
-            ),
-            apiVersion = apiVersion.int.toString(),
-            authorization = request.token.string
-        ).result
+        val url = baseUrl / "list"
+
+        val jsonObject = buildJsonObject {
+            put("amount", amount.int.toString())
+            put("pagingId", pagingId?.string)
+        }
+
+        val string = post(url.string, jsonObject, httpClient, request)
+
+        val response = json.decodeFromString<ListNotificationsResponse>(string).result
 
         val paging = PagingResponse(
             data = response.data.map { it.mapToNotification() },
@@ -39,13 +43,15 @@ internal class NotificationsEngine(
         ListNotificationsRequest.Response(paging)
     }
 
-    suspend fun read(request: ReadNotificationRequest) = with (request) {
-        base.notificationsReadPost(
-            readNotificationRequest = GeneratedReadNotificationRequest(
-                lastNotificationId = lastNotificationId.string
-            ),
-            apiVersion = apiVersion.int.toString(),
-            authorization = token.string
-        )
+    suspend fun read(request: ReadNotificationRequest): StatusTrueResponse = with (request) {
+        val url = baseUrl / "read"
+
+        val jsonObject = buildJsonObject {
+            put("lastNotificationId", request.lastNotificationId.string)
+        }
+
+        val string = post(url.string, jsonObject, httpClient, request)
+
+        return json.decodeFromString<StatusTrueResponse>(string)
     }
 }

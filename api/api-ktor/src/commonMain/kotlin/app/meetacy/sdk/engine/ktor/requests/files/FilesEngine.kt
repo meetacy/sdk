@@ -1,5 +1,6 @@
 package app.meetacy.sdk.engine.ktor.requests.files
 
+import app.meetacy.sdk.engine.ktor.response.models.GenerateIdentityResponse
 import app.meetacy.sdk.engine.requests.GetFileRequest
 import app.meetacy.sdk.engine.requests.UploadFileRequest
 import app.meetacy.sdk.files.DownloadableFile
@@ -10,7 +11,6 @@ import app.meetacy.sdk.io.asMeetacyInput
 import app.meetacy.sdk.types.file.FileId
 import app.meetacy.sdk.types.url.Url
 import app.meetacy.sdk.types.url.parametersOf
-import dev.icerock.moko.network.generated.models.GenerateIdentityResponse
 import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.client.request.forms.*

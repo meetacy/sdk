@@ -8,15 +8,16 @@ import app.meetacy.sdk.engine.ktor.mapToRegularUser
 import app.meetacy.sdk.engine.ktor.mapToUser
 import app.meetacy.sdk.engine.ktor.requests.extencion.post
 import app.meetacy.sdk.engine.ktor.response.models.ListFriendsResponse
-import app.meetacy.sdk.engine.ktor.response.models.Location
+import app.meetacy.sdk.engine.ktor.response.models.Location as ModelLocation
 import app.meetacy.sdk.engine.ktor.response.models.StatusTrueResponse
-import app.meetacy.sdk.engine.ktor.response.models.User
+import app.meetacy.sdk.engine.ktor.response.models.User as ModelUser
 import app.meetacy.sdk.engine.requests.AddFriendRequest
 import app.meetacy.sdk.engine.requests.DeleteFriendRequest
 import app.meetacy.sdk.engine.requests.EmitFriendsLocationRequest
 import app.meetacy.sdk.engine.requests.ListFriendsRequest
 import app.meetacy.sdk.types.annotation.UnsafeConstructor
 import app.meetacy.sdk.types.datetime.DateTime
+import app.meetacy.sdk.types.location.Location
 import app.meetacy.sdk.types.paging.PagingId
 import app.meetacy.sdk.types.paging.PagingResponse
 import app.meetacy.sdk.types.url.Url
@@ -36,13 +37,14 @@ import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 
 internal class FriendsEngine(
-    private val baseUrl: Url,
+    baseUrl: Url,
     private val httpClient: HttpClient,
     private val json: Json
 ) {
+    private val baseUrl =  baseUrl / "friends"
 
     suspend fun add(request: AddFriendRequest): StatusTrueResponse {
-        val url = baseUrl / "friends" / "add"
+        val url =  baseUrl / "add"
 
         val jsonObject = buildJsonObject {
             put("friendId", request.friendId.string)
@@ -54,7 +56,7 @@ internal class FriendsEngine(
     }
 
     suspend fun delete(request: DeleteFriendRequest): StatusTrueResponse {
-        val url = baseUrl / "friends" / "delete"
+        val url =  baseUrl / "delete"
 
         val jsonObject = buildJsonObject {
             put("friendId", request.friendId.string)
@@ -66,7 +68,7 @@ internal class FriendsEngine(
     }
 
     suspend fun list(request: ListFriendsRequest): ListFriendsRequest.Response {
-        val url = baseUrl / "friends" / "list"
+        val url =  baseUrl / "list"
 
         val jsonObject = buildJsonObject {
             put("amount", request.amount.int.toString())
@@ -86,7 +88,7 @@ internal class FriendsEngine(
     }
 
     suspend fun streamFriendsLocation(request: EmitFriendsLocationRequest) = handleRSocketExceptions(json) {
-        val url = baseUrl.replaceProtocolWithWebsocket() / "friends" / "location" / "stream"
+        val url = baseUrl.replaceProtocolWithWebsocket() / "location" / "stream"
 
         val socket = httpClient.rSocket(
             urlString = url.string,
@@ -115,7 +117,7 @@ private fun EmitFriendsLocationRequest.encodeToPayload(json: Json): Payload = bu
     data(json.encodeToString(initObject))
 }
 
-private fun app.meetacy.sdk.types.location.Location.encodeToPayload(): Payload = buildPayload {
+private fun Location.encodeToPayload(): Payload = buildPayload {
     val locationString = buildJsonObject {
         val `object` = buildJsonObject {
             put("latitude", latitude)
@@ -128,14 +130,14 @@ private fun app.meetacy.sdk.types.location.Location.encodeToPayload(): Payload =
 }
 
 @Serializable
-private data class LolUserLocationSnapshotSerializable(
-    val user: User,
-    val location: Location, // TODO: изменить название класса после удаления зависимостей
+private data class ModelUserLocationSnapshotSerializable(
+    val user: ModelUser,
+    val location: ModelLocation,
     val capturedAt: String
 )
 
 private fun Payload.decodeToUserLocationSnapshot(json: Json): UserLocationSnapshot {
-    val deserialized = json.decodeFromString<LolUserLocationSnapshotSerializable>(data.readText())
+    val deserialized = json.decodeFromString<ModelUserLocationSnapshotSerializable>(data.readText())
 
     return UserLocationSnapshot(
         user = deserialized.user.mapToUser() as RegularUser,

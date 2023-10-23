@@ -3,18 +3,21 @@ package app.meetacy.sdk.engine.ktor.requests.meetings
 import app.meetacy.sdk.engine.ktor.mapToMeeting
 import app.meetacy.sdk.engine.ktor.mapToUser
 import app.meetacy.sdk.engine.ktor.requests.extencion.post
+import app.meetacy.sdk.engine.ktor.response.models.*
 import app.meetacy.sdk.engine.ktor.response.models.CreateMeetingResponse
 import app.meetacy.sdk.engine.ktor.response.models.EditMeetingResponse
+import app.meetacy.sdk.engine.ktor.response.models.ListMapMeetingsResponse
+import app.meetacy.sdk.engine.ktor.response.models.ListMeetingParticipantsResponse
 import app.meetacy.sdk.engine.ktor.response.models.ListMeetingsResponse
-import app.meetacy.sdk.engine.ktor.response.models.StatusTrueResponse
+import app.meetacy.sdk.engine.ktor.response.models.User as ModelUser
 import app.meetacy.sdk.engine.requests.*
+import app.meetacy.sdk.engine.requests.CreateMeetingRequest
+import app.meetacy.sdk.engine.requests.EditMeetingRequest
+import app.meetacy.sdk.engine.requests.ListMeetingParticipantsRequest
 import app.meetacy.sdk.types.optional.ifPresent
 import app.meetacy.sdk.types.paging.PagingId
 import app.meetacy.sdk.types.paging.PagingResponse
 import app.meetacy.sdk.types.url.Url
-import dev.icerock.moko.network.generated.models.ListMapMeetingsResponse
-import dev.icerock.moko.network.generated.models.ListMeetingParticipantsResponse
-import dev.icerock.moko.network.generated.models.User
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
@@ -24,19 +27,18 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import kotlinx.serialization.json.putJsonObject
-import app.meetacy.sdk.engine.ktor.response.models.Meeting as LolMeeting
-import dev.icerock.moko.network.generated.models.Meeting as GeneratedMeeting
+import app.meetacy.sdk.engine.ktor.response.models.Meeting as ModelMeeting
 
 internal class MeetingsEngine(
-    private val baseUrl: Url,
+    baseUrl: Url,
     private val httpClient: HttpClient,
-    json: Json
+    private val json: Json
 ) {
-
+    private val baseUrl = baseUrl / "meetings"
     suspend fun listMeetingsHistory(
         request: ListMeetingsHistoryRequest
     ): ListMeetingsHistoryRequest.Response = with(request) {
-        val url = baseUrl / "meetings" / "history" / "list"
+        val url = baseUrl / "history" / "list"
 
         val jsonObject = buildJsonObject {
             put("amount", amount.int.toString())
@@ -45,11 +47,11 @@ internal class MeetingsEngine(
 
         val string = post(url.string, jsonObject, httpClient, request)
 
-        val response = Json.decodeFromString<ListMeetingsResponse>(string).result
+        val response = json.decodeFromString<ListMeetingsResponse>(string).result
 
         val paging = PagingResponse(
             nextPagingId = response.nextPagingId?.let(::PagingId),
-            data = response.data.map(LolMeeting::mapToMeeting)
+            data = response.data.map(ModelMeeting::mapToMeeting)
         )
 
         return ListMeetingsHistoryRequest.Response(paging)
@@ -58,7 +60,7 @@ internal class MeetingsEngine(
     suspend fun listActiveMeetings(
         request: ListActiveMeetingsRequest
     ): ListActiveMeetingsRequest.Response = with(request) {
-        val url = baseUrl / "meetings" / "history" / "active"
+        val url = baseUrl / "history" / "active"
 
         val jsonObject = buildJsonObject {
             put("amount", amount.int.toString())
@@ -76,11 +78,11 @@ internal class MeetingsEngine(
             header("Api-Version", request.apiVersion.int.toString())
         }.body<String>()
 
-        val response = Json.decodeFromString<ListMeetingsResponse>(string).result
+        val response = json.decodeFromString<ListMeetingsResponse>(string).result
 
         val paging = PagingResponse(
             nextPagingId = response.nextPagingId?.let(::PagingId),
-            data = response.data.map(LolMeeting::mapToMeeting)
+            data = response.data.map(ModelMeeting::mapToMeeting)
         )
 
         return ListActiveMeetingsRequest.Response(paging)
@@ -89,7 +91,7 @@ internal class MeetingsEngine(
     suspend fun listPastMeetings(
         request: ListPastMeetingsRequest
     ): ListPastMeetingsRequest.Response = with(request) {
-        val url = baseUrl / "meetings" / "history" / "past"
+        val url = baseUrl / "history" / "past"
 
         val jsonObject = buildJsonObject {
             put("amount", amount.int.toString())
@@ -98,11 +100,11 @@ internal class MeetingsEngine(
 
         val string = post(url.string, jsonObject, httpClient, request)
 
-        val response = Json.decodeFromString<ListMeetingsResponse>(string).result
+        val response = json.decodeFromString<ListMeetingsResponse>(string).result
 
         val paging = PagingResponse(
             nextPagingId = response.nextPagingId?.let(::PagingId),
-            data = response.data.map(LolMeeting::mapToMeeting)
+            data = response.data.map(ModelMeeting::mapToMeeting)
         )
 
         return ListPastMeetingsRequest.Response(paging)
@@ -111,7 +113,7 @@ internal class MeetingsEngine(
     suspend fun listMeetingsMap(
         request: ListMeetingsMapRequest
     ): ListMeetingsMapRequest.Response = with (request) {
-        val url = baseUrl / "meetings" / "map" / "list"
+        val url = baseUrl / "map" / "list"
 
         val jsonObject = buildJsonObject {
             putJsonObject("location") {
@@ -121,17 +123,17 @@ internal class MeetingsEngine(
         }
         val string = post(url.string, jsonObject, httpClient, request)
 
-        val response = Json.decodeFromString<ListMapMeetingsResponse>(string).result
+        val response = json.decodeFromString<ListMapMeetingsResponse>(string).result
 
-        val data = response.map(GeneratedMeeting::mapToMeeting)
+        val data = response.map(ModelMeeting::mapToMeeting)
 
         return ListMeetingsMapRequest.Response(data)
     }
 
     suspend fun createMeeting(
         request: CreateMeetingRequest
-    ): CreateMeetingRequest.Response = with(request){
-        val url = baseUrl / "meetings" / "create"
+    ): CreateMeetingRequest.Response = with(request) {
+        val url = baseUrl / "create"
 
         val jsonObject = buildJsonObject {
             put("title", title)
@@ -147,13 +149,13 @@ internal class MeetingsEngine(
 
         val string = post(url.string, jsonObject, httpClient, request)
 
-        val meeting = Json.decodeFromString<CreateMeetingResponse>(string).result
+        val meeting = json.decodeFromString<CreateMeetingResponse>(string).result
 
         return CreateMeetingRequest.Response(meeting.mapToMeeting())
     }
 
     suspend fun editMeeting(request: EditMeetingRequest): EditMeetingRequest.Response = with(request) {
-        val url = baseUrl / "meetings" / "edit"
+        val url = baseUrl / "edit"
 
         val jsonObject = buildJsonObject {
             put("meetingId", meetingId.string)
@@ -183,7 +185,7 @@ internal class MeetingsEngine(
 
         val string = post(url.string, jsonObject, httpClient, request)
 
-        val meeting = Json.decodeFromString<EditMeetingResponse>(string).result
+        val meeting = json.decodeFromString<EditMeetingResponse>(string).result
 
         return EditMeetingRequest.Response(meeting.mapToMeeting())
     }
@@ -191,7 +193,7 @@ internal class MeetingsEngine(
     suspend fun listMeetingParticipants(
         request: ListMeetingParticipantsRequest
     ): ListMeetingParticipantsRequest.Response {
-        val url = baseUrl / "meetings" / "participants" / "list"
+        val url = baseUrl / "participants" / "list"
 
         val jsonObject = buildJsonObject {
             put("meetingId", request.meetingId.string)
@@ -201,10 +203,10 @@ internal class MeetingsEngine(
 
         val string = post(url.string, jsonObject, httpClient, request)
 
-        val response = Json.decodeFromString<ListMeetingParticipantsResponse>(string).result
+        val response = json.decodeFromString<ListMeetingParticipantsResponse>(string).result
 
         val paging = PagingResponse(
-            data = response.data.map(User::mapToUser),
+            data = response.data.map(ModelUser::mapToUser),
             nextPagingId = response.nextPagingId?.let(::PagingId)
         )
 
@@ -212,7 +214,7 @@ internal class MeetingsEngine(
     }
 
     suspend fun participateMeeting(request: ParticipateMeetingRequest): StatusTrueResponse {
-        val url = baseUrl / "meetings" / "participate"
+        val url = baseUrl / "participate"
 
         val jsonObject = buildJsonObject {
             put("meetingId", request.meetingId.string)
@@ -224,7 +226,7 @@ internal class MeetingsEngine(
     }
 
     suspend fun getMeeting(request: GetMeetingRequest): GetMeetingRequest.Response {
-        val url = baseUrl / "meetings" / "get"
+        val url = baseUrl / "get"
 
         val jsonObject = buildJsonObject {
             put("meetingId", request.meetingId.string)
@@ -232,7 +234,7 @@ internal class MeetingsEngine(
 
         val string = post(url.string, jsonObject, httpClient, request)
 
-        val response = Json.decodeFromString<CreateMeetingResponse>(string).result
+        val response = json.decodeFromString<CreateMeetingResponse>(string).result
 
         val meeting = response.mapToMeeting()
 
