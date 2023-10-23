@@ -7,10 +7,10 @@ import app.meetacy.sdk.types.user.SelfUser
 import app.meetacy.sdk.types.user.Username
 
 public data class EditUserRequest(
-    val token: Token,
+    override val token: Token,
     val nickname: Optional<String>,
     val username: Optional<Username?>,
     val avatarId: Optional<FileId?>
-) : MeetacyRequest<EditUserRequest.Response> {
+) : MeetacyRequest<EditUserRequest.Response>, MeetacyRequestWithToken<EditUserRequest.Response> {
     public data class Response(val user: SelfUser)
 }

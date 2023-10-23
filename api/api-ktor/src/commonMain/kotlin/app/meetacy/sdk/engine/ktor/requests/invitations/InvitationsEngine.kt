@@ -1,6 +1,7 @@
 package app.meetacy.sdk.engine.ktor.requests.invitations
 
 import app.meetacy.sdk.engine.ktor.requests.extencion.post
+import app.meetacy.sdk.engine.ktor.response.models.CreateInvitationResponse
 import app.meetacy.sdk.engine.ktor.response.models.StatusTrueResponse
 import app.meetacy.sdk.engine.ktor.toInvitation
 import app.meetacy.sdk.engine.requests.AcceptInvitationRequest
@@ -31,7 +32,7 @@ internal class InvitationsEngine(
 
         val string = post(url.string, jsonObject, httpClient, request)
 
-        val response = json.decodeFromString<app.meetacy.sdk.engine.ktor.response.models.CreateInvitationResponse>(string).result
+        val response = json.decodeFromString<CreateInvitationResponse>(string).result
 
         return CreateInvitationRequest.Response(response.toInvitation())
     }
