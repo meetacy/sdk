@@ -15,19 +15,17 @@ import app.meetacy.sdk.types.meeting.MeetingId
 import app.meetacy.sdk.types.notification.Notification
 import app.meetacy.sdk.types.notification.NotificationId
 import app.meetacy.sdk.types.user.*
-import dev.icerock.moko.network.generated.models.Notification.Type.MEETING_INVITATION
-import dev.icerock.moko.network.generated.models.Notification.Type.SUBSCRIPTION
-import dev.icerock.moko.network.generated.models.Invitation as GeneratedInvitation
-import dev.icerock.moko.network.generated.models.Location as GeneratedLocation
-import dev.icerock.moko.network.generated.models.Meeting as GeneratedMeeting
-import dev.icerock.moko.network.generated.models.Notification as GeneratedNotification
-import dev.icerock.moko.network.generated.models.User as GeneratedUser
+import app.meetacy.sdk.engine.ktor.response.models.Invitation as ModelInvitation
+import app.meetacy.sdk.engine.ktor.response.models.Location as ModelLocation
+import app.meetacy.sdk.engine.ktor.response.models.Meeting as ModelMeeting
+import app.meetacy.sdk.engine.ktor.response.models.Notification as ModelNotification
+import app.meetacy.sdk.engine.ktor.response.models.User as ModelUser
 
-internal fun GeneratedUser.mapToSelfUser(): SelfUser = mapToUser() as SelfUser
-internal fun GeneratedUser.mapToRegularUser(): RegularUser = mapToUser() as RegularUser
+internal fun ModelUser.mapToSelfUser(): SelfUser = mapToUser() as SelfUser
+internal fun ModelUser.mapToRegularUser(): RegularUser = mapToUser() as RegularUser
 
 @OptIn(UnsafeConstructor::class)
-internal fun GeneratedUser.mapToUser(): User = if (isSelf) {
+internal fun ModelUser.mapToUser(): User = if (isSelf) {
     SelfUser(
         id = UserId(id),
         nickname = nickname,
@@ -46,7 +44,7 @@ internal fun GeneratedUser.mapToUser(): User = if (isSelf) {
     )
 }
 
-internal fun GeneratedInvitation.toInvitation(): Invitation = Invitation(
+internal fun ModelInvitation.toInvitation(): Invitation = Invitation(
     id = identity.let(::InvitationId),
     meeting = meeting.mapToMeeting(),
     invitedUser = invitedUser.mapToUser(),
@@ -66,7 +64,7 @@ internal fun String.mapToRelationship(): Relationship? = when(this) {
     else -> null
 }
 
-internal fun GeneratedMeeting.mapToMeeting(): Meeting = Meeting(
+internal fun ModelMeeting.mapToMeeting(): Meeting = Meeting(
     id = MeetingId(id),
     creator = creator.mapToUser(),
     date = Date(date),
@@ -78,25 +76,25 @@ internal fun GeneratedMeeting.mapToMeeting(): Meeting = Meeting(
     description = description,
     participantsCount = participantsCount,
     isParticipating = isParticipating,
-    previewParticipants = previewParticipants.map(GeneratedUser::mapToUser),
+    previewParticipants = previewParticipants.map(ModelUser::mapToUser),
     avatarId = avatarId?.let(::FileId),
     visibility = when (visibility) {
-        GeneratedMeeting.Visibility.PUBLIC -> Meeting.Visibility.Public
-        GeneratedMeeting.Visibility.PRIVATE -> Meeting.Visibility.Private
+        ModelMeeting.Visibility.PUBLIC -> Meeting.Visibility.Public
+        ModelMeeting.Visibility.PRIVATE -> Meeting.Visibility.Private
     }
 )
 
-internal fun GeneratedLocation.mapToLocation(): Location =
+internal fun ModelLocation.mapToLocation(): Location =
     Location(latitude, longitude)
 
-internal fun GeneratedNotification.mapToNotification(): Notification = when (this.type) {
-    SUBSCRIPTION -> Notification.Subscription(
+internal fun ModelNotification.mapToNotification(): Notification = when (this.type) {
+    app.meetacy.sdk.engine.ktor.response.models.Notification.Type.SUBSCRIPTION -> Notification.Subscription(
         id = NotificationId(id),
         isNew = isNew,
         date = Date(date),
         subscriber = subscriber!!.mapToRegularUser()
     )
-    MEETING_INVITATION -> Notification.Invitation(
+    app.meetacy.sdk.engine.ktor.response.models.Notification.Type.MEETING_INVITATION -> Notification.Invitation(
         id = NotificationId(id),
         isNew = isNew,
         date = Date(date),

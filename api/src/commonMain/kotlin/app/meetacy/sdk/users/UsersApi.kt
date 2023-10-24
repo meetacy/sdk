@@ -3,10 +3,10 @@ package app.meetacy.sdk.users
 import app.meetacy.sdk.MeetacyApi
 import app.meetacy.sdk.engine.requests.EditUserRequest
 import app.meetacy.sdk.engine.requests.GetUserRequest
+import app.meetacy.sdk.engine.requests.UsernameAvailableRequest
 import app.meetacy.sdk.types.auth.Token
 import app.meetacy.sdk.types.file.FileId
 import app.meetacy.sdk.types.optional.Optional
-import app.meetacy.sdk.types.user.SelfUser
 import app.meetacy.sdk.types.user.User
 import app.meetacy.sdk.types.user.UserId
 import app.meetacy.sdk.types.user.Username
@@ -46,5 +46,10 @@ public class UsersApi(private val api: MeetacyApi) {
             data = user,
             api = api
         )
+    }
+
+    public suspend fun usernameAvailable(username: Username): Username {
+        val result = api.engine.execute(UsernameAvailableRequest(username))
+        return result.username
     }
 }

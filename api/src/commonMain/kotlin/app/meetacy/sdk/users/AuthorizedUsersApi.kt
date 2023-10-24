@@ -40,4 +40,8 @@ public class AuthorizedUsersApi(private val api: AuthorizedMeetacyApi) {
             api = api
         )
     }
+
+    public suspend fun usernameAvailable(username: Username): Username {
+        return base.usernameAvailable(username)
+    }
 }
