@@ -5,24 +5,95 @@ on:
     branches: [ "main" ]
   workflow_dispatch:
 
+env:
+  GITHUB_USERNAME: "meetacy"
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 jobs:
-  release-deploy:
-    runs-on: macos-latest
-    env:
-      GITHUB_USERNAME: "meetacy"
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  deploy-multiplatform:
+    runs-on: ubuntu-latest
+    outputs:
+      release_version: ${{ steps.output_version.outputs.release_version }}
     steps:
       - uses: actions/checkout@v3
       - name: Gradle Cache Setup
         uses: gradle/gradle-build-action@v2
-      - name: Publish Release Library
-        run: ./gradlew publish
+      - name: Gradle Sync
+        run: ./gradlew
       - name: Add Sdk Version to Env
         run: |
           release_version=$(./gradlew printSdkVersion -q)
           echo "release_version=$release_version" >> $GITHUB_ENV
+      - name: Publish ${{ env.release_version }}
+        run: ./gradlew publishKotlinMultiplatformPublicationToMeetacySdkRepository
+      - name: Add Sdk Version to Output
+        id: output_version
+        run: echo "release_version=${{ env.release_version }}" >> $GITHUB_OUTPUT
+
+  deploy-jvm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Gradle Cache Setup
+        uses: gradle/gradle-build-action@v2
+      - name: Gradle Sync
+        run: ./gradlew
+      - name: Add Sdk Version to Env
+        run: |
+          release_version=$(./gradlew printSdkVersion -q)
+          echo "release_version=$release_version" >> $GITHUB_ENV
+      - name: Publish ${{ env.release_version }}
+        run: ./gradlew publishJvmPublicationToMeetacySdkRepository
+
+  deploy-js:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Gradle Cache Setup
+        uses: gradle/gradle-build-action@v2
+      - name: Gradle Sync
+        run: ./gradlew
+      - name: Add Sdk Version to Env
+        run: |
+          release_version=$(./gradlew printSdkVersion -q)
+          echo "release_version=$release_version" >> $GITHUB_ENV
+      - name: Publish ${{ env.release_version }}
+        run: ./gradlew publishJsPublicationToMeetacySdkRepository
+
+  deploy-konan:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Gradle Cache Setup
+        uses: gradle/gradle-build-action@v2
+      - name: Konan Cache Setup
+        uses: actions/cache@v3
+        with:
+          path: ~/.konan
+          key: konan-cache
+      - name: Gradle Sync
+        run: ./gradlew
+      - name: Add Sdk Version to Env
+        run: |
+          release_version=$(./gradlew printSdkVersion -q)
+          echo "release_version=$release_version" >> $GITHUB_ENV
+      - name: Publish ${{ env.release_version }}
+        run: |
+          ./gradlew publishIosX64PublicationToMeetacySdkRepository \
+                    publishIosSimulatorArm64PublicationToMeetacySdkRepository \
+                    publishIosArm64PublicationToMeetacySdkRepository
+
+  create-release:
+    runs-on: ubuntu-latest
+    needs:
+      - deploy-multiplatform
+      - deploy-jvm
+      - deploy-js
+      - deploy-konan
+    steps:
       - name: Create Release
         uses: actions/create-release@v1
         with:
-          tag_name: ${{ env.release_version }}
-          release_name: Release ${{ env.release_version }}
+          tag_name: ${{ needs.deploy-multiplatform.outputs.release_version }}
+          release_name: Release ${{ needs.deploy-multiplatform.outputs.release_version }}
