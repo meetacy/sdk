@@ -5,8 +5,8 @@ import app.meetacy.sdk.types.location.Location
 import app.meetacy.sdk.types.meeting.Meeting
 
 public data class ListMeetingsMapRequest(
-    val token: Token,
+    override val token: Token,
     val location: Location
-) : MeetacyRequest<ListMeetingsMapRequest.Response> {
+) : MeetacyRequest<ListMeetingsMapRequest.Response>, MeetacyRequestWithToken<ListMeetingsMapRequest.Response> {
     public data class Response(val meetings: List<Meeting>)
 }

@@ -1,72 +1,82 @@
 package app.meetacy.sdk.engine.ktor.requests.invitations
 
+import app.meetacy.sdk.engine.ktor.requests.extencion.post
+import app.meetacy.sdk.engine.ktor.response.models.CreateInvitationResponse
+import app.meetacy.sdk.engine.ktor.response.models.StatusTrueResponse
 import app.meetacy.sdk.engine.ktor.toInvitation
-import app.meetacy.sdk.engine.requests.*
+import app.meetacy.sdk.engine.requests.AcceptInvitationRequest
+import app.meetacy.sdk.engine.requests.CancelInvitationRequest
+import app.meetacy.sdk.engine.requests.CreateInvitationRequest
+import app.meetacy.sdk.engine.requests.DenyInvitationRequest
 import app.meetacy.sdk.types.url.Url
-import dev.icerock.moko.network.generated.apis.InvitationsApi
-import dev.icerock.moko.network.generated.apis.InvitationsApiImpl
 import io.ktor.client.*
 import kotlinx.serialization.json.Json
-import dev.icerock.moko.network.generated.models.AcceptInvitationRequest as GeneratedAcceptInvitationRequest
-import dev.icerock.moko.network.generated.models.CancelInvitationRequest as GeneratedCancelInvitationRequest
-import dev.icerock.moko.network.generated.models.CreateInvitationRequest as GeneratedCreateInvitationRequest
-import dev.icerock.moko.network.generated.models.DenyInvitationRequest as GeneratedDenyInvitationRequest
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.put
 
 internal class InvitationsEngine(
-    private val baseUrl: Url,
+    baseUrl: Url,
     private val httpClient: HttpClient,
-    json: Json
+    private val json: Json
 ) {
-    private val base: InvitationsApi = InvitationsApiImpl(baseUrl.string, httpClient, json)
-
+    private val baseUrl = baseUrl / "invitations"
     suspend fun create(
         request: CreateInvitationRequest
     ): CreateInvitationRequest.Response {
-        val response = base.invitationsCreatePost(
-            createInvitationRequest = GeneratedCreateInvitationRequest(
-                token = request.token.string,
-                meetingId = request.meetingId.string,
-                userId = request.userId.string
-            ),
-            apiVersion = request.apiVersion.int.toString()
-        ).result
+        val url = baseUrl / "create"
+
+        val jsonObject = buildJsonObject {
+            put("meetingId", request.meetingId.string)
+            put("userId", request.userId.string)
+        }
+
+        val string = post(url.string, jsonObject, httpClient, request)
+
+        val response = json.decodeFromString<CreateInvitationResponse>(string).result
 
         return CreateInvitationRequest.Response(response.toInvitation())
     }
 
     suspend fun accept(
         request: AcceptInvitationRequest
-    ) {
-        base.invitationsAcceptPost(
-            apiVersion = request.apiVersion.int.toString(),
-            acceptInvitationRequest = GeneratedAcceptInvitationRequest(
-                token = request.token.string,
-                id = request.invitationId.string
-            )
-        )
+    ): StatusTrueResponse {
+        val url = baseUrl / "accept"
+
+        val jsonObject = buildJsonObject {
+            put("invitationId", request.invitationId.string)
+        }
+
+        val string = post(url.string, jsonObject, httpClient, request)
+
+        return json.decodeFromString<StatusTrueResponse>(string)
     }
 
     suspend fun deny(
         request: DenyInvitationRequest
-    ) {
-        base.invitationsDenyPost(
-            apiVersion = request.apiVersion.int.toString(),
-            denyInvitationRequest = GeneratedDenyInvitationRequest(
-                token = request.token.string,
-                id = request.invitationId.string
-            )
-        )
+    ): StatusTrueResponse {
+        val url = baseUrl / "deny"
+
+        val jsonObject = buildJsonObject {
+            put("invitationId", request.invitationId.string)
+        }
+
+        val string = post(url.string, jsonObject, httpClient, request)
+
+        return json.decodeFromString<StatusTrueResponse>(string)
     }
 
     suspend fun cancel(
         request: CancelInvitationRequest
-    ) {
-        base.invitationsCancelPost(
-            apiVersion = request.apiVersion.int.toString(),
-            cancelInvitationRequest = GeneratedCancelInvitationRequest(
-                id = request.invitationId.string,
-                token = request.token.string
-            )
-        )
+    ): StatusTrueResponse {
+        val url = baseUrl / "cancel"
+
+        val jsonObject = buildJsonObject {
+            put("invitationId", request.invitationId.string)
+        }
+
+        val string = post(url.string, jsonObject, httpClient, request)
+
+        return json.decodeFromString<StatusTrueResponse>(string)
     }
+
 }

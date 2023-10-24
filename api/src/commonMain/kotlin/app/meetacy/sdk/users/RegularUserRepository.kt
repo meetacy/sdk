@@ -25,4 +25,8 @@ public class RegularUserRepository(
     public suspend fun deleteFriend(token: Token) {
         api.friends.delete(token, data.id)
     }
+
+    public suspend fun usernameAvailable(username: Username): Username {
+        return api.users.usernameAvailable(username)
+    }
 }

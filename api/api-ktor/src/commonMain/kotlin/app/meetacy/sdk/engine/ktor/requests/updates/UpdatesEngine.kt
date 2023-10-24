@@ -1,11 +1,9 @@
 package app.meetacy.sdk.engine.ktor.requests.updates
 
-import app.meetacy.sdk.engine.ktor.exception.getException
 import app.meetacy.sdk.engine.ktor.handleRSocketExceptions
 import app.meetacy.sdk.engine.ktor.mapToNotification
-import app.meetacy.sdk.engine.ktor.response.ServerResponse
-import app.meetacy.sdk.engine.ktor.response.decodeToEmptyServerResponse
 import app.meetacy.sdk.engine.requests.EmitUpdatesRequest
+import app.meetacy.sdk.engine.ktor.response.models.Notification as ModelNotification
 import app.meetacy.sdk.types.update.Update
 import app.meetacy.sdk.types.update.UpdateId
 import app.meetacy.sdk.types.url.Url
@@ -15,16 +13,13 @@ import io.rsocket.kotlin.payload.Payload
 import io.rsocket.kotlin.payload.buildPayload
 import io.rsocket.kotlin.payload.data
 import kotlinx.coroutines.flow.emitAll
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
-import dev.icerock.moko.network.generated.models.Notification as GeneratedNotification
 
 internal class UpdatesEngine(
     private val baseUrl: Url,
@@ -69,7 +64,7 @@ private sealed interface UpdateSerializable {
     @Serializable
     data class Notification(
         override val id: String,
-        val notification: GeneratedNotification
+        val notification: ModelNotification
     ) : UpdateSerializable
 }
 

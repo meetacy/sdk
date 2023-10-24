@@ -2,31 +2,33 @@
 
 package app.meetacy.sdk.engine.ktor.requests.auth
 
+import app.meetacy.sdk.engine.ktor.requests.extencion.postWithoutToken
+import app.meetacy.sdk.engine.ktor.response.models.GenerateIdentityResponse
 import app.meetacy.sdk.engine.requests.GenerateAuthRequest
 import app.meetacy.sdk.types.annotation.UnsafeConstructor
 import app.meetacy.sdk.types.auth.Token
 import app.meetacy.sdk.types.url.Url
-import dev.icerock.moko.network.generated.apis.AuthApi
-import dev.icerock.moko.network.generated.apis.AuthApiImpl
-import dev.icerock.moko.network.generated.models.GenerateIdentityRequest
 import io.ktor.client.*
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.put
 
 internal class AuthEngine(
-    baseUrl: Url,
-    httpClient: HttpClient,
-    json: Json
+    private val baseUrl: Url,
+    private val httpClient: HttpClient,
+    private val json: Json
 ) {
-    private val base: AuthApi = AuthApiImpl(baseUrl.string, httpClient, json)
-
     suspend fun generate(request: GenerateAuthRequest): GenerateAuthRequest.Response {
-        val response = base.authGeneratePost(
-            generateIdentityRequest = GenerateIdentityRequest(
-                nickname = request.nickname
-            ),
-            apiVersion = request.apiVersion.int.toString()
-        )
+        val url = baseUrl / "auth" / "generate"
 
-        return GenerateAuthRequest.Response(token = Token(response.result))
+        val jsonObject = buildJsonObject {
+            put("nickname", request.nickname)
+        }
+
+        val string = postWithoutToken(url.string, jsonObject, httpClient, request)
+
+        val token = json.decodeFromString<GenerateIdentityResponse>(string).result
+
+        return GenerateAuthRequest.Response(token = Token(token))
     }
 }

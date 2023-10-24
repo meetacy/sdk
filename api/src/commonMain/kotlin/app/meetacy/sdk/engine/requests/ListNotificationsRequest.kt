@@ -7,9 +7,9 @@ import app.meetacy.sdk.types.paging.PagingId
 import app.meetacy.sdk.types.paging.PagingResponse
 
 public data class ListNotificationsRequest(
-    val token: Token,
+    override val token: Token,
     val amount: Amount,
     val pagingId: PagingId?
-) : MeetacyRequest<ListNotificationsRequest.Response> {
+) : MeetacyRequest<ListNotificationsRequest.Response>, MeetacyRequestWithToken<ListNotificationsRequest.Response> {
     public data class Response(val paging: PagingResponse<Notification>)
 }

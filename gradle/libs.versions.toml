@@ -2,13 +2,12 @@
 
 kotlin = "1.8.10"
 ktor = "2.2.4"
-meetacySdk = "0.0.58"
+meetacySdk = "0.0.59"
 
 # kotlinx
 kotlinxCoroutines = "1.6.4"
 kotlinxSerialization = "1.5.1"
 kotlinxDateTime = "0.4.0"
-mokoNetwork = "0.20.1"
 rsocket = "0.15.4"
 
 [libraries]
@@ -25,9 +24,6 @@ ktorClientWebSockets = { module = "io.ktor:ktor-client-websockets", version.ref 
 
 rsocketKtorClient = { module = "io.rsocket.kotlin:rsocket-ktor-client", version.ref = "rsocket" }
 
-# moko
-mokoNetwork = { module = "dev.icerock.moko:network", version.ref="mokoNetwork" }
-
 # kotlinx
 kotlinxCoroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
 kotlinxCoroutinesTest = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
@@ -37,4 +33,3 @@ kotlinxDateTime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.r
 # gradle plugins
 kotlinxSerializationPlugin = { module = "org.jetbrains.kotlin:kotlin-serialization", version.ref = "kotlin" }
 kotlinPlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
-mokoNetworkPlugin = { module = "dev.icerock.moko:network-generator", version.ref = "mokoNetwork" }
