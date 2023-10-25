@@ -1,5 +1,7 @@
 package app.meetacy.sdk.engine.ktor.response
 
+import io.ktor.client.call.*
+import io.ktor.client.statement.*
 import io.rsocket.kotlin.payload.Payload
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
@@ -9,16 +11,7 @@ import kotlinx.serialization.builtins.nullable
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.Json
-
-@Serializable
-internal data class ServerResponseData<T>(
-    val status: Boolean,
-    val data: T? = null,
-    val errorCode: Int? = null,
-    val errorMessage: String? = null
-)
-
-internal typealias EmptyServerResponse = ServerResponse<Nothing?>
+import kotlin.reflect.KClass
 
 @Serializable(with = ServerResponse.Serializer::class)
 internal sealed interface ServerResponse<out T> {
@@ -33,8 +26,7 @@ internal sealed interface ServerResponse<out T> {
 
     @Suppress("UNCHECKED_CAST")
     class Serializer<T>(subSerializer: KSerializer<T>) : KSerializer<ServerResponse<T>> {
-        private val baseSerializer = ServerResponseData.serializer(subSerializer)
-
+        private val baseSerializer = Data.serializer(subSerializer)
         override val descriptor = baseSerializer.descriptor
 
         override fun deserialize(decoder: Decoder): ServerResponse<T> {
@@ -47,7 +39,7 @@ internal sealed interface ServerResponse<out T> {
         }
 
         override fun serialize(encoder: Encoder, value: ServerResponse<T>) {
-            val data = ServerResponseData(
+            val data = Data(
                 status = value is Success,
                 data = (value as? Success)?.data,
                 errorCode = (value as? Error)?.errorCode,
@@ -56,6 +48,13 @@ internal sealed interface ServerResponse<out T> {
             baseSerializer.serialize(encoder, data)
         }
 
+        @Serializable
+        private data class Data<T>(
+            val status: Boolean,
+            val data: T? = null,
+            val errorCode: Int? = null,
+            val errorMessage: String? = null
+        )
     }
 }
 
@@ -68,7 +67,6 @@ internal fun <T> Payload.decodeToServerResponse(
     )
 }
 
-@OptIn(ExperimentalSerializationApi::class)
-internal fun Payload.decodeToEmptyServerResponse(): EmptyServerResponse {
-    return decodeToServerResponse(NothingSerializer().nullable)
+internal suspend inline fun <reified T> HttpResponse.bodyAsSuccess(): T {
+    return body<ServerResponse.Success<T>>().data
 }

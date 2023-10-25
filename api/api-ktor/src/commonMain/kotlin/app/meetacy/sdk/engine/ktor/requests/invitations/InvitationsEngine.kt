@@ -1,8 +1,8 @@
 package app.meetacy.sdk.engine.ktor.requests.invitations
 
 import app.meetacy.sdk.engine.ktor.requests.extencion.post
-import app.meetacy.sdk.engine.ktor.response.models.CreateInvitationResponse
-import app.meetacy.sdk.engine.ktor.response.models.StatusTrueResponse
+import app.meetacy.sdk.engine.ktor.models.CreateInvitationResponse
+import app.meetacy.sdk.engine.ktor.models.StatusTrueResponse
 import app.meetacy.sdk.engine.ktor.toInvitation
 import app.meetacy.sdk.engine.requests.AcceptInvitationRequest
 import app.meetacy.sdk.engine.requests.CancelInvitationRequest
@@ -32,14 +32,14 @@ internal class InvitationsEngine(
 
         val string = post(url.string, jsonObject, httpClient, request)
 
-        val response = json.decodeFromString<CreateInvitationResponse>(string).result
+        val response = json.decodeFromString<app.meetacy.sdk.engine.ktor.models.CreateInvitationResponse>(string).result
 
         return CreateInvitationRequest.Response(response.toInvitation())
     }
 
     suspend fun accept(
         request: AcceptInvitationRequest
-    ): StatusTrueResponse {
+    ): app.meetacy.sdk.engine.ktor.models.StatusTrueResponse {
         val url = baseUrl / "accept"
 
         val jsonObject = buildJsonObject {
@@ -48,12 +48,12 @@ internal class InvitationsEngine(
 
         val string = post(url.string, jsonObject, httpClient, request)
 
-        return json.decodeFromString<StatusTrueResponse>(string)
+        return json.decodeFromString<app.meetacy.sdk.engine.ktor.models.StatusTrueResponse>(string)
     }
 
     suspend fun deny(
         request: DenyInvitationRequest
-    ): StatusTrueResponse {
+    ): app.meetacy.sdk.engine.ktor.models.StatusTrueResponse {
         val url = baseUrl / "deny"
 
         val jsonObject = buildJsonObject {
@@ -62,12 +62,12 @@ internal class InvitationsEngine(
 
         val string = post(url.string, jsonObject, httpClient, request)
 
-        return json.decodeFromString<StatusTrueResponse>(string)
+        return json.decodeFromString<app.meetacy.sdk.engine.ktor.models.StatusTrueResponse>(string)
     }
 
     suspend fun cancel(
         request: CancelInvitationRequest
-    ): StatusTrueResponse {
+    ): app.meetacy.sdk.engine.ktor.models.StatusTrueResponse {
         val url = baseUrl / "cancel"
 
         val jsonObject = buildJsonObject {
@@ -76,7 +76,7 @@ internal class InvitationsEngine(
 
         val string = post(url.string, jsonObject, httpClient, request)
 
-        return json.decodeFromString<StatusTrueResponse>(string)
+        return json.decodeFromString<app.meetacy.sdk.engine.ktor.models.StatusTrueResponse>(string)
     }
 
 }

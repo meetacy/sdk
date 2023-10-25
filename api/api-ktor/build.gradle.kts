@@ -13,6 +13,7 @@ dependencies {
     commonMainImplementation(libs.rsocketKtorClient)
 
     commonMainApi(projects.api)
+    commonMainImplementation(projects.types.serializable)
 
     jvmTestImplementation(libs.ktorClientCio)
 }

@@ -4,12 +4,12 @@ import app.meetacy.sdk.engine.ktor.mapToMeeting
 import app.meetacy.sdk.engine.ktor.mapToUser
 import app.meetacy.sdk.engine.ktor.requests.extencion.post
 import app.meetacy.sdk.engine.ktor.response.models.*
-import app.meetacy.sdk.engine.ktor.response.models.CreateMeetingResponse
-import app.meetacy.sdk.engine.ktor.response.models.EditMeetingResponse
-import app.meetacy.sdk.engine.ktor.response.models.ListMapMeetingsResponse
-import app.meetacy.sdk.engine.ktor.response.models.ListMeetingParticipantsResponse
-import app.meetacy.sdk.engine.ktor.response.models.ListMeetingsResponse
-import app.meetacy.sdk.engine.ktor.response.models.User as ModelUser
+import app.meetacy.sdk.engine.ktor.models.CreateMeetingResponse
+import app.meetacy.sdk.engine.ktor.models.EditMeetingResponse
+import app.meetacy.sdk.engine.ktor.models.ListMapMeetingsResponse
+import app.meetacy.sdk.engine.ktor.models.ListMeetingParticipantsResponse
+import app.meetacy.sdk.engine.ktor.models.ListMeetingsResponse
+import app.meetacy.sdk.engine.ktor.models.User as ModelUser
 import app.meetacy.sdk.engine.requests.*
 import app.meetacy.sdk.engine.requests.CreateMeetingRequest
 import app.meetacy.sdk.engine.requests.EditMeetingRequest
@@ -27,7 +27,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import kotlinx.serialization.json.putJsonObject
-import app.meetacy.sdk.engine.ktor.response.models.Meeting as ModelMeeting
+import app.meetacy.sdk.engine.ktor.models.Meeting as ModelMeeting
 
 internal class MeetingsEngine(
     baseUrl: Url,
@@ -41,13 +41,13 @@ internal class MeetingsEngine(
         val url = baseUrl / "history" / "list"
 
         val jsonObject = buildJsonObject {
-            put("amount", amount.int.toString())
+            put("amount", amount.int)
             put("pagingId", pagingId?.string)
         }
 
         val string = post(url.string, jsonObject, httpClient, request)
 
-        val response = json.decodeFromString<ListMeetingsResponse>(string).result
+        val response = json.decodeFromString<app.meetacy.sdk.engine.ktor.models.ListMeetingsResponse>(string).result
 
         val paging = PagingResponse(
             nextPagingId = response.nextPagingId?.let(::PagingId),
@@ -63,7 +63,7 @@ internal class MeetingsEngine(
         val url = baseUrl / "history" / "active"
 
         val jsonObject = buildJsonObject {
-            put("amount", amount.int.toString())
+            put("amount", amount.int)
             put("pagingId", pagingId?.string)
         }
 
@@ -75,10 +75,10 @@ internal class MeetingsEngine(
                 )
             )
             header("Authorization", request.token.string)
-            header("Api-Version", request.apiVersion.int.toString())
+            header("Api-Version", request.apiVersion.int)
         }.body<String>()
 
-        val response = json.decodeFromString<ListMeetingsResponse>(string).result
+        val response = json.decodeFromString<app.meetacy.sdk.engine.ktor.models.ListMeetingsResponse>(string).result
 
         val paging = PagingResponse(
             nextPagingId = response.nextPagingId?.let(::PagingId),
@@ -94,13 +94,13 @@ internal class MeetingsEngine(
         val url = baseUrl / "history" / "past"
 
         val jsonObject = buildJsonObject {
-            put("amount", amount.int.toString())
+            put("amount", amount.int)
             put("pagingId", pagingId?.string)
         }
 
         val string = post(url.string, jsonObject, httpClient, request)
 
-        val response = json.decodeFromString<ListMeetingsResponse>(string).result
+        val response = json.decodeFromString<app.meetacy.sdk.engine.ktor.models.ListMeetingsResponse>(string).result
 
         val paging = PagingResponse(
             nextPagingId = response.nextPagingId?.let(::PagingId),
@@ -123,7 +123,7 @@ internal class MeetingsEngine(
         }
         val string = post(url.string, jsonObject, httpClient, request)
 
-        val response = json.decodeFromString<ListMapMeetingsResponse>(string).result
+        val response = json.decodeFromString<app.meetacy.sdk.engine.ktor.models.ListMapMeetingsResponse>(string).result
 
         val data = response.map(ModelMeeting::mapToMeeting)
 
@@ -149,7 +149,7 @@ internal class MeetingsEngine(
 
         val string = post(url.string, jsonObject, httpClient, request)
 
-        val meeting = json.decodeFromString<CreateMeetingResponse>(string).result
+        val meeting = json.decodeFromString<app.meetacy.sdk.engine.ktor.models.CreateMeetingResponse>(string).result
 
         return CreateMeetingRequest.Response(meeting.mapToMeeting())
     }
@@ -185,7 +185,7 @@ internal class MeetingsEngine(
 
         val string = post(url.string, jsonObject, httpClient, request)
 
-        val meeting = json.decodeFromString<EditMeetingResponse>(string).result
+        val meeting = json.decodeFromString<app.meetacy.sdk.engine.ktor.models.EditMeetingResponse>(string).result
 
         return EditMeetingRequest.Response(meeting.mapToMeeting())
     }
@@ -203,7 +203,7 @@ internal class MeetingsEngine(
 
         val string = post(url.string, jsonObject, httpClient, request)
 
-        val response = json.decodeFromString<ListMeetingParticipantsResponse>(string).result
+        val response = json.decodeFromString<app.meetacy.sdk.engine.ktor.models.ListMeetingParticipantsResponse>(string).result
 
         val paging = PagingResponse(
             data = response.data.map(ModelUser::mapToUser),
@@ -213,7 +213,7 @@ internal class MeetingsEngine(
         return ListMeetingParticipantsRequest.Response(paging)
     }
 
-    suspend fun participateMeeting(request: ParticipateMeetingRequest): StatusTrueResponse {
+    suspend fun participateMeeting(request: ParticipateMeetingRequest): app.meetacy.sdk.engine.ktor.models.StatusTrueResponse {
         val url = baseUrl / "participate"
 
         val jsonObject = buildJsonObject {
@@ -222,7 +222,7 @@ internal class MeetingsEngine(
 
         val string = post(url.string, jsonObject, httpClient, request)
 
-        return Json.decodeFromString<StatusTrueResponse>(string)
+        return Json.decodeFromString<app.meetacy.sdk.engine.ktor.models.StatusTrueResponse>(string)
     }
 
     suspend fun getMeeting(request: GetMeetingRequest): GetMeetingRequest.Response {
@@ -234,7 +234,7 @@ internal class MeetingsEngine(
 
         val string = post(url.string, jsonObject, httpClient, request)
 
-        val response = json.decodeFromString<CreateMeetingResponse>(string).result
+        val response = json.decodeFromString<app.meetacy.sdk.engine.ktor.models.CreateMeetingResponse>(string).result
 
         val meeting = response.mapToMeeting()
 

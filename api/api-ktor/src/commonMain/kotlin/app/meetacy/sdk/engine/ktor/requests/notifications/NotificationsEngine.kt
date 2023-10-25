@@ -2,8 +2,8 @@ package app.meetacy.sdk.engine.ktor.requests.notifications
 
 import app.meetacy.sdk.engine.ktor.mapToNotification
 import app.meetacy.sdk.engine.ktor.requests.extencion.post
-import app.meetacy.sdk.engine.ktor.response.models.ListNotificationsResponse
-import app.meetacy.sdk.engine.ktor.response.models.StatusTrueResponse
+import app.meetacy.sdk.engine.ktor.models.ListNotificationsResponse
+import app.meetacy.sdk.engine.ktor.models.StatusTrueResponse
 import app.meetacy.sdk.engine.requests.ListNotificationsRequest
 import app.meetacy.sdk.engine.requests.ReadNotificationRequest
 import app.meetacy.sdk.types.paging.PagingId
@@ -27,13 +27,13 @@ internal class NotificationsEngine(
         val url = baseUrl / "list"
 
         val jsonObject = buildJsonObject {
-            put("amount", amount.int.toString())
+            put("amount", amount.int)
             put("pagingId", pagingId?.string)
         }
 
         val string = post(url.string, jsonObject, httpClient, request)
 
-        val response = json.decodeFromString<ListNotificationsResponse>(string).result
+        val response = json.decodeFromString<app.meetacy.sdk.engine.ktor.models.ListNotificationsResponse>(string).result
 
         val paging = PagingResponse(
             data = response.data.map { it.mapToNotification() },
@@ -43,7 +43,7 @@ internal class NotificationsEngine(
         ListNotificationsRequest.Response(paging)
     }
 
-    suspend fun read(request: ReadNotificationRequest): StatusTrueResponse = with (request) {
+    suspend fun read(request: ReadNotificationRequest): app.meetacy.sdk.engine.ktor.models.StatusTrueResponse = with (request) {
         val url = baseUrl / "read"
 
         val jsonObject = buildJsonObject {
@@ -52,6 +52,6 @@ internal class NotificationsEngine(
 
         val string = post(url.string, jsonObject, httpClient, request)
 
-        return json.decodeFromString<StatusTrueResponse>(string)
+        return json.decodeFromString<app.meetacy.sdk.engine.ktor.models.StatusTrueResponse>(string)
     }
 }

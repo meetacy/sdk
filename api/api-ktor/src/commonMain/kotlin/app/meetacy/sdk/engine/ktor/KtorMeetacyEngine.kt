@@ -8,6 +8,7 @@ import app.meetacy.sdk.engine.ktor.requests.friends.FriendsEngine
 import app.meetacy.sdk.engine.ktor.requests.invitations.InvitationsEngine
 import app.meetacy.sdk.engine.ktor.requests.meetings.MeetingsEngine
 import app.meetacy.sdk.engine.ktor.requests.notifications.NotificationsEngine
+import app.meetacy.sdk.engine.ktor.requests.search.SearchEngine
 import app.meetacy.sdk.engine.ktor.requests.updates.UpdatesEngine
 import app.meetacy.sdk.engine.ktor.requests.users.UsersEngine
 import app.meetacy.sdk.engine.ktor.response.ServerResponse
@@ -51,6 +52,7 @@ public class KtorMeetacyEngine(
     private val files = FilesEngine(baseUrl, this.httpClient)
     private val invitations = InvitationsEngine(baseUrl, this.httpClient, this.json)
     private val notifications = NotificationsEngine(baseUrl, this.httpClient, this.json)
+    private val search = SearchEngine(baseUrl, this.httpClient)
     private val updates = UpdatesEngine(baseUrl, this.httpClient, this.json)
 
     override fun getFileUrl(
@@ -93,12 +95,13 @@ public class KtorMeetacyEngine(
             // notifications
             is ReadNotificationRequest -> notifications.read(request) as T
             is ListNotificationsRequest -> notifications.list(request) as T
+            // search
+            is SearchRequest -> search.search(request) as T
             // updates
             is EmitUpdatesRequest -> updates.stream(request) as T
             // not yet supported
             is LinkEmailRequest -> notSupported()
             is ConfirmEmailRequest -> notSupported()
-            is TokenProviderEmpty -> notSupported()
         }
     }
 

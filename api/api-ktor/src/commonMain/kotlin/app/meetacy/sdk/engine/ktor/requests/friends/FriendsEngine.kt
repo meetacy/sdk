@@ -7,10 +7,10 @@ import app.meetacy.sdk.engine.ktor.mapToLocation
 import app.meetacy.sdk.engine.ktor.mapToRegularUser
 import app.meetacy.sdk.engine.ktor.mapToUser
 import app.meetacy.sdk.engine.ktor.requests.extencion.post
-import app.meetacy.sdk.engine.ktor.response.models.ListFriendsResponse
-import app.meetacy.sdk.engine.ktor.response.models.Location as ModelLocation
-import app.meetacy.sdk.engine.ktor.response.models.StatusTrueResponse
-import app.meetacy.sdk.engine.ktor.response.models.User as ModelUser
+import app.meetacy.sdk.engine.ktor.models.ListFriendsResponse
+import app.meetacy.sdk.engine.ktor.models.Location as ModelLocation
+import app.meetacy.sdk.engine.ktor.models.StatusTrueResponse
+import app.meetacy.sdk.engine.ktor.models.User as ModelUser
 import app.meetacy.sdk.engine.requests.AddFriendRequest
 import app.meetacy.sdk.engine.requests.DeleteFriendRequest
 import app.meetacy.sdk.engine.requests.EmitFriendsLocationRequest
@@ -43,7 +43,7 @@ internal class FriendsEngine(
 ) {
     private val baseUrl =  baseUrl / "friends"
 
-    suspend fun add(request: AddFriendRequest): StatusTrueResponse {
+    suspend fun add(request: AddFriendRequest): app.meetacy.sdk.engine.ktor.models.StatusTrueResponse {
         val url =  baseUrl / "add"
 
         val jsonObject = buildJsonObject {
@@ -52,10 +52,10 @@ internal class FriendsEngine(
 
         val string = post(url.string, jsonObject, httpClient, request)
 
-        return json.decodeFromString<StatusTrueResponse>(string)
+        return json.decodeFromString<app.meetacy.sdk.engine.ktor.models.StatusTrueResponse>(string)
     }
 
-    suspend fun delete(request: DeleteFriendRequest): StatusTrueResponse {
+    suspend fun delete(request: DeleteFriendRequest): app.meetacy.sdk.engine.ktor.models.StatusTrueResponse {
         val url =  baseUrl / "delete"
 
         val jsonObject = buildJsonObject {
@@ -64,20 +64,20 @@ internal class FriendsEngine(
 
         val string = post(url.string, jsonObject, httpClient, request)
 
-        return json.decodeFromString<StatusTrueResponse>(string)
+        return json.decodeFromString<app.meetacy.sdk.engine.ktor.models.StatusTrueResponse>(string)
     }
 
     suspend fun list(request: ListFriendsRequest): ListFriendsRequest.Response {
         val url =  baseUrl / "list"
 
         val jsonObject = buildJsonObject {
-            put("amount", request.amount.int.toString())
+            put("amount", request.amount.int)
             put("pagingId", request.pagingId?.string)
         }
 
         val string = post(url.string, jsonObject, httpClient, request)
 
-        val response = Json.decodeFromString<ListFriendsResponse>(string).result
+        val response = Json.decodeFromString<app.meetacy.sdk.engine.ktor.models.ListFriendsResponse>(string).result
 
         val paging = PagingResponse(
             nextPagingId = response.nextPagingId?.let(::PagingId),
