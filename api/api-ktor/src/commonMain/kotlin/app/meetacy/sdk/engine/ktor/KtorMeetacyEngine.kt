@@ -47,7 +47,7 @@ public class KtorMeetacyEngine(
 
     private val auth = AuthEngine(baseUrl, this.httpClient)
     private val users = UsersEngine(baseUrl, this.httpClient)
-    private val friends = FriendsEngine(baseUrl, this.httpClient)
+    private val friends = FriendsEngine(baseUrl, this.httpClient, this.json)
     private val meetings = MeetingsEngine(baseUrl, this.httpClient, this.json)
     private val files = FilesEngine(baseUrl, this.httpClient)
     private val invitations = InvitationsEngine(baseUrl, this.httpClient, this.json)
