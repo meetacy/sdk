@@ -35,7 +35,7 @@ public fun UserSerializable.type(): User = if (isSelf) {
         id = id.type(),
         email = email?.type(),
         nickname = nickname,
-        emailVerified = emailVerified!!,
+        emailVerified = emailVerified ?: error("Self user must always return emailVerified parameter"),
         username = username?.type(),
         avatarId = avatarId?.type()
     )
@@ -45,6 +45,6 @@ public fun UserSerializable.type(): User = if (isSelf) {
         nickname = nickname,
         username = username?.type(),
         avatarId = avatarId?.type(),
-        relationship = relationship!!.type()
+        relationship = relationship?.type() ?: error("Regular user should always return relationship parameter")
     )
 }

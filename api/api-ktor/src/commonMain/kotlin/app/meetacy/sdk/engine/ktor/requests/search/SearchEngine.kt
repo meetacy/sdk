@@ -4,7 +4,6 @@ import app.meetacy.sdk.engine.requests.SearchRequest
 import app.meetacy.sdk.types.url.Url
 import io.ktor.client.*
 import io.ktor.client.request.*
-import kotlinx.serialization.json.Json
 
 internal class SearchEngine(
     baseUrl: Url,
@@ -12,9 +11,9 @@ internal class SearchEngine(
 ) {
     val baseUrl: Url = baseUrl / "search"
 
-    suspend fun search(request: SearchRequest): SearchRequest.Response {
+    suspend fun search(request: SearchRequest){
         httpClient.get(baseUrl.string) {
-
+            request.location
         }
     }
 }

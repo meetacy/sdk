@@ -2,28 +2,23 @@
 
 package app.meetacy.sdk.engine.ktor.requests.friends
 
-import app.meetacy.sdk.engine.ktor.handleRSocketExceptions
-import app.meetacy.sdk.engine.ktor.mapToLocation
-import app.meetacy.sdk.engine.ktor.mapToRegularUser
-import app.meetacy.sdk.engine.ktor.mapToUser
-import app.meetacy.sdk.engine.ktor.requests.extencion.post
-import app.meetacy.sdk.engine.ktor.models.ListFriendsResponse
-import app.meetacy.sdk.engine.ktor.models.Location as ModelLocation
-import app.meetacy.sdk.engine.ktor.models.StatusTrueResponse
-import app.meetacy.sdk.engine.ktor.models.User as ModelUser
-import app.meetacy.sdk.engine.requests.AddFriendRequest
-import app.meetacy.sdk.engine.requests.DeleteFriendRequest
-import app.meetacy.sdk.engine.requests.EmitFriendsLocationRequest
-import app.meetacy.sdk.engine.requests.ListFriendsRequest
+import app.meetacy.sdk.engine.ktor.*
+import app.meetacy.sdk.engine.ktor.response.StatusTrueResponse
+import app.meetacy.sdk.engine.requests.*
 import app.meetacy.sdk.types.annotation.UnsafeConstructor
 import app.meetacy.sdk.types.datetime.DateTime
 import app.meetacy.sdk.types.location.Location
 import app.meetacy.sdk.types.paging.PagingId
 import app.meetacy.sdk.types.paging.PagingResponse
+import app.meetacy.sdk.types.serializable.user.UserIdSerializable
+import app.meetacy.sdk.types.serializable.user.serializable
 import app.meetacy.sdk.types.url.Url
 import app.meetacy.sdk.types.user.RegularUser
 import app.meetacy.sdk.types.user.UserLocationSnapshot
 import io.ktor.client.*
+import io.ktor.client.call.*
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import io.rsocket.kotlin.ktor.client.rSocket
 import io.rsocket.kotlin.payload.Payload
 import io.rsocket.kotlin.payload.buildPayload
@@ -38,21 +33,23 @@ import kotlinx.serialization.json.put
 
 internal class FriendsEngine(
     baseUrl: Url,
-    private val httpClient: HttpClient,
-    private val json: Json
+    private val httpClient: HttpClient
 ) {
     private val baseUrl =  baseUrl / "friends"
 
-    suspend fun add(request: AddFriendRequest): app.meetacy.sdk.engine.ktor.models.StatusTrueResponse {
+    @Serializable
+    private data class AddFriendBody(val friendId: UserIdSerializable)
+    private fun AddFriendRequest.toBody() = AddFriendBody(friendId.serializable())
+
+    suspend fun add(request: AddFriendRequest): StatusTrueResponse {
         val url =  baseUrl / "add"
-
-        val jsonObject = buildJsonObject {
-            put("friendId", request.friendId.string)
-        }
-
-        val string = post(url.string, jsonObject, httpClient, request)
-
-        return json.decodeFromString<app.meetacy.sdk.engine.ktor.models.StatusTrueResponse>(string)
+        val body = request.toBody()
+        val response = httpClient.post(url.string) {
+            apiVersion(request.apiVersion)
+            token(request.token)
+            setBody(body)
+        }.body<StatusTrueResponse>()
+        return response
     }
 
     suspend fun delete(request: DeleteFriendRequest): app.meetacy.sdk.engine.ktor.models.StatusTrueResponse {
