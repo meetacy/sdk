@@ -9,7 +9,7 @@ import app.meetacy.sdk.types.meeting.MeetingId
 import app.meetacy.sdk.types.optional.Optional
 
 public data class EditMeetingRequest(
-    public override val token: Token,
+    public val token: Token,
     public val meetingId: MeetingId,
     public val title: Optional<String>,
     public val description: Optional<String?>,
@@ -17,6 +17,6 @@ public data class EditMeetingRequest(
     public val date: Optional<Date>,
     public val avatarId: Optional<FileId?>,
     public val visibility: Optional<Meeting.Visibility>
-) : MeetacyRequest<EditMeetingRequest.Response>, MeetacyRequestWithToken<EditMeetingRequest.Response> {
+) : MeetacyRequest<EditMeetingRequest.Response> {
     public data class Response(val meeting: Meeting)
 }

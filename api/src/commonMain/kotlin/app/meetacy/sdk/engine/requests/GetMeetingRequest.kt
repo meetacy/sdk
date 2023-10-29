@@ -5,8 +5,8 @@ import app.meetacy.sdk.types.meeting.Meeting
 import app.meetacy.sdk.types.meeting.MeetingId
 
 public data class GetMeetingRequest(
-    override val token: Token,
+    val token: Token,
     val meetingId: MeetingId
-) : MeetacyRequest<GetMeetingRequest.Response>, MeetacyRequestWithToken<GetMeetingRequest.Response> {
+) : MeetacyRequest<GetMeetingRequest.Response> {
     public data class Response(val meeting: Meeting)
 }

@@ -1,4 +1,4 @@
-package app.meetacy.sdk.types.serializable.pagingId
+package app.meetacy.sdk.types.serializable.paging
 
 import app.meetacy.sdk.types.paging.PagingId
 import kotlinx.serialization.Serializable

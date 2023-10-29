@@ -1,7 +1,6 @@
 package app.meetacy.sdk.types.meeting
 
 import app.meetacy.sdk.types.datetime.Date
-import app.meetacy.sdk.types.datetime.DateOrTime
 import app.meetacy.sdk.types.file.FileId
 import app.meetacy.sdk.types.location.Location
 import app.meetacy.sdk.types.user.User
@@ -16,7 +15,7 @@ public data class Meeting(
     val creator: User,
     val date: Date,
     val location: Location,
-    val title: String,
+    val title: String?,
     val description: String?,
     val participantsCount: Int,
     val previewParticipants: List<User>,

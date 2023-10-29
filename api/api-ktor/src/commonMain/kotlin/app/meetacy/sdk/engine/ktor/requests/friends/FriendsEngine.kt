@@ -6,6 +6,7 @@ import app.meetacy.sdk.engine.ktor.apiVersion
 import app.meetacy.sdk.engine.ktor.handleRSocketExceptions
 import app.meetacy.sdk.engine.ktor.response.ListFriendsResponse
 import app.meetacy.sdk.engine.ktor.response.StatusTrueResponse
+import app.meetacy.sdk.engine.ktor.response.bodyAsSuccess
 import app.meetacy.sdk.engine.ktor.token
 import app.meetacy.sdk.engine.requests.AddFriendRequest
 import app.meetacy.sdk.engine.requests.DeleteFriendRequest
@@ -20,8 +21,8 @@ import app.meetacy.sdk.types.serializable.amount.AmountSerializable
 import app.meetacy.sdk.types.serializable.amount.serializable
 import app.meetacy.sdk.types.serializable.location.LocationSerializable
 import app.meetacy.sdk.types.serializable.location.type
-import app.meetacy.sdk.types.serializable.pagingId.PagingIdSerializable
-import app.meetacy.sdk.types.serializable.pagingId.serializable
+import app.meetacy.sdk.types.serializable.paging.PagingIdSerializable
+import app.meetacy.sdk.types.serializable.paging.serializable
 import app.meetacy.sdk.types.serializable.user.UserIdSerializable
 import app.meetacy.sdk.types.serializable.user.UserSerializable
 import app.meetacy.sdk.types.serializable.user.serializable
@@ -30,7 +31,6 @@ import app.meetacy.sdk.types.url.Url
 import app.meetacy.sdk.types.user.RegularUser
 import app.meetacy.sdk.types.user.UserLocationSnapshot
 import io.ktor.client.*
-import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.rsocket.kotlin.ktor.client.rSocket
 import io.rsocket.kotlin.payload.Payload
@@ -62,7 +62,7 @@ internal class FriendsEngine(
             apiVersion(request.apiVersion)
             token(request.token)
             setBody(body)
-        }.body<StatusTrueResponse>()
+        }.bodyAsSuccess<StatusTrueResponse>()
         return response
     }
 
@@ -77,7 +77,7 @@ internal class FriendsEngine(
             apiVersion(request.apiVersion)
             token(request.token)
             setBody(body)
-        }.body<StatusTrueResponse>()
+        }.bodyAsSuccess<StatusTrueResponse>()
         return response
     }
 
@@ -95,7 +95,7 @@ internal class FriendsEngine(
             apiVersion(request.apiVersion)
             token(request.token)
             setBody(body)
-        }.body<ListFriendsResponse>()
+        }.bodyAsSuccess<ListFriendsResponse>()
 
         val paging = PagingResponse(
             nextPagingId = response.nextPagingId?.let(::PagingId),
