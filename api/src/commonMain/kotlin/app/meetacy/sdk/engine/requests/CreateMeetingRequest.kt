@@ -8,7 +8,7 @@ import app.meetacy.sdk.types.meeting.Meeting
 
 public class CreateMeetingRequest(
     public val token: Token,
-    public val title: String,
+    public val title: String?,
     public val date: Date,
     public val location: Location,
     public val description: String?,

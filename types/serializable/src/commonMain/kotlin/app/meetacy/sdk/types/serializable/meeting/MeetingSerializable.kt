@@ -54,3 +54,8 @@ public fun MeetingSerializable.Visibility.type(): Meeting.Visibility = when (thi
     MeetingSerializable.Visibility.Private -> Meeting.Visibility.Private
 }
 
+public fun Meeting.Visibility.serializable(): MeetingSerializable.Visibility = when (this) {
+    Meeting.Visibility.Public -> MeetingSerializable.Visibility.Public
+    Meeting.Visibility.Private -> MeetingSerializable.Visibility.Private
+}
+
