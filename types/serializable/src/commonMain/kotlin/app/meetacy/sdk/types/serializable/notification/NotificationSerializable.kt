@@ -7,6 +7,7 @@ import app.meetacy.sdk.types.serializable.meeting.MeetingSerializable
 import app.meetacy.sdk.types.serializable.meeting.type
 import app.meetacy.sdk.types.serializable.user.UserSerializable
 import app.meetacy.sdk.types.serializable.user.type
+import app.meetacy.sdk.types.user.RegularUser
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -43,12 +44,12 @@ public fun NotificationSerializable.type(): Notification =
             isNew = isNew,
             meeting = meeting.type(),
             date = date.type(),
-            inviter = inviter.type()
+            inviter = inviter.type() as RegularUser
         )
         is NotificationSerializable.Subscription -> Notification.Subscription(
-            id = id.serializable(),
+            id = id.type(),
             isNew = isNew,
-            subscriber = subscriber.mapToEndpoint(),
-            date = date.serializable()
+            subscriber = subscriber.type() as RegularUser,
+            date = date.type()
         )
     }

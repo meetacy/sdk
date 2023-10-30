@@ -1,9 +1,9 @@
 package app.meetacy.sdk.engine.ktor.requests.updates
 
 import app.meetacy.sdk.engine.ktor.handleRSocketExceptions
-import app.meetacy.sdk.engine.ktor.mapToNotification
 import app.meetacy.sdk.engine.requests.EmitUpdatesRequest
-import app.meetacy.sdk.engine.ktor.models.Notification as ModelNotification
+import app.meetacy.sdk.types.serializable.notification.NotificationSerializable
+import app.meetacy.sdk.types.serializable.notification.type
 import app.meetacy.sdk.types.update.Update
 import app.meetacy.sdk.types.update.UpdateId
 import app.meetacy.sdk.types.url.Url
@@ -64,7 +64,7 @@ private sealed interface UpdateSerializable {
     @Serializable
     data class Notification(
         override val id: String,
-        val notification: ModelNotification
+        val notification: NotificationSerializable
     ) : UpdateSerializable
 }
 
@@ -74,7 +74,7 @@ private fun Payload.decodeToUpdate(json: Json): Update {
     ) {
         is UpdateSerializable.Notification -> Update.Notification(
             id = UpdateId(deserialized.id),
-            notification = deserialized.notification.mapToNotification()
+            notification = deserialized.notification.type()
         )
     }
 }

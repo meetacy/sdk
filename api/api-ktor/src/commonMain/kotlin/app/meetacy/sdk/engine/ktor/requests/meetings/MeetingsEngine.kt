@@ -7,7 +7,7 @@ import app.meetacy.sdk.engine.ktor.response.StatusTrueResponse
 import app.meetacy.sdk.engine.ktor.response.bodyAsSuccess
 import app.meetacy.sdk.engine.ktor.token
 import app.meetacy.sdk.engine.requests.*
-import app.meetacy.sdk.types.optional.ifPresent
+import app.meetacy.sdk.types.optional.map
 import app.meetacy.sdk.types.paging.PagingId
 import app.meetacy.sdk.types.paging.PagingResponse
 import app.meetacy.sdk.types.serializable.amount.AmountSerializable
@@ -22,18 +22,15 @@ import app.meetacy.sdk.types.serializable.meeting.MeetingIdSerializable
 import app.meetacy.sdk.types.serializable.meeting.MeetingSerializable
 import app.meetacy.sdk.types.serializable.meeting.serializable
 import app.meetacy.sdk.types.serializable.meeting.type
+import app.meetacy.sdk.types.serializable.optional.OptionalSerializable
+import app.meetacy.sdk.types.serializable.optional.serializable
 import app.meetacy.sdk.types.serializable.paging.PagingIdSerializable
 import app.meetacy.sdk.types.serializable.paging.serializable
 import app.meetacy.sdk.types.serializable.user.type
 import app.meetacy.sdk.types.url.Url
 import io.ktor.client.*
 import io.ktor.client.request.*
-import io.ktor.content.*
-import io.ktor.http.*
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.buildJsonObject
-import kotlinx.serialization.json.put
-import kotlinx.serialization.json.putJsonObject
 
 internal class MeetingsEngine(
     baseUrl: Url,
@@ -171,44 +168,34 @@ internal class MeetingsEngine(
         return CreateMeetingRequest.Response(response.type())
     }
 
+    @Serializable
+    private data class EditMeetingBody(
+        val meetingId: MeetingIdSerializable,
+        val title: OptionalSerializable<String>,
+        val description: OptionalSerializable<String?>,
+        val location: OptionalSerializable<LocationSerializable>,
+        val date: OptionalSerializable<DateSerializable>,
+        val avatarId: OptionalSerializable<FileIdSerializable?>,
+        val visibility: OptionalSerializable<MeetingSerializable.Visibility>
+    )
+
+    private fun EditMeetingRequest.toBody() = EditMeetingBody(
+        meetingId.serializable(),
+        title.serializable(),
+        description.serializable(),
+        location.map { it.serializable() }.serializable(),
+        date.map { it.serializable() }.serializable(),
+        avatarId.map { it?.serializable() }.serializable(),
+        visibility.map { it.serializable() }.serializable()
+    )
+
     suspend fun editMeeting(request: EditMeetingRequest): EditMeetingRequest.Response = with(request) {
         val url = baseUrl / "edit"
-
-        val jsonObject = buildJsonObject {
-            put("meetingId", meetingId.string)
-
-            title.ifPresent { title ->
-                put("title", title)
-            }
-            description.ifPresent { description ->
-                put("description", description)
-            }
-            location.ifPresent { location ->
-                putJsonObject("location") {
-                    put("latitude", location.latitude)
-                    put("longitude", location.longitude)
-                }
-            }
-            date.ifPresent { date ->
-                put("date", date.iso8601)
-            }
-            avatarId.ifPresent { avatarId ->
-                put("avatarId", avatarId?.string)
-            }
-            visibility.ifPresent { visibility ->
-                put("visibility", visibility.name.lowercase())
-            }
-        }
-
+        val body = request.toBody()
         val response = httpClient.post(url.string) {
-            setBody(
-                TextContent(
-                    text = jsonObject.toString(),
-                    contentType = ContentType.Application.Json
-                )
-            )
-            header("Authorization", request.token.string)
-            header("Api-Version", request.apiVersion.int.toString())
+            apiVersion(request.apiVersion)
+            token(request.token)
+            setBody(body)
         }.bodyAsSuccess<MeetingSerializable>()
 
         return EditMeetingRequest.Response(response.type())

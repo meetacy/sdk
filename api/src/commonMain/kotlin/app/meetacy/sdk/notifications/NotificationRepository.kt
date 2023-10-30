@@ -3,7 +3,7 @@ package app.meetacy.sdk.notifications
 import app.meetacy.sdk.MeetacyApi
 import app.meetacy.sdk.meetings.MeetingRepository
 import app.meetacy.sdk.types.auth.Token
-import app.meetacy.sdk.types.datetime.Date
+import app.meetacy.sdk.types.datetime.DateTime
 import app.meetacy.sdk.types.notification.Notification
 import app.meetacy.sdk.types.notification.NotificationId
 import app.meetacy.sdk.users.RegularUserRepository
@@ -19,7 +19,7 @@ public sealed class NotificationRepository {
 
     public val id: NotificationId get() = data.id
     public val isNew: Boolean get() = data.isNew
-    public val date: Date get() = data.date
+    public val date: DateTime get() = data.date
 
     public suspend fun read(token: Token) {
         api.notifications.read(token, id)

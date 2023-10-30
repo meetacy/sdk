@@ -3,6 +3,7 @@ package app.meetacy.sdk.types.serializable.user
 import app.meetacy.sdk.types.serializable.email.EmailSerializable
 import app.meetacy.sdk.types.serializable.email.type
 import app.meetacy.sdk.types.serializable.file.FileIdSerializable
+import app.meetacy.sdk.types.serializable.file.serializable
 import app.meetacy.sdk.types.serializable.file.type
 import app.meetacy.sdk.types.user.RegularUser
 import app.meetacy.sdk.types.user.SelfUser
@@ -48,3 +49,12 @@ public fun UserSerializable.type(): User = if (isSelf) {
         relationship = relationship?.type() ?: error("Regular user should always return relationship parameter")
     )
 }
+
+public fun User.serializable(): UserSerializable = UserSerializable(
+    isSelf = isSelf,
+    relationship = relationship?.serializable(),
+    id = id.serializable(),
+    nickname = nickname,
+    username = username?.serializable(),
+    avatarId = avatarId?.serializable()
+)

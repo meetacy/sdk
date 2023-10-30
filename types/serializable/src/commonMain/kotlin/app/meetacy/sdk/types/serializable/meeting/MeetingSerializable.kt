@@ -2,12 +2,16 @@ package app.meetacy.sdk.types.serializable.meeting
 
 import app.meetacy.sdk.types.meeting.Meeting
 import app.meetacy.sdk.types.serializable.datetime.DateSerializable
+import app.meetacy.sdk.types.serializable.datetime.serializable
 import app.meetacy.sdk.types.serializable.datetime.type
 import app.meetacy.sdk.types.serializable.file.FileIdSerializable
+import app.meetacy.sdk.types.serializable.file.serializable
 import app.meetacy.sdk.types.serializable.file.type
 import app.meetacy.sdk.types.serializable.location.LocationSerializable
+import app.meetacy.sdk.types.serializable.location.serializable
 import app.meetacy.sdk.types.serializable.location.type
 import app.meetacy.sdk.types.serializable.user.UserSerializable
+import app.meetacy.sdk.types.serializable.user.serializable
 import app.meetacy.sdk.types.serializable.user.type
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -58,4 +62,18 @@ public fun Meeting.Visibility.serializable(): MeetingSerializable.Visibility = w
     Meeting.Visibility.Public -> MeetingSerializable.Visibility.Public
     Meeting.Visibility.Private -> MeetingSerializable.Visibility.Private
 }
+
+public fun Meeting.serializable(): MeetingSerializable = MeetingSerializable(
+    id = id.serializable(),
+    creator = creator.serializable(),
+    date = date.serializable(),
+    location = location.serializable(),
+    title = title,
+    description = description,
+    participantsCount = participantsCount,
+    previewParticipants = previewParticipants.map { it.serializable() },
+    isParticipating = isParticipating,
+    avatarIdentity = avatarId?.serializable(),
+    visibility = visibility.serializable()
+)
 
