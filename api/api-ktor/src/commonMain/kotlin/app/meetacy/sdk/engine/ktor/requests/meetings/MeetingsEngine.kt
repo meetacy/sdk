@@ -29,6 +29,7 @@ import app.meetacy.sdk.types.serializable.paging.serializable
 import app.meetacy.sdk.types.serializable.user.type
 import app.meetacy.sdk.types.url.Url
 import io.ktor.client.*
+import io.ktor.client.call.*
 import io.ktor.client.request.*
 import kotlinx.serialization.Serializable
 
@@ -140,17 +141,17 @@ internal class MeetingsEngine(
     @Serializable
     private data class CreateMeetingBody(
         val title: String?,
+        val description: String?,
         val date: DateSerializable,
         val location: LocationSerializable,
-        val description: String?,
         val visibility: MeetingSerializable.Visibility,
-        val fileId: FileIdSerializable?
+        val avatarId: FileIdSerializable?
     )
     private fun CreateMeetingRequest.toBody() = CreateMeetingBody(
         title,
+        description,
         date.serializable(),
         location.serializable(),
-        description,
         visibility.serializable(),
         fileId?.serializable()
     )
@@ -171,22 +172,22 @@ internal class MeetingsEngine(
     @Serializable
     private data class EditMeetingBody(
         val meetingId: MeetingIdSerializable,
-        val title: OptionalSerializable<String>,
-        val description: OptionalSerializable<String?>,
-        val location: OptionalSerializable<LocationSerializable>,
-        val date: OptionalSerializable<DateSerializable>,
-        val avatarId: OptionalSerializable<FileIdSerializable?>,
-        val visibility: OptionalSerializable<MeetingSerializable.Visibility>
+        val title: String?,
+        val description: String?,
+        val location: LocationSerializable?,
+        val date: DateSerializable?,
+        val avatarId: OptionalSerializable<FileIdSerializable?> = OptionalSerializable.Undefined,
+        val visibility: MeetingSerializable.Visibility?
     )
 
     private fun EditMeetingRequest.toBody() = EditMeetingBody(
         meetingId.serializable(),
-        title.serializable(),
-        description.serializable(),
-        location.map { it.serializable() }.serializable(),
-        date.map { it.serializable() }.serializable(),
+        title,
+        description,
+        location?.serializable(),
+        date?.serializable(),
         avatarId.map { it?.serializable() }.serializable(),
-        visibility.map { it.serializable() }.serializable()
+        visibility?.serializable()
     )
 
     suspend fun editMeeting(request: EditMeetingRequest): EditMeetingRequest.Response = with(request) {
@@ -243,7 +244,7 @@ internal class MeetingsEngine(
             apiVersion(request.apiVersion)
             token(request.token)
             setBody(body)
-        }.bodyAsSuccess<StatusTrueResponse>()
+        }.body<StatusTrueResponse>()
     }
 
     @Serializable

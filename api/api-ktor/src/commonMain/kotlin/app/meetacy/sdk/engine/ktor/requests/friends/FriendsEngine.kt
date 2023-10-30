@@ -31,6 +31,7 @@ import app.meetacy.sdk.types.url.Url
 import app.meetacy.sdk.types.user.RegularUser
 import app.meetacy.sdk.types.user.UserLocationSnapshot
 import io.ktor.client.*
+import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.rsocket.kotlin.ktor.client.rSocket
 import io.rsocket.kotlin.payload.Payload
@@ -62,7 +63,7 @@ internal class FriendsEngine(
             apiVersion(request.apiVersion)
             token(request.token)
             setBody(body)
-        }.bodyAsSuccess<StatusTrueResponse>()
+        }.body<StatusTrueResponse>()
         return response
     }
 
@@ -77,7 +78,7 @@ internal class FriendsEngine(
             apiVersion(request.apiVersion)
             token(request.token)
             setBody(body)
-        }.bodyAsSuccess<StatusTrueResponse>()
+        }.body<StatusTrueResponse>()
         return response
     }
 

@@ -18,6 +18,7 @@ import app.meetacy.sdk.types.serializable.user.UserIdSerializable
 import app.meetacy.sdk.types.serializable.user.serializable
 import app.meetacy.sdk.types.url.Url
 import io.ktor.client.*
+import io.ktor.client.call.*
 import io.ktor.client.request.*
 import kotlinx.serialization.Serializable
 
@@ -63,7 +64,7 @@ internal class InvitationsEngine(
             apiVersion(request.apiVersion)
             token(request.token)
             setBody(body)
-        }.bodyAsSuccess<StatusTrueResponse>()
+        }.body<StatusTrueResponse>()
     }
 
     @Serializable
@@ -79,7 +80,7 @@ internal class InvitationsEngine(
             apiVersion(request.apiVersion)
             token(request.token)
             setBody(body)
-        }.bodyAsSuccess<StatusTrueResponse>()
+        }.body<StatusTrueResponse>()
     }
 
     @Serializable
@@ -95,6 +96,6 @@ internal class InvitationsEngine(
             apiVersion(request.apiVersion)
             token(request.token)
             setBody(body)
-        }.bodyAsSuccess<StatusTrueResponse>()
+        }.body<StatusTrueResponse>()
     }
 }

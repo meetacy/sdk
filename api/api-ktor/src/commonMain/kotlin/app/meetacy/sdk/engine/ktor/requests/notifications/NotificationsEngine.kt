@@ -18,6 +18,7 @@ import app.meetacy.sdk.types.serializable.paging.PagingIdSerializable
 import app.meetacy.sdk.types.serializable.paging.serializable
 import app.meetacy.sdk.types.url.Url
 import io.ktor.client.*
+import io.ktor.client.call.*
 import io.ktor.client.request.*
 import kotlinx.serialization.Serializable
 
@@ -64,6 +65,6 @@ internal class NotificationsEngine(
             apiVersion(request.apiVersion)
             token(request.token)
             setBody(body)
-        }.bodyAsSuccess<StatusTrueResponse>()
+        }.body<StatusTrueResponse>()
     }
 }

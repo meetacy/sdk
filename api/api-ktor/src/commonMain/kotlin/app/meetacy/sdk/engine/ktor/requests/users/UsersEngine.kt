@@ -56,9 +56,9 @@ internal class UsersEngine(
 
     @Serializable
     private data class EditUserBody(
-        val nickname: OptionalSerializable<String>,
-        val avatarId: OptionalSerializable<FileIdSerializable?>,
-        val username: OptionalSerializable<UsernameSerializable?>
+        val nickname: OptionalSerializable<String> = OptionalSerializable.Undefined,
+        val avatarId: OptionalSerializable<FileIdSerializable?> = OptionalSerializable.Undefined,
+        val username: OptionalSerializable<UsernameSerializable?> = OptionalSerializable.Undefined
     )
 
     private fun EditUserRequest.toBody() = EditUserBody(
