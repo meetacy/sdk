@@ -40,7 +40,6 @@ internal class UsersEngine(
 
     @Serializable
     private data class GetUserBody(val id: UserIdSerializable?)
-
     private fun GetUserRequest.toBody() = GetUserBody(userId?.serializable())
 
     suspend fun getUser(request: GetUserRequest): GetUserRequest.Response {
