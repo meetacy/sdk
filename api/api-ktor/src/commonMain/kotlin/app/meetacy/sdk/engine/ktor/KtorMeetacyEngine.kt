@@ -42,6 +42,10 @@ public class KtorMeetacyEngine(
     }
 
     private val httpClient = httpClient.config {
+
+        expectSuccess = true
+        install(WebSockets)
+        install(RSocketSupport)
         install(ContentNegotiation) {
             Json(json) {
                 ignoreUnknownKeys = true
@@ -50,9 +54,6 @@ public class KtorMeetacyEngine(
         defaultRequest {
             header(HttpHeaders.ContentType, ContentType.Application.Json.toString())
         }
-        expectSuccess = true
-        install(WebSockets)
-        install(RSocketSupport)
     }
 
     private val auth = AuthEngine(baseUrl, this.httpClient)

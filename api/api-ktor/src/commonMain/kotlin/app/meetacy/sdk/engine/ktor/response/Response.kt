@@ -3,15 +3,11 @@ package app.meetacy.sdk.engine.ktor.response
 import io.ktor.client.call.*
 import io.ktor.client.statement.*
 import io.rsocket.kotlin.payload.Payload
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.builtins.NothingSerializer
-import kotlinx.serialization.builtins.nullable
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.Json
-import kotlin.reflect.KClass
 
 @Serializable(with = ServerResponse.Serializer::class)
 internal sealed interface ServerResponse<out T> {
@@ -22,7 +18,7 @@ internal sealed interface ServerResponse<out T> {
     ) : ServerResponse<Nothing>
 
     @Serializable
-    data class Success<T>(val data: T) : ServerResponse<T>
+    data class Success<T>(val result: T) : ServerResponse<T>
 
     @Suppress("UNCHECKED_CAST")
     class Serializer<T>(subSerializer: KSerializer<T>) : KSerializer<ServerResponse<T>> {
@@ -41,7 +37,7 @@ internal sealed interface ServerResponse<out T> {
         override fun serialize(encoder: Encoder, value: ServerResponse<T>) {
             val data = Data(
                 status = value is Success,
-                data = (value as? Success)?.data,
+                data = (value as? Success)?.result,
                 errorCode = (value as? Error)?.errorCode,
                 errorMessage = (value as? Error)?.errorMessage
             )
@@ -67,6 +63,6 @@ internal fun <T> Payload.decodeToServerResponse(
     )
 }
 
-internal suspend inline fun <reified T> HttpResponse.bodyAsSuccess(): T {
-    return body<ServerResponse.Success<T>>().data
+internal suspend inline fun <reified T : Any> HttpResponse.bodyAsSuccess(): T {
+    return body<ServerResponse.Success<T>>().result
 }
