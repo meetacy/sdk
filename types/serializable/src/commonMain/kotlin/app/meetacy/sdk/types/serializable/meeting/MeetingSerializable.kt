@@ -23,11 +23,11 @@ public data class MeetingSerializable(
     val date: DateSerializable,
     val location: LocationSerializable,
     val title: String?,
-    val description: String?,
+    val description: String? = null,
     val participantsCount: Int,
     val previewParticipants: List<UserSerializable>,
     val isParticipating: Boolean,
-    val avatarIdentity: FileIdSerializable?,
+    val avatarId: FileIdSerializable? = null,
     val visibility: Visibility
 ) {
     @Serializable
@@ -49,7 +49,7 @@ public fun MeetingSerializable.type(): Meeting = Meeting(
     participantsCount = participantsCount,
     previewParticipants = previewParticipants.map { it.type() },
     isParticipating = isParticipating,
-    avatarId = avatarIdentity?.type(),
+    avatarId = avatarId?.type(),
     visibility = visibility.type()
 )
 
@@ -73,7 +73,7 @@ public fun Meeting.serializable(): MeetingSerializable = MeetingSerializable(
     participantsCount = participantsCount,
     previewParticipants = previewParticipants.map { it.serializable() },
     isParticipating = isParticipating,
-    avatarIdentity = avatarId?.serializable(),
+    avatarId = avatarId?.serializable(),
     visibility = visibility.serializable()
 )
 
