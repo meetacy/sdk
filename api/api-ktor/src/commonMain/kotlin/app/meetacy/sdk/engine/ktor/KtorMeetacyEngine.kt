@@ -22,6 +22,7 @@ import app.meetacy.sdk.types.url.parametersOf
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.*
+import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.plugins.websocket.*
 import io.ktor.utils.io.errors.*
 import io.rsocket.kotlin.ktor.client.RSocketSupport
@@ -39,8 +40,13 @@ public class KtorMeetacyEngine(
     }
 
     private val httpClient = httpClient.config {
-        expectSuccess = true
+        install(ContentNegotiation) {
+            Json(json) {
+                ignoreUnknownKeys = true
+            }
+        }
 
+        expectSuccess = true
         install(WebSockets)
         install(RSocketSupport)
     }
