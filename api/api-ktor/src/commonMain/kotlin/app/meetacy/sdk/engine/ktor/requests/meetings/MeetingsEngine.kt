@@ -117,10 +117,9 @@ internal class MeetingsEngine(
 
     @Serializable
     private data class ListMeetingsMapBody(
-        val latitude: Double,
-        val longitude: Double
+        val location: LocationSerializable
     )
-    private fun ListMeetingsMapRequest.toBody() = ListMeetingsMapBody(location.latitude, location.longitude)
+    private fun ListMeetingsMapRequest.toBody() = ListMeetingsMapBody(location.serializable())
 
     suspend fun listMeetingsMap(
         request: ListMeetingsMapRequest

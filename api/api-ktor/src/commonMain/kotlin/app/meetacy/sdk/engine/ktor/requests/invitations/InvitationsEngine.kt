@@ -1,7 +1,6 @@
 package app.meetacy.sdk.engine.ktor.requests.invitations
 
 import app.meetacy.sdk.engine.ktor.apiVersion
-import app.meetacy.sdk.engine.ktor.response.CreateInvitationResponse
 import app.meetacy.sdk.engine.ktor.response.StatusTrueResponse
 import app.meetacy.sdk.engine.ktor.response.bodyAsSuccess
 import app.meetacy.sdk.engine.ktor.token
@@ -10,6 +9,7 @@ import app.meetacy.sdk.engine.requests.CancelInvitationRequest
 import app.meetacy.sdk.engine.requests.CreateInvitationRequest
 import app.meetacy.sdk.engine.requests.DenyInvitationRequest
 import app.meetacy.sdk.types.serializable.invitation.InvitationIdSerializable
+import app.meetacy.sdk.types.serializable.invitation.InvitationSerializable
 import app.meetacy.sdk.types.serializable.invitation.serializable
 import app.meetacy.sdk.types.serializable.invitation.type
 import app.meetacy.sdk.types.serializable.meeting.MeetingIdSerializable
@@ -47,7 +47,7 @@ internal class InvitationsEngine(
             apiVersion(request.apiVersion)
             token(request.token)
             setBody(body)
-        }.bodyAsSuccess<CreateInvitationResponse>().result
+        }.bodyAsSuccess<InvitationSerializable>()
         return CreateInvitationRequest.Response(response.type())
     }
 
