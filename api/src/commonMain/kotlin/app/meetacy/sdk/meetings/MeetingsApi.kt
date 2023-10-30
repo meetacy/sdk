@@ -28,7 +28,7 @@ public class MeetingsApi(private val api: MeetacyApi) {
 
     public suspend fun create(
         token: Token,
-        title: String,
+        title: String?,
         date: Date,
         location: Location,
         description: String? = null,
@@ -62,23 +62,23 @@ public class MeetingsApi(private val api: MeetacyApi) {
     ): MeetingRepository = edit(
         token = token,
         meetingId = meetingId,
-        title = Optional.Present(title),
-        date = Optional.Present(date),
-        location = Optional.Present(location),
-        description = Optional.Present(description),
+        title = title,
+        date = date,
+        location = location,
+        description = description,
         avatarId = Optional.Present(avatarId),
-        visibility = Optional.Present(visibility),
+        visibility = visibility,
     )
 
     public suspend fun edit(
         token: Token,
         meetingId: MeetingId,
-        title: Optional<String> = Optional.Undefined,
-        date: Optional<Date> = Optional.Undefined,
-        location: Optional<Location> = Optional.Undefined,
-        description: Optional<String?> = Optional.Undefined,
+        title: String?,
+        date: Date?,
+        location: Location?,
+        description: String?,
         avatarId: Optional<FileId?> = Optional.Undefined,
-        visibility: Optional<Meeting.Visibility> = Optional.Undefined
+        visibility: Meeting.Visibility?
     ): MeetingRepository {
         val meeting = api.engine.execute(
             EditMeetingRequest(
