@@ -14,7 +14,7 @@ public data class InvitationSerializable(
     val invitedUser: UserSerializable,
     val inviterUser: UserSerializable,
     val meeting: MeetingSerializable,
-    val isAccepted: Boolean?
+    val isAccepted: Boolean? = null
 )
 
 public fun InvitationSerializable.type(): Invitation = Invitation(

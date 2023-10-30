@@ -77,7 +77,7 @@ internal class MeetingsEngine(
     ): ListActiveMeetingsRequest.Response {
         val url = baseUrl / "history" / "active"
         val body = request.toBody()
-        val response = httpClient.post(url.string) {
+        val response = httpClient.get(url.string) {
             apiVersion(request.apiVersion)
             token(request.token)
             setBody(body)
