@@ -23,6 +23,8 @@ import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.*
 import io.ktor.client.plugins.websocket.*
+import io.ktor.client.request.*
+import io.ktor.http.*
 import io.ktor.utils.io.errors.*
 import io.rsocket.kotlin.ktor.client.RSocketSupport
 import kotlinx.coroutines.CancellationException
@@ -43,6 +45,9 @@ public class KtorMeetacyEngine(
 
         install(WebSockets)
         install(RSocketSupport)
+        defaultRequest {
+            header(HttpHeaders.ContentType, ContentType.Application.Json.contentType)
+        }
     }
 
     private val auth = AuthEngine(baseUrl, this.httpClient)

@@ -7,7 +7,6 @@ import app.meetacy.sdk.engine.requests.EditUserRequest
 import app.meetacy.sdk.engine.requests.GetMeRequest
 import app.meetacy.sdk.engine.requests.GetUserRequest
 import app.meetacy.sdk.engine.requests.UsernameAvailableRequest
-import app.meetacy.sdk.types.annotation.UnsafeConstructor
 import app.meetacy.sdk.types.optional.map
 import app.meetacy.sdk.types.serializable.file.FileIdSerializable
 import app.meetacy.sdk.types.serializable.file.serializable
@@ -88,7 +87,6 @@ internal class UsersEngine(
     )
 
 
-    @OptIn(UnsafeConstructor::class)
     suspend fun usernameAvailable(request: UsernameAvailableRequest): UsernameAvailableRequest.Response {
         val url = baseUrl / "username" / "available"
         val body = request.toBody()
