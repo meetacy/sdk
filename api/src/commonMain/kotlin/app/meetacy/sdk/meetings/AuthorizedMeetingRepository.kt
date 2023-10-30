@@ -40,21 +40,21 @@ public class AuthorizedMeetingRepository(
         avatarId: FileId?,
         visibility: Meeting.Visibility
     ): AuthorizedMeetingRepository = edited(
-        title = Optional.Present(title),
-        date = Optional.Present(date),
-        location = Optional.Present(location),
-        description = Optional.Present(description),
+        title = title,
+        date = date,
+        location = location,
+        description = description,
         avatarId = Optional.Present(avatarId),
-        visibility = Optional.Present(visibility),
+        visibility = visibility,
     )
 
     public suspend fun edited(
-        title: Optional<String> = Optional.Undefined,
-        date: Optional<Date> = Optional.Undefined,
-        location: Optional<Location> = Optional.Undefined,
-        description: Optional<String?> = Optional.Undefined,
+        title: String?,
+        date: Date?,
+        location: Location?,
+        description: String?,
         avatarId: Optional<FileId?> = Optional.Undefined,
-        visibility: Optional<Meeting.Visibility> = Optional.Undefined
+        visibility: Meeting.Visibility?
     ): AuthorizedMeetingRepository {
         return api.meetings.edit(
             meetingId = data.id,
