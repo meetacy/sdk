@@ -17,9 +17,9 @@ public data class UserSerializable(
     public val id: UserIdSerializable,
     @SerialName("nickname")
     public val nickname: String,
-    @SerialName("avatar_id")
+    @SerialName("avatarId")
     public val avatarId: FileIdSerializable?,
-    @SerialName("is_self")
+    @SerialName("isSelf")
     public val isSelf: Boolean,
     @SerialName("username")
     public val username: UsernameSerializable?,
@@ -27,7 +27,7 @@ public data class UserSerializable(
     public val relationship: RelationshipSerializable? = null,
     @SerialName("email")
     public val email: EmailSerializable? = null,
-    @SerialName("email_verified")
+    @SerialName("emailVerified")
     public val emailVerified: Boolean? = null
 )
 

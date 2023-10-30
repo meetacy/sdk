@@ -17,7 +17,6 @@ public sealed class NotificationSerializable {
     public abstract val isNew: Boolean
     public abstract val date: DateTimeSerializable
 
-    @SerialName("subscription")
     @Serializable
     public class Subscription(
         override val isNew: Boolean,
@@ -26,7 +25,6 @@ public sealed class NotificationSerializable {
         public val subscriber: UserSerializable,
     ) : NotificationSerializable()
 
-    @SerialName("meeting_invitation")
     @Serializable
     public class Invitation(
         override val id: NotificationIdSerializable,
