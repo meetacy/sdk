@@ -18,11 +18,11 @@ public data class UserSerializable(
     @SerialName("nickname")
     public val nickname: String,
     @SerialName("avatarId")
-    public val avatarId: FileIdSerializable?,
+    public val avatarId: FileIdSerializable? = null,
     @SerialName("isSelf")
     public val isSelf: Boolean,
     @SerialName("username")
-    public val username: UsernameSerializable?,
+    public val username: UsernameSerializable? = null,
     @SerialName("relationship")
     public val relationship: RelationshipSerializable? = null,
     @SerialName("email")
