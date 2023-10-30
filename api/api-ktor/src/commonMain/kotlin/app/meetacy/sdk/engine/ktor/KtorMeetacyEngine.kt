@@ -51,7 +51,7 @@ public class KtorMeetacyEngine(
     private val meetings = MeetingsEngine(baseUrl, this.httpClient)
     private val files = FilesEngine(baseUrl, this.httpClient)
     private val invitations = InvitationsEngine(baseUrl, this.httpClient)
-    private val notifications = NotificationsEngine(baseUrl, this.httpClient, this.json)
+    private val notifications = NotificationsEngine(baseUrl, this.httpClient)
     private val search = SearchEngine(baseUrl, this.httpClient)
     private val updates = UpdatesEngine(baseUrl, this.httpClient, this.json)
 
