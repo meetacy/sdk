@@ -26,6 +26,7 @@ import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.plugins.websocket.*
 import io.ktor.client.request.*
 import io.ktor.http.*
+import io.ktor.serialization.kotlinx.json.*
 import io.ktor.utils.io.errors.*
 import io.rsocket.kotlin.ktor.client.RSocketSupport
 import kotlinx.coroutines.CancellationException
@@ -42,17 +43,14 @@ public class KtorMeetacyEngine(
     }
 
     private val httpClient = httpClient.config {
-
         expectSuccess = true
         install(WebSockets)
         install(RSocketSupport)
         install(ContentNegotiation) {
-            Json(json) {
-                ignoreUnknownKeys = true
-            }
+            json(json)
         }
         defaultRequest {
-            header(HttpHeaders.ContentType, ContentType.Application.Json.toString())
+            header(HttpHeaders.ContentType, ContentType.Application.Json)
         }
     }
 

@@ -12,6 +12,7 @@ dependencies {
     commonMainImplementation(libs.ktorClientWebSockets)
     commonMainImplementation(libs.rsocketKtorClient)
     commonMainImplementation(libs.ktorClientContentNegotiation)
+    commonMainImplementation(libs.ktorSerializationJson)
 
     commonMainApi(projects.api)
     commonMainImplementation(projects.types.serializable)
