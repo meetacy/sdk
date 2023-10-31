@@ -11,12 +11,12 @@ import app.meetacy.sdk.types.optional.Optional
 public data class EditMeetingRequest(
     public val token: Token,
     public val meetingId: MeetingId,
-    public val avatarId: Optional<FileId?> = Optional.Undefined,
-    public val title: String?,
-    public val description: String?,
-    public val location: Location?,
-    public val date: Date?,
-    public val visibility: Meeting.Visibility?
+    public val title: Optional<String>,
+    public val description: Optional<String?>,
+    public val location: Optional<Location>,
+    public val date: Optional<Date>,
+    public val avatarId: Optional<FileId?>,
+    public val visibility: Optional<Meeting.Visibility>
 ) : MeetacyRequest<EditMeetingRequest.Response> {
     public data class Response(val meeting: Meeting)
 }

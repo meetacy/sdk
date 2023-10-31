@@ -55,22 +55,22 @@ public class AuthorizedMeetingsApi(
         visibility: Meeting.Visibility
     ): AuthorizedMeetingRepository = edit(
         meetingId = meetingId,
-        title = title,
-        date = date,
-        location = location,
-        description = description,
+        title = Optional.Present(title),
+        date = Optional.Present(date),
+        location = Optional.Present(location),
+        description = Optional.Present(description),
         avatarId = Optional.Present(avatarId),
-        visibility = visibility
+        visibility = Optional.Present(visibility),
     )
 
     public suspend fun edit(
         meetingId: MeetingId,
-        title: String?,
-        date: Date?,
-        location: Location?,
-        description: String?,
+        title: Optional<String> = Optional.Undefined,
+        date: Optional<Date> = Optional.Undefined,
+        location: Optional<Location> = Optional.Undefined,
+        description: Optional<String?> = Optional.Undefined,
         avatarId: Optional<FileId?> = Optional.Undefined,
-        visibility: Meeting.Visibility?
+        visibility: Optional<Meeting.Visibility> = Optional.Undefined
     ): AuthorizedMeetingRepository {
         val meeting = api.base.meetings.edit(
             token = api.token,
