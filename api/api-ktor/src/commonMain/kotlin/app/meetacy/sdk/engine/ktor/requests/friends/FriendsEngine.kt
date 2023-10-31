@@ -48,7 +48,7 @@ import kotlinx.serialization.json.put
 internal class FriendsEngine(
     baseUrl: Url,
     private val httpClient: HttpClient,
-    val json: Json
+    private val json: Json
 ) {
     private val baseUrl =  baseUrl / "friends"
 
@@ -149,14 +149,14 @@ private fun Location.encodeToPayload(): Payload = buildPayload {
 }
 
 @Serializable
-private data class ModelUserLocationSnapshotSerializable(
+private data class UserLocationSnapshotSerializable(
     val user: UserSerializable,
     val location: LocationSerializable,
     val capturedAt: String
 )
 
 private fun Payload.decodeToUserLocationSnapshot(json: Json): UserLocationSnapshot {
-    val deserialized = json.decodeFromString<ModelUserLocationSnapshotSerializable>(data.readText())
+    val deserialized = json.decodeFromString<UserLocationSnapshotSerializable>(data.readText())
 
     return UserLocationSnapshot(
         user = deserialized.user.type() as RegularUser,
