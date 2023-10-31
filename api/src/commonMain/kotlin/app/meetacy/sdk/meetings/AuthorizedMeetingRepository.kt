@@ -21,7 +21,7 @@ public class AuthorizedMeetingRepository(
     public val creator: User get() = data.creator
     public val date: Date get() = data.date
     public val location: Location get() = data.location
-    public val title: String? get() = data.title
+    public val title: String get() = data.title
     public val description: String? get() = data.description
     public val participantsCount: Int get() = data.participantsCount
     public val previewParticipants: List<User> get() = data.previewParticipants
