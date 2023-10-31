@@ -171,12 +171,12 @@ internal class MeetingsEngine(
     @Serializable
     private data class EditMeetingBody(
         val meetingId: MeetingIdSerializable,
-        val title: OptionalSerializable<String>,
-        val description: OptionalSerializable<String?>,
-        val location: OptionalSerializable<LocationSerializable>,
-        val date: OptionalSerializable<DateSerializable>,
+        val title: OptionalSerializable<String> = OptionalSerializable.Undefined,
+        val description: OptionalSerializable<String?> = OptionalSerializable.Undefined,
+        val location: OptionalSerializable<LocationSerializable> = OptionalSerializable.Undefined,
+        val date: OptionalSerializable<DateSerializable> = OptionalSerializable.Undefined,
         val avatarId: OptionalSerializable<FileIdSerializable?> = OptionalSerializable.Undefined,
-        val visibility: OptionalSerializable<MeetingSerializable.Visibility>
+        val visibility: OptionalSerializable<MeetingSerializable.Visibility> = OptionalSerializable.Undefined
     )
 
     private fun EditMeetingRequest.toBody() = EditMeetingBody(
