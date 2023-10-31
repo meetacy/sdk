@@ -21,7 +21,7 @@ public class AuthorizedMeetingRepository(
     public val creator: User get() = data.creator
     public val date: Date get() = data.date
     public val location: Location get() = data.location
-    public val title: String? get() = data.title
+    public val title: String get() = data.title
     public val description: String? get() = data.description
     public val participantsCount: Int get() = data.participantsCount
     public val previewParticipants: List<User> get() = data.previewParticipants
@@ -33,28 +33,28 @@ public class AuthorizedMeetingRepository(
         AuthorizedMeetingParticipantsRepository(data.id, api)
 
     public suspend fun edited(
-        title: String? = null,
-        date: Date? = null,
-        location: Location? = null,
-        description: String? = null,
-        avatarId: FileId? = null,
-        visibility: Meeting.Visibility? = null
+        title: String,
+        date: Date,
+        location: Location,
+        description: String?,
+        avatarId: FileId?,
+        visibility: Meeting.Visibility
     ): AuthorizedMeetingRepository = edited(
-        title = title,
-        date = date,
-        location = location,
-        description = description,
+        title = Optional.Present(title),
+        date = Optional.Present(date),
+        location = Optional.Present(location),
+        description = Optional.Present(description),
         avatarId = Optional.Present(avatarId),
-        visibility = visibility,
+        visibility = Optional.Present(visibility),
     )
 
     public suspend fun edited(
-        title: String?,
-        date: Date?,
-        location: Location?,
-        description: String?,
+        title: Optional<String> = Optional.Undefined,
+        date: Optional<Date> = Optional.Undefined,
+        location: Optional<Location> = Optional.Undefined,
+        description: Optional<String?> = Optional.Undefined,
         avatarId: Optional<FileId?> = Optional.Undefined,
-        visibility: Meeting.Visibility?
+        visibility: Optional<Meeting.Visibility> = Optional.Undefined
     ): AuthorizedMeetingRepository {
         return api.meetings.edit(
             meetingId = data.id,

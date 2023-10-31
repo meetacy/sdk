@@ -15,7 +15,7 @@ public data class Meeting(
     val creator: User,
     val date: Date,
     val location: Location,
-    val title: String?,
+    val title: String,
     val description: String?,
     val participantsCount: Int,
     val previewParticipants: List<User>,

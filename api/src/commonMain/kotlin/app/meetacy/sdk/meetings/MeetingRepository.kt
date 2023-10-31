@@ -24,7 +24,7 @@ public class MeetingRepository(
     public val creator: User get() = data.creator
     public val date: Date get() = data.date
     public val location: Location get() = data.location
-    public val title: String? get() = data.title
+    public val title: String get() = data.title
     public val description: String? get() = data.description
     public val participantsCount: Int get() = data.participantsCount
     public val previewParticipants: List<User> get() = data.previewParticipants
@@ -36,30 +36,30 @@ public class MeetingRepository(
 
     public suspend fun edited(
         token: Token,
-        title: String?,
-        date: Date?,
-        location: Location?,
+        title: String,
+        date: Date,
+        location: Location,
         description: String?,
         avatarId: FileId?,
-        visibility: Meeting.Visibility?
+        visibility: Meeting.Visibility
     ): MeetingRepository = edited(
         token = token,
-        title = title,
-        date = date,
-        location = location,
-        description = description,
+        title = Optional.Present(title),
+        date = Optional.Present(date),
+        location = Optional.Present(location),
+        description = Optional.Present(description),
         avatarId = Optional.Present(avatarId),
-        visibility = visibility,
+        visibility = Optional.Present(visibility),
     )
 
     public suspend fun edited(
         token: Token,
-        title: String?,
-        date: Date?,
-        location: Location?,
-        description: String?,
+        title: Optional<String> = Optional.Undefined,
+        date: Optional<Date> = Optional.Undefined,
+        location: Optional<Location> = Optional.Undefined,
+        description: Optional<String?> = Optional.Undefined,
         avatarId: Optional<FileId?> = Optional.Undefined,
-        visibility: Meeting.Visibility?
+        visibility: Optional<Meeting.Visibility> = Optional.Undefined
     ): MeetingRepository {
         return api.meetings.edit(
             token = token,
