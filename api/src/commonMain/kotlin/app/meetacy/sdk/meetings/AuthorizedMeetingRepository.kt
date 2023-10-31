@@ -36,7 +36,7 @@ public class AuthorizedMeetingRepository(
         title: String,
         date: Date,
         location: Location,
-        description: String?,
+        description: String,
         avatarId: FileId?,
         visibility: Meeting.Visibility
     ): AuthorizedMeetingRepository = edited(
@@ -52,7 +52,7 @@ public class AuthorizedMeetingRepository(
         title: Optional<String> = Optional.Undefined,
         date: Optional<Date> = Optional.Undefined,
         location: Optional<Location> = Optional.Undefined,
-        description: Optional<String?> = Optional.Undefined,
+        description: Optional<String> = Optional.Undefined,
         avatarId: Optional<FileId?> = Optional.Undefined,
         visibility: Optional<Meeting.Visibility> = Optional.Undefined
     ): AuthorizedMeetingRepository {
