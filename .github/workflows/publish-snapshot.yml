@@ -31,6 +31,9 @@ jobs:
           echo "snapshot_version=$snapshot_version" >> $GITHUB_ENV
       - name: Publish ${{ env.snapshot_version }}
         run: ./gradlew publishKotlinMultiplatformPublicationToMeetacySdkRepository
+      - name: Add Sdk Version to Output
+        id: output_version
+        run: echo "snapshot_version=${{ env.snapshot_version }}" >> $GITHUB_OUTPUT
 
   deploy-jvm:
     runs-on: ubuntu-latest
