@@ -22,7 +22,7 @@ public data class MeetingSerializable(
     val creator: UserSerializable,
     val date: DateSerializable,
     val location: LocationSerializable,
-    val title: String,
+    val title: String?,
     val description: String? = null,
     val participantsCount: Int,
     val previewParticipants: List<UserSerializable>,

@@ -172,7 +172,7 @@ internal class MeetingsEngine(
     private data class EditMeetingBody(
         val meetingId: MeetingIdSerializable,
         val title: OptionalSerializable<String>,
-        val description: OptionalSerializable<String>,
+        val description: OptionalSerializable<String?>,
         val location: OptionalSerializable<LocationSerializable>,
         val date: OptionalSerializable<DateSerializable>,
         val avatarId: OptionalSerializable<FileIdSerializable?> = OptionalSerializable.Undefined,

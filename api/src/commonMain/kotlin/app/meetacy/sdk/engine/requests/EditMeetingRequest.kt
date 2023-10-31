@@ -12,7 +12,7 @@ public data class EditMeetingRequest(
     public val token: Token,
     public val meetingId: MeetingId,
     public val title: Optional<String>,
-    public val description: Optional<String>,
+    public val description: Optional<String?>,
     public val location: Optional<Location>,
     public val date: Optional<Date>,
     public val avatarId: Optional<FileId?>,
