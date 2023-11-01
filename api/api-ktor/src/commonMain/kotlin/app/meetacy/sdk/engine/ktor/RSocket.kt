@@ -23,9 +23,9 @@ internal inline fun <T> handleRSocketExceptions(
     } catch (exception: RSocketError) {
         when (exception) {
             is RSocketError.Custom -> {
-                val response = json.decodeFromString<ServerResponse.Error>(
+                val response = json.decodeFromString<ServerResponse<Nothing>>(
                     string = exception.message ?: meetacyApiError(message = "Message should be present when throwing custom error")
-                )
+                ) as ServerResponse.Error
                 throw getException(response)
             }
             else -> {
