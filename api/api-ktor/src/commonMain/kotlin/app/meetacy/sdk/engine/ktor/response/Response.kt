@@ -27,7 +27,7 @@ internal sealed interface ServerResponse<out T> {
         override fun deserialize(decoder: Decoder): ServerResponse<T> {
             val data = baseSerializer.deserialize(decoder)
             return if (data.status) {
-                Success(data.data as T)
+                Success(data.result as T)
             } else {
                 Error(data.errorCode!!, data.errorMessage!!)
             }
@@ -36,7 +36,7 @@ internal sealed interface ServerResponse<out T> {
         override fun serialize(encoder: Encoder, value: ServerResponse<T>) {
             val data = Data(
                 status = value is Success,
-                data = (value as? Success)?.result,
+                result = (value as? Success)?.result,
                 errorCode = (value as? Error)?.errorCode,
                 errorMessage = (value as? Error)?.errorMessage
             )
@@ -46,7 +46,7 @@ internal sealed interface ServerResponse<out T> {
         @Serializable
         private data class Data<T>(
             val status: Boolean,
-            val data: T? = null,
+            val result: T? = null,
             val errorCode: Int? = null,
             val errorMessage: String? = null
         )
