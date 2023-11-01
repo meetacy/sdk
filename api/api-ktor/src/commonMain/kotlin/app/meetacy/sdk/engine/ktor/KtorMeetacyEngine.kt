@@ -50,7 +50,9 @@ public class KtorMeetacyEngine(
             json(json)
         }
         defaultRequest {
-            header(HttpHeaders.ContentType, ContentType.Application.Json)
+            if (!url.protocol.isWebsocket()) {
+                header(HttpHeaders.ContentType, ContentType.Application.Json)
+            }
         }
     }
 
