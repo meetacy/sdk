@@ -11,13 +11,12 @@ import kotlinx.serialization.json.Json
 
 @Serializable(with = ServerResponse.Serializer::class)
 internal sealed interface ServerResponse<out T> {
-    @Serializable
+
     data class Error(
         val errorCode: Int,
         val errorMessage: String
     ) : ServerResponse<Nothing>
 
-    @Serializable
     data class Success<T>(val result: T) : ServerResponse<T>
 
     @Suppress("UNCHECKED_CAST")
@@ -64,5 +63,5 @@ internal fun <T> Payload.decodeToServerResponse(
 }
 
 internal suspend inline fun <reified T : Any> HttpResponse.bodyAsSuccess(): T {
-    return body<ServerResponse.Success<T>>().result
+    return (body<ServerResponse<T>>() as ServerResponse.Success).result
 }
