@@ -4,6 +4,7 @@ package app.meetacy.sdk.engine.ktor.requests.friends
 
 import app.meetacy.sdk.engine.ktor.apiVersion
 import app.meetacy.sdk.engine.ktor.handleRSocketExceptions
+import app.meetacy.sdk.engine.ktor.meetacyRSocket
 import app.meetacy.sdk.engine.ktor.response.ListFriendsResponse
 import app.meetacy.sdk.engine.ktor.response.StatusTrueResponse
 import app.meetacy.sdk.engine.ktor.response.bodyAsSuccess
@@ -109,7 +110,7 @@ internal class FriendsEngine(
     suspend fun streamFriendsLocation(request: EmitFriendsLocationRequest) = handleRSocketExceptions(json) {
         val url = baseUrl.replaceProtocolWithWebsocket() / "location" / "stream"
 
-        val socket = httpClient.rSocket(
+        val socket = httpClient.meetacyRSocket(
             urlString = url.string,
             secure = url.protocol.isWss
         )

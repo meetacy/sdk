@@ -50,10 +50,7 @@ public class KtorMeetacyEngine(
             json(json)
         }
         defaultRequest {
-            println("ca62: ${url.protocol}: isWebsocket = ${url.protocol.isWebsocket()}")
-            if (!url.protocol.isWebsocket()) {
-                header(HttpHeaders.ContentType, ContentType.Application.Json)
-            }
+            header(HttpHeaders.ContentType, ContentType.Application.Json)
         }
     }
 
