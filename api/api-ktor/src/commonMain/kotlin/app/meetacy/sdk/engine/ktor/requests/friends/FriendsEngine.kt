@@ -4,7 +4,6 @@ package app.meetacy.sdk.engine.ktor.requests.friends
 
 import app.meetacy.sdk.engine.ktor.apiVersion
 import app.meetacy.sdk.engine.ktor.handleRSocketExceptions
-import app.meetacy.sdk.engine.ktor.meetacyRSocket
 import app.meetacy.sdk.engine.ktor.response.ListFriendsResponse
 import app.meetacy.sdk.engine.ktor.response.StatusTrueResponse
 import app.meetacy.sdk.engine.ktor.response.bodyAsSuccess
