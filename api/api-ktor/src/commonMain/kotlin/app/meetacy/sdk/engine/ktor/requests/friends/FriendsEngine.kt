@@ -49,6 +49,7 @@ import kotlinx.serialization.json.put
 internal class FriendsEngine(
     baseUrl: Url,
     private val httpClient: HttpClient,
+    private val rsocketClient: HttpClient,
     private val json: Json
 ) {
     private val baseUrl =  baseUrl / "friends"
@@ -110,7 +111,7 @@ internal class FriendsEngine(
     suspend fun streamFriendsLocation(request: EmitFriendsLocationRequest) = handleRSocketExceptions(json) {
         val url = baseUrl.replaceProtocolWithWebsocket() / "location" / "stream"
 
-        val socket = httpClient.meetacyRSocket(
+        val socket = rsocketClient.rSocket(
             urlString = url.string,
             secure = url.protocol.isWss
         )

@@ -44,8 +44,6 @@ public class KtorMeetacyEngine(
 
     private val httpClient = httpClient.config {
         expectSuccess = true
-        install(WebSockets)
-        install(RSocketSupport)
         install(ContentNegotiation) {
             json(json)
         }
@@ -53,16 +51,59 @@ public class KtorMeetacyEngine(
             header(HttpHeaders.ContentType, ContentType.Application.Json)
         }
     }
+    private val rsocketClient = httpClient.config {
+        expectSuccess = true
+        install(WebSockets)
+        install(RSocketSupport)
+    }
 
-    private val auth = AuthEngine(baseUrl, this.httpClient)
-    private val users = UsersEngine(baseUrl, this.httpClient)
-    private val friends = FriendsEngine(baseUrl, this.httpClient, this.json)
-    private val meetings = MeetingsEngine(baseUrl, this.httpClient)
-    private val files = FilesEngine(baseUrl, this.httpClient)
-    private val invitations = InvitationsEngine(baseUrl, this.httpClient)
-    private val notifications = NotificationsEngine(baseUrl, this.httpClient)
-    private val search = SearchEngine(baseUrl, this.httpClient)
-    private val updates = UpdatesEngine(baseUrl, this.httpClient, this.json)
+    private val auth = AuthEngine(
+        baseUrl = baseUrl,
+        httpClient = this.httpClient
+    )
+
+    private val users = UsersEngine(
+        baseUrl = baseUrl,
+        httpClient = this.httpClient
+    )
+
+    private val friends = FriendsEngine(
+        baseUrl = baseUrl,
+        httpClient = this.httpClient,
+        rsocketClient = rsocketClient,
+        json = this.json
+    )
+
+    private val meetings = MeetingsEngine(
+        baseUrl = baseUrl,
+        httpClient = this.httpClient
+    )
+
+    private val files = FilesEngine(
+        baseUrl = baseUrl,
+        httpClient = this.httpClient
+    )
+
+    private val invitations = InvitationsEngine(
+        baseUrl = baseUrl,
+        httpClient = this.httpClient
+    )
+
+    private val notifications = NotificationsEngine(
+        baseUrl = baseUrl,
+        httpClient = this.httpClient
+    )
+
+    private val search = SearchEngine(
+        baseUrl = baseUrl,
+        httpClient = this.httpClient
+    )
+
+    private val updates = UpdatesEngine(
+        baseUrl = baseUrl,
+        rsocketClient = rsocketClient,
+        json = this.json
+    )
 
     override fun getFileUrl(
         id: FileId

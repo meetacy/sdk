@@ -1,7 +1,6 @@
 package app.meetacy.sdk.engine.ktor.requests.updates
 
 import app.meetacy.sdk.engine.ktor.handleRSocketExceptions
-import app.meetacy.sdk.engine.ktor.meetacyRSocket
 import app.meetacy.sdk.engine.requests.EmitUpdatesRequest
 import app.meetacy.sdk.types.serializable.notification.NotificationSerializable
 import app.meetacy.sdk.types.serializable.notification.type
@@ -24,13 +23,13 @@ import kotlinx.serialization.json.put
 
 internal class UpdatesEngine(
     private val baseUrl: Url,
-    private val httpClient: HttpClient,
+    private val rsocketClient: HttpClient,
     private val json: Json
 ) {
     suspend fun stream(request: EmitUpdatesRequest) = handleRSocketExceptions(json) {
         val url = baseUrl.replaceProtocolWithWebsocket() / "updates" / "stream"
 
-        val socket = httpClient.meetacyRSocket(
+        val socket = rsocketClient.rSocket(
             urlString = url.string,
             secure = url.protocol.isWss
         )

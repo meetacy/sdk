@@ -41,15 +41,3 @@ internal inline fun <T> handleRSocketExceptions(
         }
     }
 }
-
-internal suspend fun HttpClient.meetacyRSocket(
-    urlString: String,
-    secure: Boolean
-): RSocket {
-    return rSocket(
-        urlString = urlString,
-        secure = secure
-    ) {
-        headers.remove(HttpHeaders.ContentType)
-    }
-}
