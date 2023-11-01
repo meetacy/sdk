@@ -1,21 +1,21 @@
 package app.meetacy.sdk.engine.ktor.requests.notifications
 
 import app.meetacy.sdk.engine.ktor.apiVersion
-import app.meetacy.sdk.engine.ktor.response.ListNotificationsResponse
 import app.meetacy.sdk.engine.ktor.response.StatusTrueResponse
 import app.meetacy.sdk.engine.ktor.response.bodyAsSuccess
 import app.meetacy.sdk.engine.ktor.token
 import app.meetacy.sdk.engine.requests.ListNotificationsRequest
 import app.meetacy.sdk.engine.requests.ReadNotificationRequest
-import app.meetacy.sdk.types.paging.PagingId
-import app.meetacy.sdk.types.paging.PagingResponse
+import app.meetacy.sdk.types.serializable.paging.PagingResponseSerializable
 import app.meetacy.sdk.types.serializable.amount.AmountSerializable
 import app.meetacy.sdk.types.serializable.amount.serializable
 import app.meetacy.sdk.types.serializable.notification.NotificationIdSerializable
+import app.meetacy.sdk.types.serializable.notification.NotificationSerializable
 import app.meetacy.sdk.types.serializable.notification.serializable
 import app.meetacy.sdk.types.serializable.notification.type
 import app.meetacy.sdk.types.serializable.paging.PagingIdSerializable
 import app.meetacy.sdk.types.serializable.paging.serializable
+import app.meetacy.sdk.types.serializable.paging.type
 import app.meetacy.sdk.types.url.Url
 import io.ktor.client.*
 import io.ktor.client.call.*
@@ -40,18 +40,16 @@ internal class NotificationsEngine(
     ): ListNotificationsRequest.Response {
         val url = baseUrl / "list"
         val body = request.toBody()
+
         val response = httpClient.post(url.string) {
             apiVersion(request.apiVersion)
             token(request.token)
             setBody(body)
-        }.bodyAsSuccess<ListNotificationsResponse>()
+        }.bodyAsSuccess<PagingResponseSerializable<NotificationSerializable>>()
+            .type()
+            .mapItems { notification -> notification.type() }
 
-        val paging = PagingResponse(
-            data = response.data.map { it.type() },
-            nextPagingId = response.nextPagingId?.let(::PagingId)
-        )
-
-        return ListNotificationsRequest.Response(paging)
+        return ListNotificationsRequest.Response(response)
     }
 
     @Serializable

@@ -4,7 +4,6 @@ package app.meetacy.sdk.engine.ktor.requests.friends
 
 import app.meetacy.sdk.engine.ktor.apiVersion
 import app.meetacy.sdk.engine.ktor.handleRSocketExceptions
-import app.meetacy.sdk.engine.ktor.response.ListFriendsResponse
 import app.meetacy.sdk.engine.ktor.response.StatusTrueResponse
 import app.meetacy.sdk.engine.ktor.response.bodyAsSuccess
 import app.meetacy.sdk.engine.ktor.token
@@ -15,14 +14,14 @@ import app.meetacy.sdk.engine.requests.ListFriendsRequest
 import app.meetacy.sdk.types.annotation.UnsafeConstructor
 import app.meetacy.sdk.types.datetime.DateTime
 import app.meetacy.sdk.types.location.Location
-import app.meetacy.sdk.types.paging.PagingId
-import app.meetacy.sdk.types.paging.PagingResponse
+import app.meetacy.sdk.types.serializable.paging.PagingResponseSerializable
 import app.meetacy.sdk.types.serializable.amount.AmountSerializable
 import app.meetacy.sdk.types.serializable.amount.serializable
 import app.meetacy.sdk.types.serializable.location.LocationSerializable
 import app.meetacy.sdk.types.serializable.location.type
 import app.meetacy.sdk.types.serializable.paging.PagingIdSerializable
 import app.meetacy.sdk.types.serializable.paging.serializable
+import app.meetacy.sdk.types.serializable.paging.type
 import app.meetacy.sdk.types.serializable.user.UserIdSerializable
 import app.meetacy.sdk.types.serializable.user.UserSerializable
 import app.meetacy.sdk.types.serializable.user.serializable
@@ -93,18 +92,16 @@ internal class FriendsEngine(
     suspend fun list(request: ListFriendsRequest): ListFriendsRequest.Response {
         val url =  baseUrl / "list"
         val body = request.toBody()
+
         val response = httpClient.post(url.string) {
             apiVersion(request.apiVersion)
             token(request.token)
             setBody(body)
-        }.bodyAsSuccess<ListFriendsResponse>()
+        }.bodyAsSuccess<PagingResponseSerializable<UserSerializable>>()
+            .type()
+            .mapItems { user -> user.type() as RegularUser }
 
-        val paging = PagingResponse(
-            nextPagingId = response.nextPagingId?.let(::PagingId),
-            data = response.data.map { user -> user.type() as RegularUser }
-        )
-
-        return ListFriendsRequest.Response(paging)
+        return ListFriendsRequest.Response(response)
     }
 
     suspend fun streamFriendsLocation(request: EmitFriendsLocationRequest) = handleRSocketExceptions(json) {
