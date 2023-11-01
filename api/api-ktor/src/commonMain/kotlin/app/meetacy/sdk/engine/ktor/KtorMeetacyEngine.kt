@@ -35,8 +35,12 @@ import kotlinx.serialization.json.Json
 public class KtorMeetacyEngine(
     private val baseUrl: Url,
     httpClient: HttpClient = HttpClient(),
-    private val json: Json = Json,
+    json: Json = Json,
 ) : MeetacyRequestsEngine {
+
+    private val json = Json(json) {
+        ignoreUnknownKeys = true
+    }
 
     private val httpClient = httpClient.config {
         expectSuccess = true
