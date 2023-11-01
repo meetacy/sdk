@@ -119,7 +119,7 @@ public class KtorMeetacyEngine(
             block()
         } catch (exception: ResponseException) {
             val response = try {
-                json.decodeFromString<ServerResponse.Error>(exception.response.body())
+                json.decodeFromString<ServerResponse<Nothing>>(exception.response.body()) as ServerResponse.Error
             } catch (exception: Throwable) {
                 throw MeetacyInternalException(cause = exception)
             }
