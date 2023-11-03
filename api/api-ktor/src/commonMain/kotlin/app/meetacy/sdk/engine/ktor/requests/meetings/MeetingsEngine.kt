@@ -6,7 +6,6 @@ import app.meetacy.sdk.engine.ktor.response.bodyAsSuccess
 import app.meetacy.sdk.engine.ktor.token
 import app.meetacy.sdk.engine.requests.*
 import app.meetacy.sdk.types.optional.map
-import app.meetacy.sdk.types.serializable.paging.PagingResponseSerializable
 import app.meetacy.sdk.types.serializable.amount.AmountSerializable
 import app.meetacy.sdk.types.serializable.amount.serializable
 import app.meetacy.sdk.types.serializable.datetime.DateSerializable
@@ -22,6 +21,7 @@ import app.meetacy.sdk.types.serializable.meeting.type
 import app.meetacy.sdk.types.serializable.optional.OptionalSerializable
 import app.meetacy.sdk.types.serializable.optional.serializable
 import app.meetacy.sdk.types.serializable.paging.PagingIdSerializable
+import app.meetacy.sdk.types.serializable.paging.PagingResponseSerializable
 import app.meetacy.sdk.types.serializable.paging.serializable
 import app.meetacy.sdk.types.serializable.paging.type
 import app.meetacy.sdk.types.serializable.user.UserSerializable
@@ -65,21 +65,15 @@ internal class MeetingsEngine(
         return ListMeetingsHistoryRequest.Response(response)
     }
 
-    private fun ListActiveMeetingsRequest.toBody() = ListMeetingsPagingBody(
-        amount.serializable(),
-        pagingId?.serializable()
-    )
-
     suspend fun listActiveMeetings(
         request: ListActiveMeetingsRequest
     ): ListActiveMeetingsRequest.Response {
         val url = baseUrl / "history" / "active"
-        val body = request.toBody()
-
         val response = httpClient.get(url.string) {
             apiVersion(request.apiVersion)
             token(request.token)
-            setBody(body)
+            parameter("amount", request.amount)
+            parameter("pagingId", request.pagingId)
         }.bodyAsSuccess<PagingResponseSerializable<MeetingSerializable>>()
             .type()
             .mapItems { meeting -> meeting.type() }
@@ -87,21 +81,16 @@ internal class MeetingsEngine(
         return ListActiveMeetingsRequest.Response(response)
     }
 
-    private fun ListPastMeetingsRequest.toBody() = ListMeetingsPagingBody(
-        amount.serializable(),
-        pagingId?.serializable()
-    )
-
     suspend fun listPastMeetings(
         request: ListPastMeetingsRequest
     ): ListPastMeetingsRequest.Response {
         val url = baseUrl / "history" / "past"
-        val body = request.toBody()
 
         val response = httpClient.post(url.string) {
             apiVersion(request.apiVersion)
             token(request.token)
-            setBody(body)
+            parameter("amount", request.amount)
+            parameter("pagingId", request.pagingId)
         }.bodyAsSuccess<PagingResponseSerializable<MeetingSerializable>>()
             .type()
             .mapItems { meeting -> meeting.type() }
