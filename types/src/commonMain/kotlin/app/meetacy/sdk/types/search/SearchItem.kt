@@ -9,6 +9,7 @@ import app.meetacy.sdk.types.user.User as UserView
  * - [app.meetacy.sdk.search.SearchItemRepository]
  * - [app.meetacy.sdk.search.AuthorizedSearchItemRepository]
  */
+
 public sealed interface SearchItem {
     public class Meeting(public val meeting: MeetingView) : SearchItem
     public class User(public val user: UserView) : SearchItem

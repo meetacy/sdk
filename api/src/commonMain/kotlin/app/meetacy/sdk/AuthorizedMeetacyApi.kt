@@ -40,7 +40,6 @@ public class AuthorizedMeetacyApi @UnsafeConstructor constructor(
             data = base.getMe(token),
             api = this
         )
-
     public suspend fun search(location: Location, prompt: String): List<AuthorizedSearchItemRepository> =
         base.search(token, location, prompt).map { AuthorizedSearchItemRepository.of(it.data, api = this) }
 
