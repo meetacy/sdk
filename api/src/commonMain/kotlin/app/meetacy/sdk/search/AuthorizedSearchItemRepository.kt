@@ -2,21 +2,17 @@ package app.meetacy.sdk.search
 
 import app.meetacy.sdk.AuthorizedMeetacyApi
 import app.meetacy.sdk.meetings.AuthorizedMeetingRepository
-import app.meetacy.sdk.types.auth.Token
 import app.meetacy.sdk.types.search.SearchItem
 import app.meetacy.sdk.users.AuthorizedUserRepository
 import app.meetacy.sdk.types.place.Place as PlaceData
 
 public sealed class AuthorizedSearchItemRepository {
-    protected abstract val api: AuthorizedMeetacyApi
     public abstract val data: SearchItem
     public abstract val base: SearchItemRepository
 
-    public val token: Token get() = api.token
-
     public class Meeting(
         override val data: SearchItem.Meeting,
-        override val api: AuthorizedMeetacyApi
+        public val api: AuthorizedMeetacyApi
     ) : AuthorizedSearchItemRepository() {
         override val base: SearchItemRepository
             get() = SearchItemRepository.Meeting(data, api.base)
@@ -26,7 +22,7 @@ public sealed class AuthorizedSearchItemRepository {
 
     public class Place(
         override val data: SearchItem.Place,
-        override val api: AuthorizedMeetacyApi
+        public val api: AuthorizedMeetacyApi
     ) : AuthorizedSearchItemRepository() {
         override val base: SearchItemRepository
             get() = SearchItemRepository.Place(data)
@@ -37,7 +33,7 @@ public sealed class AuthorizedSearchItemRepository {
 
     public class User(
         override val data: SearchItem.User,
-        override val api: AuthorizedMeetacyApi
+        public val api: AuthorizedMeetacyApi
     ) : AuthorizedSearchItemRepository() {
 
         override val base: SearchItemRepository
