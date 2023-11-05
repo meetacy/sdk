@@ -59,7 +59,9 @@ public class KtorMeetacyEngine(
 
     private val auth = AuthEngine(
         baseUrl = baseUrl,
-        httpClient = this.httpClient
+        httpClient = this.httpClient,
+        rsocketClient = rsocketClient,
+        json = this.json
     )
 
     private val users = UsersEngine(
@@ -114,6 +116,8 @@ public class KtorMeetacyEngine(
         return when (request) {
             // auth
             is GenerateAuthRequest -> auth.generate(request) as T
+            // telegram
+            is AwaitTelegramAuthRequest -> auth.telegram.await(request) as T
             // friends
             is AddFriendRequest -> friends.add(request) as T
             is DeleteFriendRequest -> friends.delete(request) as T

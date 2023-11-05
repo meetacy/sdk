@@ -5,7 +5,7 @@ import app.meetacy.sdk.types.email.ConfirmEmailStatus
 import app.meetacy.sdk.types.email.Email
 
 public class LinkEmailResult(
-    private val emailApi: EmailApi,
+    private val emailApi: AuthEmailApi,
     private val email: Email
 ) {
     public suspend fun confirm(confirmHash: ConfirmEmailHash): ConfirmEmailStatus =

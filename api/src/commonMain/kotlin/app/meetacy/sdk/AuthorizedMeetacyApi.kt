@@ -1,5 +1,6 @@
 package app.meetacy.sdk
 
+import app.meetacy.sdk.auth.AuthorizedAuthApi
 import app.meetacy.sdk.files.AuthorizedFilesApi
 import app.meetacy.sdk.friends.AuthorizedFriendsApi
 import app.meetacy.sdk.invitations.AuthorizedInvitationsApi
@@ -25,7 +26,7 @@ public class AuthorizedMeetacyApi @UnsafeConstructor constructor(
     public val base: MeetacyApi
 ) {
     public val files: AuthorizedFilesApi = AuthorizedFilesApi(api = this)
-    public val auth: app.meetacy.sdk.auth.AuthorizedAuthApi = app.meetacy.sdk.auth.AuthorizedAuthApi(api = this)
+    public val auth: AuthorizedAuthApi = AuthorizedAuthApi(api = this)
     public val friends: AuthorizedFriendsApi = AuthorizedFriendsApi(api = this)
     public val users: AuthorizedUsersApi = AuthorizedUsersApi(api = this)
     public val meetings: AuthorizedMeetingsApi = AuthorizedMeetingsApi(api = this)
