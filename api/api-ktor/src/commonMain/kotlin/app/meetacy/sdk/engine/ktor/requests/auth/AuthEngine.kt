@@ -3,6 +3,7 @@
 package app.meetacy.sdk.engine.ktor.requests.auth
 
 import app.meetacy.sdk.engine.ktor.apiVersion
+import app.meetacy.sdk.engine.ktor.requests.auth.telegram.AuthTelegramEngine
 import app.meetacy.sdk.engine.ktor.response.bodyAsSuccess
 import app.meetacy.sdk.engine.requests.GenerateAuthRequest
 import app.meetacy.sdk.types.annotation.UnsafeConstructor
@@ -11,11 +12,20 @@ import app.meetacy.sdk.types.url.Url
 import io.ktor.client.*
 import io.ktor.client.request.*
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
 
 internal class AuthEngine(
     private val baseUrl: Url,
-    private val httpClient: HttpClient
+    private val httpClient: HttpClient,
+    rsocketClient: HttpClient,
+    json: Json
 ) {
+    val telegram: AuthTelegramEngine = AuthTelegramEngine(
+        baseUrl = baseUrl,
+        rsocketClient = rsocketClient,
+        json = json
+    )
+
     @Serializable
     private data class GenerateAuthBody(val nickname: String)
 
