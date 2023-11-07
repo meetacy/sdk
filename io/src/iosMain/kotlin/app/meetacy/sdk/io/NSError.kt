@@ -1,7 +1,10 @@
+@file:OptIn(ExperimentalForeignApi::class)
+
 package app.meetacy.sdk.io
 
 import kotlinx.cinterop.*
 import platform.Foundation.NSError
+import kotlinx.cinterop.ExperimentalForeignApi
 
 public inline fun <T> MemScope.runCatching(block: (ObjCObjectVar<NSError?>) -> T): IosResult<T> {
     val error = alloc<ObjCObjectVar<NSError?>>()
