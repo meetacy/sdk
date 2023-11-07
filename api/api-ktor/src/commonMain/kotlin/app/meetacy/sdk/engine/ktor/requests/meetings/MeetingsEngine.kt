@@ -1,243 +1,256 @@
 package app.meetacy.sdk.engine.ktor.requests.meetings
 
-import app.meetacy.sdk.engine.ktor.mapToMeeting
-import app.meetacy.sdk.engine.ktor.mapToUser
-import app.meetacy.sdk.engine.ktor.requests.extencion.post
-import app.meetacy.sdk.engine.ktor.response.models.*
-import app.meetacy.sdk.engine.ktor.response.models.CreateMeetingResponse
-import app.meetacy.sdk.engine.ktor.response.models.EditMeetingResponse
-import app.meetacy.sdk.engine.ktor.response.models.ListMapMeetingsResponse
-import app.meetacy.sdk.engine.ktor.response.models.ListMeetingParticipantsResponse
-import app.meetacy.sdk.engine.ktor.response.models.ListMeetingsResponse
-import app.meetacy.sdk.engine.ktor.response.models.User as ModelUser
+import app.meetacy.sdk.engine.ktor.apiVersion
+import app.meetacy.sdk.engine.ktor.response.StatusTrueResponse
+import app.meetacy.sdk.engine.ktor.response.bodyAsSuccess
+import app.meetacy.sdk.engine.ktor.token
 import app.meetacy.sdk.engine.requests.*
-import app.meetacy.sdk.engine.requests.CreateMeetingRequest
-import app.meetacy.sdk.engine.requests.EditMeetingRequest
-import app.meetacy.sdk.engine.requests.ListMeetingParticipantsRequest
-import app.meetacy.sdk.types.optional.ifPresent
-import app.meetacy.sdk.types.paging.PagingId
-import app.meetacy.sdk.types.paging.PagingResponse
+import app.meetacy.sdk.types.optional.map
+import app.meetacy.sdk.types.serializable.amount.AmountSerializable
+import app.meetacy.sdk.types.serializable.amount.serializable
+import app.meetacy.sdk.types.serializable.datetime.DateSerializable
+import app.meetacy.sdk.types.serializable.datetime.serializable
+import app.meetacy.sdk.types.serializable.file.FileIdSerializable
+import app.meetacy.sdk.types.serializable.file.serializable
+import app.meetacy.sdk.types.serializable.location.LocationSerializable
+import app.meetacy.sdk.types.serializable.location.serializable
+import app.meetacy.sdk.types.serializable.meeting.MeetingIdSerializable
+import app.meetacy.sdk.types.serializable.meeting.MeetingSerializable
+import app.meetacy.sdk.types.serializable.meeting.serializable
+import app.meetacy.sdk.types.serializable.meeting.type
+import app.meetacy.sdk.types.serializable.optional.OptionalSerializable
+import app.meetacy.sdk.types.serializable.optional.serializable
+import app.meetacy.sdk.types.serializable.paging.PagingIdSerializable
+import app.meetacy.sdk.types.serializable.paging.PagingResponseSerializable
+import app.meetacy.sdk.types.serializable.paging.serializable
+import app.meetacy.sdk.types.serializable.paging.type
+import app.meetacy.sdk.types.serializable.user.UserSerializable
+import app.meetacy.sdk.types.serializable.user.type
 import app.meetacy.sdk.types.url.Url
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
-import io.ktor.content.*
-import io.ktor.http.*
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.buildJsonObject
-import kotlinx.serialization.json.put
-import kotlinx.serialization.json.putJsonObject
-import app.meetacy.sdk.engine.ktor.response.models.Meeting as ModelMeeting
+import kotlinx.serialization.Serializable
 
 internal class MeetingsEngine(
     baseUrl: Url,
-    private val httpClient: HttpClient,
-    private val json: Json
+    private val httpClient: HttpClient
 ) {
     private val baseUrl = baseUrl / "meetings"
+
+    @Serializable
+    private data class ListMeetingsPagingBody(
+        val amount: AmountSerializable,
+        val pagingId: PagingIdSerializable?
+    )
+    private fun ListMeetingsHistoryRequest.toBody() = ListMeetingsPagingBody(
+        amount.serializable(),
+        pagingId?.serializable()
+    )
+
     suspend fun listMeetingsHistory(
         request: ListMeetingsHistoryRequest
-    ): ListMeetingsHistoryRequest.Response = with(request) {
+    ): ListMeetingsHistoryRequest.Response {
         val url = baseUrl / "history" / "list"
+        val body = request.toBody()
 
-        val jsonObject = buildJsonObject {
-            put("amount", amount.int.toString())
-            put("pagingId", pagingId?.string)
-        }
+        val response = httpClient.post(url.string) {
+            apiVersion(request.apiVersion)
+            token(request.token)
+            setBody(body)
+        }.bodyAsSuccess<PagingResponseSerializable<MeetingSerializable>>()
+            .type()
+            .mapItems { meeting -> meeting.type() }
 
-        val string = post(url.string, jsonObject, httpClient, request)
-
-        val response = json.decodeFromString<ListMeetingsResponse>(string).result
-
-        val paging = PagingResponse(
-            nextPagingId = response.nextPagingId?.let(::PagingId),
-            data = response.data.map(ModelMeeting::mapToMeeting)
-        )
-
-        return ListMeetingsHistoryRequest.Response(paging)
+        return ListMeetingsHistoryRequest.Response(response)
     }
+
+    private fun ListActiveMeetingsRequest.toBody() = ListMeetingsPagingBody(
+        amount.serializable(),
+        pagingId?.serializable()
+    )
 
     suspend fun listActiveMeetings(
         request: ListActiveMeetingsRequest
-    ): ListActiveMeetingsRequest.Response = with(request) {
+    ): ListActiveMeetingsRequest.Response {
         val url = baseUrl / "history" / "active"
+        val body = request.toBody()
 
-        val jsonObject = buildJsonObject {
-            put("amount", amount.int.toString())
-            put("pagingId", pagingId?.string)
-        }
+        val response = httpClient.get(url.string) {
+            apiVersion(request.apiVersion)
+            token(request.token)
+            setBody(body)
+        }.bodyAsSuccess<PagingResponseSerializable<MeetingSerializable>>()
+            .type()
+            .mapItems { meeting -> meeting.type() }
 
-        val string = httpClient.get(url.string) {
-            setBody(
-                TextContent(
-                    text = jsonObject.toString(),
-                    contentType = ContentType.Application.Json
-                )
-            )
-            header("Authorization", request.token.string)
-            header("Api-Version", request.apiVersion.int.toString())
-        }.body<String>()
-
-        val response = json.decodeFromString<ListMeetingsResponse>(string).result
-
-        val paging = PagingResponse(
-            nextPagingId = response.nextPagingId?.let(::PagingId),
-            data = response.data.map(ModelMeeting::mapToMeeting)
-        )
-
-        return ListActiveMeetingsRequest.Response(paging)
+        return ListActiveMeetingsRequest.Response(response)
     }
+
+    private fun ListPastMeetingsRequest.toBody() = ListMeetingsPagingBody(
+        amount.serializable(),
+        pagingId?.serializable()
+    )
 
     suspend fun listPastMeetings(
         request: ListPastMeetingsRequest
-    ): ListPastMeetingsRequest.Response = with(request) {
+    ): ListPastMeetingsRequest.Response {
         val url = baseUrl / "history" / "past"
+        val body = request.toBody()
 
-        val jsonObject = buildJsonObject {
-            put("amount", amount.int.toString())
-            put("pagingId", pagingId?.string)
-        }
+        val response = httpClient.post(url.string) {
+            apiVersion(request.apiVersion)
+            token(request.token)
+            setBody(body)
+        }.bodyAsSuccess<PagingResponseSerializable<MeetingSerializable>>()
+            .type()
+            .mapItems { meeting -> meeting.type() }
 
-        val string = post(url.string, jsonObject, httpClient, request)
-
-        val response = json.decodeFromString<ListMeetingsResponse>(string).result
-
-        val paging = PagingResponse(
-            nextPagingId = response.nextPagingId?.let(::PagingId),
-            data = response.data.map(ModelMeeting::mapToMeeting)
-        )
-
-        return ListPastMeetingsRequest.Response(paging)
+        return ListPastMeetingsRequest.Response(response)
     }
+
+    @Serializable
+    private data class ListMeetingsMapBody(
+        val location: LocationSerializable
+    )
+    private fun ListMeetingsMapRequest.toBody() = ListMeetingsMapBody(location.serializable())
 
     suspend fun listMeetingsMap(
         request: ListMeetingsMapRequest
-    ): ListMeetingsMapRequest.Response = with (request) {
+    ): ListMeetingsMapRequest.Response {
         val url = baseUrl / "map" / "list"
+        val body = request.toBody()
+        val response = httpClient.post(url.string) {
+            apiVersion(request.apiVersion)
+            token(request.token)
+            setBody(body)
+        }.bodyAsSuccess<List<MeetingSerializable>>()
 
-        val jsonObject = buildJsonObject {
-            putJsonObject("location") {
-                put("latitude", location.latitude)
-                put("longitude", location.longitude)
-            }
-        }
-        val string = post(url.string, jsonObject, httpClient, request)
-
-        val response = json.decodeFromString<ListMapMeetingsResponse>(string).result
-
-        val data = response.map(ModelMeeting::mapToMeeting)
+        val data = response.map { it.type() }
 
         return ListMeetingsMapRequest.Response(data)
     }
+
+    @Serializable
+    private data class CreateMeetingBody(
+        val title: String?,
+        val description: String?,
+        val date: DateSerializable,
+        val location: LocationSerializable,
+        val visibility: MeetingSerializable.Visibility,
+        val avatarId: FileIdSerializable?
+    )
+    private fun CreateMeetingRequest.toBody() = CreateMeetingBody(
+        title,
+        description,
+        date.serializable(),
+        location.serializable(),
+        visibility.serializable(),
+        fileId?.serializable()
+    )
 
     suspend fun createMeeting(
         request: CreateMeetingRequest
     ): CreateMeetingRequest.Response = with(request) {
         val url = baseUrl / "create"
-
-        val jsonObject = buildJsonObject {
-            put("title", title)
-            put("description", description)
-            put("date", date.iso8601)
-            putJsonObject("location") {
-                put("latitude", location.latitude)
-                put("longitude", location.longitude)
-            }
-            put("visibility", visibility.name.lowercase())
-            put("avatarId", fileId?.string)
-        }
-
-        val string = post(url.string, jsonObject, httpClient, request)
-
-        val meeting = json.decodeFromString<CreateMeetingResponse>(string).result
-
-        return CreateMeetingRequest.Response(meeting.mapToMeeting())
+        val body = request.toBody()
+        val response = httpClient.post(url.string) {
+            apiVersion(request.apiVersion)
+            token(request.token)
+            setBody(body)
+        }.bodyAsSuccess<MeetingSerializable>()
+        return CreateMeetingRequest.Response(response.type())
     }
+
+    @Serializable
+    private data class EditMeetingBody(
+        val meetingId: MeetingIdSerializable,
+        val title: OptionalSerializable<String> = OptionalSerializable.Undefined,
+        val description: OptionalSerializable<String?> = OptionalSerializable.Undefined,
+        val location: OptionalSerializable<LocationSerializable> = OptionalSerializable.Undefined,
+        val date: OptionalSerializable<DateSerializable> = OptionalSerializable.Undefined,
+        val avatarId: OptionalSerializable<FileIdSerializable?> = OptionalSerializable.Undefined,
+        val visibility: OptionalSerializable<MeetingSerializable.Visibility> = OptionalSerializable.Undefined
+    )
+
+    private fun EditMeetingRequest.toBody() = EditMeetingBody(
+        meetingId.serializable(),
+        title.serializable(),
+        description.serializable(),
+        location.map { it.serializable() }.serializable(),
+        date.map { it.serializable() }.serializable(),
+        avatarId.map { it?.serializable() }.serializable(),
+        visibility.map { it.serializable() }.serializable(),
+    )
 
     suspend fun editMeeting(request: EditMeetingRequest): EditMeetingRequest.Response = with(request) {
         val url = baseUrl / "edit"
+        val body = request.toBody()
+        val response = httpClient.post(url.string) {
+            apiVersion(request.apiVersion)
+            token(request.token)
+            setBody(body)
+        }.bodyAsSuccess<MeetingSerializable>()
 
-        val jsonObject = buildJsonObject {
-            put("meetingId", meetingId.string)
-
-            title.ifPresent { title ->
-                put("title", title)
-            }
-            description.ifPresent { description ->
-                put("description", description)
-            }
-            location.ifPresent { location ->
-                putJsonObject("location") {
-                    put("latitude", location.latitude)
-                    put("longitude", location.longitude)
-                }
-            }
-            date.ifPresent { date ->
-                put("date", date.iso8601)
-            }
-            avatarId.ifPresent { avatarId ->
-                put("avatarId", avatarId?.string)
-            }
-            visibility.ifPresent { visibility ->
-                put("visibility", visibility.name.lowercase())
-            }
-        }
-
-        val string = post(url.string, jsonObject, httpClient, request)
-
-        val meeting = json.decodeFromString<EditMeetingResponse>(string).result
-
-        return EditMeetingRequest.Response(meeting.mapToMeeting())
+        return EditMeetingRequest.Response(response.type())
     }
+
+    @Serializable
+    private data class ListMeetingParticipantsBody(
+        val meetingId: MeetingIdSerializable,
+        val amount: AmountSerializable,
+        val pagingId: PagingIdSerializable?
+    )
+    private fun ListMeetingParticipantsRequest.toBody() = ListMeetingParticipantsBody(
+        meetingId.serializable(),
+        amount.serializable(),
+        pagingId?.serializable()
+    )
 
     suspend fun listMeetingParticipants(
         request: ListMeetingParticipantsRequest
     ): ListMeetingParticipantsRequest.Response {
         val url = baseUrl / "participants" / "list"
+        val body = request.toBody()
 
-        val jsonObject = buildJsonObject {
-            put("meetingId", request.meetingId.string)
-            put("amount", request.amount.int)
-            put("pagingId", request.pagingId?.string)
-        }
+        val response = httpClient.post(url.string) {
+            apiVersion(request.apiVersion)
+            token(request.token)
+            setBody(body)
+        }.bodyAsSuccess<PagingResponseSerializable<UserSerializable>>()
+            .type()
+            .mapItems { meeting -> meeting.type() }
 
-        val string = post(url.string, jsonObject, httpClient, request)
-
-        val response = json.decodeFromString<ListMeetingParticipantsResponse>(string).result
-
-        val paging = PagingResponse(
-            data = response.data.map(ModelUser::mapToUser),
-            nextPagingId = response.nextPagingId?.let(::PagingId)
-        )
-
-        return ListMeetingParticipantsRequest.Response(paging)
+        return ListMeetingParticipantsRequest.Response(response)
     }
+
+    @Serializable
+    private data class ParticipateMeetingBody(val meetingId: MeetingIdSerializable)
+    private fun ParticipateMeetingRequest.toBody() = ParticipateMeetingBody(meetingId.serializable())
 
     suspend fun participateMeeting(request: ParticipateMeetingRequest): StatusTrueResponse {
         val url = baseUrl / "participate"
-
-        val jsonObject = buildJsonObject {
-            put("meetingId", request.meetingId.string)
-        }
-
-        val string = post(url.string, jsonObject, httpClient, request)
-
-        return Json.decodeFromString<StatusTrueResponse>(string)
+        val body = request.toBody()
+        return httpClient.post(url.string) {
+            apiVersion(request.apiVersion)
+            token(request.token)
+            setBody(body)
+        }.body<StatusTrueResponse>()
     }
+
+    @Serializable
+    private data class GetMeetingBody(val meetingId: MeetingIdSerializable)
+    private fun GetMeetingRequest.toBody() = GetMeetingBody(meetingId.serializable())
 
     suspend fun getMeeting(request: GetMeetingRequest): GetMeetingRequest.Response {
         val url = baseUrl / "get"
+        val body = request.toBody()
+        val response = httpClient.post(url.string) {
+            apiVersion(request.apiVersion)
+            token(request.token)
+            setBody(body)
+        }.bodyAsSuccess<MeetingSerializable>()
 
-        val jsonObject = buildJsonObject {
-            put("meetingId", request.meetingId.string)
-        }
-
-        val string = post(url.string, jsonObject, httpClient, request)
-
-        val response = json.decodeFromString<CreateMeetingResponse>(string).result
-
-        val meeting = response.mapToMeeting()
-
-        return GetMeetingRequest.Response(meeting)
+        return GetMeetingRequest.Response(response.type())
     }
 }

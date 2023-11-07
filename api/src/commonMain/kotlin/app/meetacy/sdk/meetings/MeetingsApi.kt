@@ -28,7 +28,7 @@ public class MeetingsApi(private val api: MeetacyApi) {
 
     public suspend fun create(
         token: Token,
-        title: String,
+        title: String?,
         date: Date,
         location: Location,
         description: String? = null,
