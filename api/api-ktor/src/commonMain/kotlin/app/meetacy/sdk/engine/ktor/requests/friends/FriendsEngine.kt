@@ -2,15 +2,11 @@
 
 package app.meetacy.sdk.engine.ktor.requests.friends
 
+import app.meetacy.sdk.engine.ktor.apiVersion
 import app.meetacy.sdk.engine.ktor.handleRSocketExceptions
-import app.meetacy.sdk.engine.ktor.mapToLocation
-import app.meetacy.sdk.engine.ktor.mapToRegularUser
-import app.meetacy.sdk.engine.ktor.mapToUser
-import app.meetacy.sdk.engine.ktor.requests.extencion.post
-import app.meetacy.sdk.engine.ktor.response.models.ListFriendsResponse
-import app.meetacy.sdk.engine.ktor.response.models.Location as ModelLocation
-import app.meetacy.sdk.engine.ktor.response.models.StatusTrueResponse
-import app.meetacy.sdk.engine.ktor.response.models.User as ModelUser
+import app.meetacy.sdk.engine.ktor.response.StatusTrueResponse
+import app.meetacy.sdk.engine.ktor.response.bodyAsSuccess
+import app.meetacy.sdk.engine.ktor.token
 import app.meetacy.sdk.engine.requests.AddFriendRequest
 import app.meetacy.sdk.engine.requests.DeleteFriendRequest
 import app.meetacy.sdk.engine.requests.EmitFriendsLocationRequest
@@ -18,12 +14,24 @@ import app.meetacy.sdk.engine.requests.ListFriendsRequest
 import app.meetacy.sdk.types.annotation.UnsafeConstructor
 import app.meetacy.sdk.types.datetime.DateTime
 import app.meetacy.sdk.types.location.Location
-import app.meetacy.sdk.types.paging.PagingId
-import app.meetacy.sdk.types.paging.PagingResponse
+import app.meetacy.sdk.types.serializable.paging.PagingResponseSerializable
+import app.meetacy.sdk.types.serializable.amount.AmountSerializable
+import app.meetacy.sdk.types.serializable.amount.serializable
+import app.meetacy.sdk.types.serializable.location.LocationSerializable
+import app.meetacy.sdk.types.serializable.location.type
+import app.meetacy.sdk.types.serializable.paging.PagingIdSerializable
+import app.meetacy.sdk.types.serializable.paging.serializable
+import app.meetacy.sdk.types.serializable.paging.type
+import app.meetacy.sdk.types.serializable.user.UserIdSerializable
+import app.meetacy.sdk.types.serializable.user.UserSerializable
+import app.meetacy.sdk.types.serializable.user.serializable
+import app.meetacy.sdk.types.serializable.user.type
 import app.meetacy.sdk.types.url.Url
 import app.meetacy.sdk.types.user.RegularUser
 import app.meetacy.sdk.types.user.UserLocationSnapshot
 import io.ktor.client.*
+import io.ktor.client.call.*
+import io.ktor.client.request.*
 import io.rsocket.kotlin.ktor.client.rSocket
 import io.rsocket.kotlin.payload.Payload
 import io.rsocket.kotlin.payload.buildPayload
@@ -39,58 +47,67 @@ import kotlinx.serialization.json.put
 internal class FriendsEngine(
     baseUrl: Url,
     private val httpClient: HttpClient,
+    private val rsocketClient: HttpClient,
     private val json: Json
 ) {
     private val baseUrl =  baseUrl / "friends"
 
+    @Serializable
+    private data class AddFriendBody(val friendId: UserIdSerializable)
+    private fun AddFriendRequest.toBody() = AddFriendBody(friendId.serializable())
+
     suspend fun add(request: AddFriendRequest): StatusTrueResponse {
         val url =  baseUrl / "add"
-
-        val jsonObject = buildJsonObject {
-            put("friendId", request.friendId.string)
-        }
-
-        val string = post(url.string, jsonObject, httpClient, request)
-
-        return json.decodeFromString<StatusTrueResponse>(string)
+        val body = request.toBody()
+        val response = httpClient.post(url.string) {
+            apiVersion(request.apiVersion)
+            token(request.token)
+            setBody(body)
+        }.body<StatusTrueResponse>()
+        return response
     }
+
+    @Serializable
+    private data class DeleteFriendBody(val friendId: UserIdSerializable)
+    private fun DeleteFriendRequest.toBody() = DeleteFriendBody(friendId.serializable())
 
     suspend fun delete(request: DeleteFriendRequest): StatusTrueResponse {
         val url =  baseUrl / "delete"
-
-        val jsonObject = buildJsonObject {
-            put("friendId", request.friendId.string)
-        }
-
-        val string = post(url.string, jsonObject, httpClient, request)
-
-        return json.decodeFromString<StatusTrueResponse>(string)
+        val body = request.toBody()
+        val response = httpClient.post(url.string) {
+            apiVersion(request.apiVersion)
+            token(request.token)
+            setBody(body)
+        }.body<StatusTrueResponse>()
+        return response
     }
+
+    @Serializable
+    private data class ListFriendsBody(
+        val amount: AmountSerializable,
+        val pagingId: PagingIdSerializable?
+    )
+    private fun ListFriendsRequest.toBody() = ListFriendsBody(amount.serializable(), pagingId?.serializable() )
 
     suspend fun list(request: ListFriendsRequest): ListFriendsRequest.Response {
         val url =  baseUrl / "list"
+        val body = request.toBody()
 
-        val jsonObject = buildJsonObject {
-            put("amount", request.amount.int.toString())
-            put("pagingId", request.pagingId?.string)
-        }
+        val response = httpClient.post(url.string) {
+            apiVersion(request.apiVersion)
+            token(request.token)
+            setBody(body)
+        }.bodyAsSuccess<PagingResponseSerializable<UserSerializable>>()
+            .type()
+            .mapItems { user -> user.type() as RegularUser }
 
-        val string = post(url.string, jsonObject, httpClient, request)
-
-        val response = Json.decodeFromString<ListFriendsResponse>(string).result
-
-        val paging = PagingResponse(
-            nextPagingId = response.nextPagingId?.let(::PagingId),
-            data = response.data.map { user -> user.mapToRegularUser() }
-        )
-
-        return ListFriendsRequest.Response(paging)
+        return ListFriendsRequest.Response(response)
     }
 
     suspend fun streamFriendsLocation(request: EmitFriendsLocationRequest) = handleRSocketExceptions(json) {
         val url = baseUrl.replaceProtocolWithWebsocket() / "location" / "stream"
 
-        val socket = httpClient.rSocket(
+        val socket = rsocketClient.rSocket(
             urlString = url.string,
             secure = url.protocol.isWss
         )
@@ -130,18 +147,18 @@ private fun Location.encodeToPayload(): Payload = buildPayload {
 }
 
 @Serializable
-private data class ModelUserLocationSnapshotSerializable(
-    val user: ModelUser,
-    val location: ModelLocation,
+private data class UserLocationSnapshotSerializable(
+    val user: UserSerializable,
+    val location: LocationSerializable,
     val capturedAt: String
 )
 
 private fun Payload.decodeToUserLocationSnapshot(json: Json): UserLocationSnapshot {
-    val deserialized = json.decodeFromString<ModelUserLocationSnapshotSerializable>(data.readText())
+    val deserialized = json.decodeFromString<UserLocationSnapshotSerializable>(data.readText())
 
     return UserLocationSnapshot(
-        user = deserialized.user.mapToUser() as RegularUser,
-        location = deserialized.location.mapToLocation(),
+        user = deserialized.user.type() as RegularUser,
+        location = deserialized.location.type(),
         capturedAt = DateTime(deserialized.capturedAt)
     )
 }

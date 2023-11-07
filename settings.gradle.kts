@@ -20,6 +20,7 @@ includeBuild("build-logic")
 include(
     ":api",
     ":types",
+    ":types:serializable",
     ":api:api-ktor",
     ":kotlinx-datetime",
     ":io",

@@ -6,9 +6,9 @@ import app.meetacy.sdk.types.meeting.MeetingId
 import app.meetacy.sdk.types.user.UserId
 
 public data class CreateInvitationRequest(
-    override val token: Token,
+    val token: Token,
     val userId: UserId,
     val meetingId: MeetingId
-) : MeetacyRequest<CreateInvitationRequest.Response>, MeetacyRequestWithToken<CreateInvitationRequest.Response> {
+) : MeetacyRequest<CreateInvitationRequest.Response> {
     public data class Response(val invitation: Invitation)
 }

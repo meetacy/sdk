@@ -7,4 +7,3 @@ public sealed interface MeetacyRequest<out T> {
 }
 
 public typealias SimpleMeetacyRequest = MeetacyRequest<Unit>
-public typealias SimpleMeetacyRequestWithToken = MeetacyRequestWithToken<Unit>
