@@ -2,7 +2,7 @@
 
 kotlin = "1.9.20"
 ktor = "2.2.4"
-meetacySdk = "0.0.59"
+meetacySdk = "0.0.60"
 
 # kotlinx
 kotlinxCoroutines = "1.6.4"
