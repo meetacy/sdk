@@ -3,10 +3,9 @@ package app.meetacy.sdk.meetings
 import app.meetacy.sdk.AuthorizedMeetacyApi
 import app.meetacy.sdk.files.FileRepository
 import app.meetacy.sdk.meetings.participants.AuthorizedMeetingParticipantsRepository
-import app.meetacy.sdk.types.auth.Token
 import app.meetacy.sdk.types.datetime.Date
-import app.meetacy.sdk.types.location.Location
 import app.meetacy.sdk.types.file.FileId
+import app.meetacy.sdk.types.location.Location
 import app.meetacy.sdk.types.meeting.Meeting
 import app.meetacy.sdk.types.meeting.MeetingId
 import app.meetacy.sdk.types.optional.Optional

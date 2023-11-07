@@ -5,8 +5,10 @@ import app.meetacy.sdk.friends.AuthorizedFriendsApi
 import app.meetacy.sdk.invitations.AuthorizedInvitationsApi
 import app.meetacy.sdk.meetings.AuthorizedMeetingsApi
 import app.meetacy.sdk.notifications.AuthorizedNotificationsApi
+import app.meetacy.sdk.search.AuthorizedSearchItemRepository
 import app.meetacy.sdk.types.annotation.UnsafeConstructor
 import app.meetacy.sdk.types.auth.Token
+import app.meetacy.sdk.types.location.Location
 import app.meetacy.sdk.updates.AuthorizedUpdatesApi
 import app.meetacy.sdk.users.AuthorizedSelfUserRepository
 import app.meetacy.sdk.users.AuthorizedUsersApi
@@ -38,4 +40,7 @@ public class AuthorizedMeetacyApi @UnsafeConstructor constructor(
             data = base.getMe(token),
             api = this
         )
+    public suspend fun search(location: Location, prompt: String): List<AuthorizedSearchItemRepository> =
+        base.search(token, location, prompt).map { AuthorizedSearchItemRepository.of(it.data, api = this) }
+
 }

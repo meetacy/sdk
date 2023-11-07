@@ -25,7 +25,7 @@ public class AuthorizedMeetingsApi(
     public val participants: AuthorizedMeetingParticipantsApi = AuthorizedMeetingParticipantsApi(api)
 
     public suspend fun create(
-        title: String,
+        title: String?,
         date: Date,
         location: Location,
         description: String? = null,

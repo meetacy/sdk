@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalForeignApi::class)
+
 package app.meetacy.sdk.io
 
 import app.meetacy.sdk.io.bytes.ByteArrayView
@@ -9,6 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import platform.Foundation.*
 import kotlin.coroutines.CoroutineContext
+import kotlinx.cinterop.ExperimentalForeignApi
 
 public fun NSURL.asMeetacyOutputSource(
     context: CoroutineContext = Dispatchers.Default

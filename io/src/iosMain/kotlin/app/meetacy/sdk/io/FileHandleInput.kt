@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalForeignApi::class)
+
 package app.meetacy.sdk.io
 
 import app.meetacy.sdk.io.bytes.ByteArrayView
@@ -13,6 +15,7 @@ import platform.Foundation.closeFile
 import platform.Foundation.fileHandleForReadingFromURL
 import platform.posix.memcpy
 import kotlin.coroutines.CoroutineContext
+import kotlinx.cinterop.ExperimentalForeignApi
 
 public fun NSURL.asMeetacyInputSource(
     context: CoroutineContext = Dispatchers.Default

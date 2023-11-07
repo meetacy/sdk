@@ -8,6 +8,7 @@ import app.meetacy.sdk.engine.ktor.requests.friends.FriendsEngine
 import app.meetacy.sdk.engine.ktor.requests.invitations.InvitationsEngine
 import app.meetacy.sdk.engine.ktor.requests.meetings.MeetingsEngine
 import app.meetacy.sdk.engine.ktor.requests.notifications.NotificationsEngine
+import app.meetacy.sdk.engine.ktor.requests.search.SearchEngine
 import app.meetacy.sdk.engine.ktor.requests.updates.UpdatesEngine
 import app.meetacy.sdk.engine.ktor.requests.users.UsersEngine
 import app.meetacy.sdk.engine.ktor.response.ServerResponse
@@ -21,7 +22,11 @@ import app.meetacy.sdk.types.url.parametersOf
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.*
+import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.plugins.websocket.*
+import io.ktor.client.request.*
+import io.ktor.http.*
+import io.ktor.serialization.kotlinx.json.*
 import io.ktor.utils.io.errors.*
 import io.rsocket.kotlin.ktor.client.RSocketSupport
 import kotlinx.coroutines.CancellationException
@@ -39,19 +44,66 @@ public class KtorMeetacyEngine(
 
     private val httpClient = httpClient.config {
         expectSuccess = true
-
+        install(ContentNegotiation) {
+            json(json)
+        }
+        defaultRequest {
+            header(HttpHeaders.ContentType, ContentType.Application.Json)
+        }
+    }
+    private val rsocketClient = httpClient.config {
+        expectSuccess = true
         install(WebSockets)
         install(RSocketSupport)
     }
 
-    private val auth = AuthEngine(baseUrl, this.httpClient, this.json)
-    private val users = UsersEngine(baseUrl, this.httpClient, this.json)
-    private val friends = FriendsEngine(baseUrl, this.httpClient, this.json)
-    private val meetings = MeetingsEngine(baseUrl, this.httpClient, this.json)
-    private val files = FilesEngine(baseUrl, this.httpClient)
-    private val invitations = InvitationsEngine(baseUrl, this.httpClient, this.json)
-    private val notifications = NotificationsEngine(baseUrl, this.httpClient, this.json)
-    private val updates = UpdatesEngine(baseUrl, this.httpClient, this.json)
+    private val auth = AuthEngine(
+        baseUrl = baseUrl,
+        httpClient = this.httpClient
+    )
+
+    private val users = UsersEngine(
+        baseUrl = baseUrl,
+        httpClient = this.httpClient
+    )
+
+    private val friends = FriendsEngine(
+        baseUrl = baseUrl,
+        httpClient = this.httpClient,
+        rsocketClient = rsocketClient,
+        json = this.json
+    )
+
+    private val meetings = MeetingsEngine(
+        baseUrl = baseUrl,
+        httpClient = this.httpClient
+    )
+
+    private val files = FilesEngine(
+        baseUrl = baseUrl,
+        httpClient = this.httpClient
+    )
+
+    private val invitations = InvitationsEngine(
+        baseUrl = baseUrl,
+        httpClient = this.httpClient
+    )
+
+    private val notifications = NotificationsEngine(
+        baseUrl = baseUrl,
+        httpClient = this.httpClient
+    )
+
+    private val search = SearchEngine(
+        baseUrl = baseUrl,
+        httpClient = this.httpClient
+    )
+
+    private val updates = UpdatesEngine(
+        baseUrl = baseUrl,
+        rsocketClient = rsocketClient,
+        json = this.json
+    )
 
     override fun getFileUrl(
         id: FileId
@@ -93,12 +145,13 @@ public class KtorMeetacyEngine(
             // notifications
             is ReadNotificationRequest -> notifications.read(request) as T
             is ListNotificationsRequest -> notifications.list(request) as T
+            // search
+            is SearchRequest -> search.search(request) as T
             // updates
             is EmitUpdatesRequest -> updates.stream(request) as T
             // not yet supported
             is LinkEmailRequest -> notSupported()
             is ConfirmEmailRequest -> notSupported()
-            is TokenProviderEmpty -> notSupported()
         }
     }
 
@@ -107,7 +160,7 @@ public class KtorMeetacyEngine(
             block()
         } catch (exception: ResponseException) {
             val response = try {
-                json.decodeFromString<ServerResponse.Error>(exception.response.body())
+                json.decodeFromString<ServerResponse<Nothing>>(exception.response.body()) as ServerResponse.Error
             } catch (exception: Throwable) {
                 throw MeetacyInternalException(cause = exception)
             }

@@ -8,11 +8,10 @@ import app.meetacy.sdk.types.paging.PagingResponse
 import app.meetacy.sdk.types.user.User
 
 public data class ListMeetingParticipantsRequest(
-    override val token: Token,
+    val token: Token,
     val meetingId: MeetingId,
     val amount: Amount,
     val pagingId: PagingId?
-) : MeetacyRequest<ListMeetingParticipantsRequest.Response>,
-    MeetacyRequestWithToken<ListMeetingParticipantsRequest.Response> {
+) : MeetacyRequest<ListMeetingParticipantsRequest.Response> {
     public data class Response(val paging: PagingResponse<User>)
 }

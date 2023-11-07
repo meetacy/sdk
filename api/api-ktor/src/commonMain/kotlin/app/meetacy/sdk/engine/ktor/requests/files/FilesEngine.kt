@@ -1,6 +1,8 @@
 package app.meetacy.sdk.engine.ktor.requests.files
 
-import app.meetacy.sdk.engine.ktor.response.models.GenerateIdentityResponse
+import app.meetacy.sdk.engine.ktor.apiVersion
+import app.meetacy.sdk.engine.ktor.response.bodyAsSuccess
+import app.meetacy.sdk.engine.ktor.token
 import app.meetacy.sdk.engine.requests.GetFileRequest
 import app.meetacy.sdk.engine.requests.UploadFileRequest
 import app.meetacy.sdk.files.DownloadableFile
@@ -18,7 +20,6 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.coroutineScope
-import kotlinx.serialization.json.Json
 
 internal class FilesEngine(
     private val baseUrl: Url,
@@ -57,7 +58,7 @@ internal class FilesEngine(
     suspend fun upload(request: UploadFileRequest): UploadFileRequest.Response = coroutineScope {
         val url = baseUrl / "files" / "upload"
 
-        val string = httpClient.submitFormWithBinaryData(
+        val response = httpClient.submitFormWithBinaryData(
             url = url.string,
             formData = formData {
                 append(
@@ -73,14 +74,11 @@ internal class FilesEngine(
                 )
             }
         ) {
-            header("Api-Version", request.apiVersion.int)
-            header("Authorization", request.token.string)
-        }.bodyAsText()
+            apiVersion(request.apiVersion)
+            token(request.token)
+        }.bodyAsSuccess<String>()
 
-        val response = Json.decodeFromString<GenerateIdentityResponse>(string)
-
-        val fileId = FileId(response.result)
-
+        val fileId = FileId(response)
         UploadFileRequest.Response(fileId)
     }
 }

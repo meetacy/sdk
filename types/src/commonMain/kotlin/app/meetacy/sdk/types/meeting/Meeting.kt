@@ -1,7 +1,6 @@
 package app.meetacy.sdk.types.meeting
 
 import app.meetacy.sdk.types.datetime.Date
-import app.meetacy.sdk.types.datetime.DateOrTime
 import app.meetacy.sdk.types.file.FileId
 import app.meetacy.sdk.types.location.Location
 import app.meetacy.sdk.types.user.User
