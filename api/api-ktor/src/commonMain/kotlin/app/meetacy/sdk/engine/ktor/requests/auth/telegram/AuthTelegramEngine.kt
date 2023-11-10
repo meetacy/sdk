@@ -3,14 +3,13 @@
 package app.meetacy.sdk.engine.ktor.requests.auth.telegram
 
 import app.meetacy.sdk.engine.ktor.handleRSocketExceptions
+import app.meetacy.sdk.engine.ktor.response.ServerResponse
 import app.meetacy.sdk.engine.requests.AwaitTelegramAuthRequest
 import app.meetacy.sdk.types.annotation.UnsafeConstructor
 import app.meetacy.sdk.types.auth.Token
 import app.meetacy.sdk.types.url.Url
 import io.ktor.client.*
-import io.ktor.http.*
 import io.rsocket.kotlin.ktor.client.rSocket
-import io.rsocket.kotlin.payload.Payload
 import io.rsocket.kotlin.payload.buildPayload
 import io.rsocket.kotlin.payload.data
 import kotlinx.serialization.Serializable
@@ -29,9 +28,6 @@ internal class AuthTelegramEngine(
         val temporalToken: String,
         val apiVersion: Int
     )
-
-    @Serializable
-    private data class AwaitTelegramAuthResult(val token: String)
 
     suspend fun await(
         request: AwaitTelegramAuthRequest
@@ -54,10 +50,12 @@ internal class AuthTelegramEngine(
         }
 
         val responsePayload = socket.requestResponse(requestPayload)
-        val deserialized = json.decodeFromString<AwaitTelegramAuthResult>(responsePayload.data.readText())
+        val deserialized = json.decodeFromString<ServerResponse<String>>(
+            string = responsePayload.data.readText()
+        ) as ServerResponse.Success
 
         return AwaitTelegramAuthRequest.Response(
-            token = Token(deserialized.token)
+            permanentToken = Token(deserialized.result)
         )
     }
 }
