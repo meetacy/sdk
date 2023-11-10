@@ -6,6 +6,6 @@ import app.meetacy.sdk.types.auth.Token
 
 public class AuthTelegramApi(private val api: MeetacyApi) {
     public suspend fun await(temporalToken: Token): Token {
-        return api.engine.execute(AwaitTelegramAuthRequest(temporalToken)).token
+        return api.engine.execute(AwaitTelegramAuthRequest(temporalToken)).permanentToken
     }
 }
