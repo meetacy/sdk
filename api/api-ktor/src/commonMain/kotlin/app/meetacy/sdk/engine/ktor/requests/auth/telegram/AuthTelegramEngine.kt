@@ -36,7 +36,7 @@ internal class AuthTelegramEngine(
     suspend fun await(
         request: AwaitTelegramAuthRequest
     ): AwaitTelegramAuthRequest.Response {
-        val url = baseUrl / "await"
+        val url = baseUrl.replaceProtocolWithWebsocket() / "await"
 
         val socket = rsocketClient.rSocket(
             urlString = url.string,
