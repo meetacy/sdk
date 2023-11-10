@@ -2,6 +2,7 @@
 
 package app.meetacy.sdk.engine.ktor.requests.auth.telegram
 
+import app.meetacy.sdk.engine.ktor.handleRSocketExceptions
 import app.meetacy.sdk.engine.requests.AwaitTelegramAuthRequest
 import app.meetacy.sdk.types.annotation.UnsafeConstructor
 import app.meetacy.sdk.types.auth.Token
@@ -32,10 +33,9 @@ internal class AuthTelegramEngine(
     @Serializable
     private data class AwaitTelegramAuthResult(val token: String)
 
-
     suspend fun await(
         request: AwaitTelegramAuthRequest
-    ): AwaitTelegramAuthRequest.Response {
+    ): AwaitTelegramAuthRequest.Response = handleRSocketExceptions(json) {
         val url = baseUrl.replaceProtocolWithWebsocket() / "await"
 
         val socket = rsocketClient.rSocket(
