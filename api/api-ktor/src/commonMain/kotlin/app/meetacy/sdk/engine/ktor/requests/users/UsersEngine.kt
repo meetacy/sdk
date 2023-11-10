@@ -85,7 +85,6 @@ internal class UsersEngine(
         username = username.serializable()
     )
 
-
     suspend fun usernameAvailable(request: UsernameAvailableRequest): UsernameAvailableRequest.Response {
         val url = baseUrl / "username" / "available"
         val body = request.toBody()
