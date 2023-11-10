@@ -15,13 +15,15 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 
 internal class AuthEngine(
-    private val baseUrl: Url,
+    baseUrl: Url,
     private val httpClient: HttpClient,
     rsocketClient: HttpClient,
     json: Json
 ) {
+    private val baseUrl: Url = baseUrl / "auth"
+
     val telegram: AuthTelegramEngine = AuthTelegramEngine(
-        baseUrl = baseUrl,
+        baseUrl = this.baseUrl,
         rsocketClient = rsocketClient,
         json = json
     )
@@ -30,7 +32,7 @@ internal class AuthEngine(
     private data class GenerateAuthBody(val nickname: String)
 
     suspend fun generate(request: GenerateAuthRequest): GenerateAuthRequest.Response {
-        val url = baseUrl / "auth" / "generate"
+        val url = baseUrl / "generate"
         val body = GenerateAuthBody(request.nickname)
         val response = httpClient
             .post(url.string) {

@@ -7,6 +7,7 @@ import app.meetacy.sdk.types.annotation.UnsafeConstructor
 import app.meetacy.sdk.types.auth.Token
 import app.meetacy.sdk.types.url.Url
 import io.ktor.client.*
+import io.ktor.http.*
 import io.rsocket.kotlin.ktor.client.rSocket
 import io.rsocket.kotlin.payload.Payload
 import io.rsocket.kotlin.payload.buildPayload
@@ -42,13 +43,21 @@ internal class AuthTelegramEngine(
             secure = url.protocol.isWss
         )
 
+        val serializable = with (request) {
+            AwaitTelegramAuthInit(
+                temporalToken = temporalToken.string,
+                apiVersion = apiVersion.int
+            )
+        }
         val requestPayload = buildPayload {
-            data(json.encodeToString(request))
+            data(json.encodeToString(serializable))
         }
 
         val responsePayload = socket.requestResponse(requestPayload)
         val deserialized = json.decodeFromString<AwaitTelegramAuthResult>(responsePayload.data.readText())
 
-        return AwaitTelegramAuthRequest.Response(token = Token(deserialized.token))
+        return AwaitTelegramAuthRequest.Response(
+            token = Token(deserialized.token)
+        )
     }
 }
