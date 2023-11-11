@@ -118,6 +118,8 @@ public class KtorMeetacyEngine(
             is GenerateAuthRequest -> auth.generate(request) as T
             // telegram
             is AwaitTelegramAuthRequest -> auth.telegram.await(request) as T
+            is FinishTelegramAuthRequest -> auth.telegram.finish(request) as T
+            is PreloginTelegramAuthRequest -> auth.telegram.prelogin(request) as T
             // friends
             is AddFriendRequest -> friends.add(request) as T
             is DeleteFriendRequest -> friends.delete(request) as T

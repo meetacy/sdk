@@ -56,30 +56,28 @@ internal class FriendsEngine(
     private data class AddFriendBody(val friendId: UserIdSerializable)
     private fun AddFriendRequest.toBody() = AddFriendBody(friendId.serializable())
 
-    suspend fun add(request: AddFriendRequest): StatusTrueResponse {
+    suspend fun add(request: AddFriendRequest) {
         val url =  baseUrl / "add"
         val body = request.toBody()
-        val response = httpClient.post(url.string) {
+        httpClient.post(url.string) {
             apiVersion(request.apiVersion)
             token(request.token)
             setBody(body)
         }.body<StatusTrueResponse>()
-        return response
     }
 
     @Serializable
     private data class DeleteFriendBody(val friendId: UserIdSerializable)
     private fun DeleteFriendRequest.toBody() = DeleteFriendBody(friendId.serializable())
 
-    suspend fun delete(request: DeleteFriendRequest): StatusTrueResponse {
+    suspend fun delete(request: DeleteFriendRequest) {
         val url =  baseUrl / "delete"
         val body = request.toBody()
-        val response = httpClient.post(url.string) {
+        httpClient.post(url.string) {
             apiVersion(request.apiVersion)
             token(request.token)
             setBody(body)
         }.body<StatusTrueResponse>()
-        return response
     }
 
     @Serializable
