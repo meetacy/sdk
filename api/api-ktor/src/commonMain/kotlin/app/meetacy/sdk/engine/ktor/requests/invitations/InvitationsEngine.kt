@@ -17,9 +17,10 @@ import app.meetacy.sdk.types.serializable.meeting.serializable
 import app.meetacy.sdk.types.serializable.user.UserIdSerializable
 import app.meetacy.sdk.types.serializable.user.serializable
 import app.meetacy.sdk.types.url.Url
-import io.ktor.client.*
-import io.ktor.client.call.*
-import io.ktor.client.request.*
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
 import kotlinx.serialization.Serializable
 
 internal class InvitationsEngine(
@@ -33,6 +34,7 @@ internal class InvitationsEngine(
         val meetingId: MeetingIdSerializable,
         val userId: UserIdSerializable
     )
+
     private fun CreateInvitationRequest.toBody() = CreateInvitationBody(
         meetingId.serializable(),
         userId.serializable()
@@ -53,14 +55,15 @@ internal class InvitationsEngine(
 
     @Serializable
     private data class AcceptInvitationBody(val invitationId: InvitationIdSerializable)
+
     private fun AcceptInvitationRequest.toBody() = AcceptInvitationBody(invitationId.serializable())
 
     suspend fun accept(
         request: AcceptInvitationRequest
-    ): StatusTrueResponse {
+    ) {
         val url = baseUrl / "accept"
         val body = request.toBody()
-        return httpClient.post(url.string) {
+        httpClient.post(url.string) {
             apiVersion(request.apiVersion)
             token(request.token)
             setBody(body)
@@ -69,14 +72,15 @@ internal class InvitationsEngine(
 
     @Serializable
     private data class DenyInvitationBody(val invitationId: InvitationIdSerializable)
+
     private fun DenyInvitationRequest.toBody() = DenyInvitationBody(invitationId.serializable())
 
     suspend fun deny(
         request: DenyInvitationRequest
-    ): StatusTrueResponse {
+    ) {
         val url = baseUrl / "deny"
         val body = request.toBody()
-        return httpClient.post(url.string) {
+        httpClient.post(url.string) {
             apiVersion(request.apiVersion)
             token(request.token)
             setBody(body)
@@ -85,14 +89,15 @@ internal class InvitationsEngine(
 
     @Serializable
     private data class CancelInvitationBody(val invitationId: InvitationIdSerializable)
+
     private fun CancelInvitationRequest.toBody() = CancelInvitationBody(invitationId.serializable())
 
     suspend fun cancel(
         request: CancelInvitationRequest
-    ): StatusTrueResponse {
+    ) {
         val url = baseUrl / "cancel"
         val body = request.toBody()
-        return httpClient.post(url.string) {
+        httpClient.post(url.string) {
             apiVersion(request.apiVersion)
             token(request.token)
             setBody(body)

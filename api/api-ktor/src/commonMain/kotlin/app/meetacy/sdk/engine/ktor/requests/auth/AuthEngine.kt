@@ -9,8 +9,9 @@ import app.meetacy.sdk.engine.requests.GenerateAuthRequest
 import app.meetacy.sdk.types.annotation.UnsafeConstructor
 import app.meetacy.sdk.types.auth.Token
 import app.meetacy.sdk.types.url.Url
-import io.ktor.client.*
-import io.ktor.client.request.*
+import io.ktor.client.HttpClient
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 
@@ -24,6 +25,7 @@ internal class AuthEngine(
 
     val telegram: AuthTelegramEngine = AuthTelegramEngine(
         baseUrl = this.baseUrl,
+        httpClient = httpClient,
         rsocketClient = rsocketClient,
         json = json
     )
