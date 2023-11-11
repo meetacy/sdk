@@ -1,6 +1,9 @@
+@file:OptIn(UnstableApi::class)
+
 package app.meetacy.sdk.engine
 
 import app.meetacy.sdk.engine.requests.MeetacyRequest
+import app.meetacy.sdk.types.annotation.UnstableApi
 import app.meetacy.sdk.types.file.FileId
 import app.meetacy.sdk.types.url.Url
 
