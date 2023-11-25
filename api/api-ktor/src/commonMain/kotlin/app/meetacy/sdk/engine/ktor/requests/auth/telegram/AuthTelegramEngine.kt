@@ -43,11 +43,7 @@ internal class AuthTelegramEngine(
         request: AwaitTelegramAuthRequest
     ): AwaitTelegramAuthRequest.Response = handleRSocketExceptions(json) {
         val url = baseUrl.replaceProtocolWithWebsocket() / "await"
-
-        val socket = rsocketClient.rSocket(
-            urlString = url.string,
-            secure = url.protocol.isWss
-        )
+        val socket = rsocketClient.rSocket(url.string)
 
         val serializable = with(request) {
             AwaitTelegramAuthInit(

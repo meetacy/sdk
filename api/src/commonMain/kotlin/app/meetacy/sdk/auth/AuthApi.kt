@@ -5,7 +5,6 @@ import app.meetacy.sdk.MeetacyApi
 import app.meetacy.sdk.auth.email.AuthEmailApi
 import app.meetacy.sdk.auth.telegram.AuthTelegramApi
 import app.meetacy.sdk.engine.requests.GenerateAuthRequest
-import app.meetacy.sdk.types.auth.Token
 
 public class AuthApi(private val api: MeetacyApi) {
     public val email: AuthEmailApi = AuthEmailApi(api)
