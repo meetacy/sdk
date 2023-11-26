@@ -8,7 +8,7 @@ import app.meetacy.sdk.types.email.ConfirmEmailHash
 import app.meetacy.sdk.types.email.ConfirmEmailStatus
 import app.meetacy.sdk.types.email.Email
 
-public class EmailApi(private val api: MeetacyApi) {
+public class AuthEmailApi(private val api: MeetacyApi) {
     public suspend fun link(token: Token, email: Email): LinkEmailResult {
         api.engine.execute(LinkEmailRequest(token, email))
         return LinkEmailResult(emailApi = this, email)

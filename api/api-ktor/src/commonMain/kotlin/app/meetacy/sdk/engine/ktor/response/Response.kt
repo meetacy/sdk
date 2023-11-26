@@ -54,9 +54,10 @@ internal sealed interface ServerResponse<out T> {
 }
 
 internal fun <T> Payload.decodeToServerResponse(
+    json: Json,
     subSerializer: KSerializer<T>
 ): ServerResponse<T> {
-    return Json.decodeFromString(
+    return json.decodeFromString(
         deserializer = ServerResponse.Serializer(subSerializer),
         string = data.readText()
     )
