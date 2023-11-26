@@ -1,12 +1,12 @@
 [versions]
 
-kotlin = "1.9.20"
-ktor = "2.2.4"
-meetacySdk = "0.0.60"
+kotlin = "1.9.0"
+ktor = "2.3.6"
+meetacySdk = "0.0.61"
 
 # kotlinx
 kotlinxCoroutines = "1.6.4"
-kotlinxSerialization = "1.5.1"
+kotlinxSerialization = "1.6.0"
 kotlinxDateTime = "0.4.0"
 rsocket = "0.15.4"
 

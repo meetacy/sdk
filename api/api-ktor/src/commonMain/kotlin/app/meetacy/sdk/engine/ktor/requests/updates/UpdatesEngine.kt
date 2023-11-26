@@ -70,7 +70,7 @@ private sealed interface UpdateSerializable {
 
 private fun Payload.decodeToUpdate(json: Json): Update {
     return when (
-        val deserialized = json.decodeFromString<UpdateSerializable>(data.readText().apply { println("STRING: $this") })
+        val deserialized = json.decodeFromString<UpdateSerializable>(data.readText())
     ) {
         is UpdateSerializable.Notification -> Update.Notification(
             id = UpdateId(deserialized.id),
