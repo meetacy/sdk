@@ -73,7 +73,7 @@ internal class FriendsEngine(
     suspend fun delete(request: DeleteFriendRequest) {
         val url =  baseUrl / "delete"
         val body = request.toBody()
-        httpClient.post(url.string) {
+        httpClient.delete(url.string) {
             apiVersion(request.apiVersion)
             token(request.token)
             setBody(body)

@@ -37,9 +37,7 @@ import app.meetacy.sdk.types.serializable.user.type
 import app.meetacy.sdk.types.url.Url
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
-import io.ktor.client.request.get
-import io.ktor.client.request.post
-import io.ktor.client.request.setBody
+import io.ktor.client.request.*
 import kotlinx.serialization.Serializable
 
 internal class MeetingsEngine(
@@ -199,7 +197,7 @@ internal class MeetingsEngine(
     suspend fun editMeeting(request: EditMeetingRequest): EditMeetingRequest.Response = with(request) {
         val url = baseUrl / "edit"
         val body = request.toBody()
-        val response = httpClient.post(url.string) {
+        val response = httpClient.put(url.string) {
             apiVersion(request.apiVersion)
             token(request.token)
             setBody(body)
