@@ -69,7 +69,7 @@ internal class UsersEngine(
     suspend fun editUser(request: EditUserRequest): EditUserRequest.Response {
         val url = baseUrl / "edit"
         val body = request.toBody()
-        val response = httpClient.post(url.string) {
+        val response = httpClient.put(url.string) {
             apiVersion(request.apiVersion)
             token(request.token)
             setBody(body)

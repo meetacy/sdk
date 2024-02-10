@@ -37,9 +37,7 @@ import app.meetacy.sdk.types.serializable.user.type
 import app.meetacy.sdk.types.url.Url
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
-import io.ktor.client.request.get
-import io.ktor.client.request.post
-import io.ktor.client.request.setBody
+import io.ktor.client.request.*
 import kotlinx.serialization.Serializable
 
 internal class MeetingsEngine(
@@ -76,21 +74,15 @@ internal class MeetingsEngine(
         return ListMeetingsHistoryRequest.Response(response)
     }
 
-    private fun ListActiveMeetingsRequest.toBody() = ListMeetingsPagingBody(
-        amount.serializable(),
-        pagingId?.serializable()
-    )
-
     suspend fun listActiveMeetings(
         request: ListActiveMeetingsRequest
     ): ListActiveMeetingsRequest.Response {
         val url = baseUrl / "history" / "active"
-        val body = request.toBody()
-
         val response = httpClient.get(url.string) {
             apiVersion(request.apiVersion)
             token(request.token)
-            setBody(body)
+            parameter("amount", request.amount.int)
+            parameter("pagingId", request.pagingId?.string)
         }.bodyAsSuccess<PagingResponseSerializable<MeetingSerializable>>()
             .type()
             .mapItems { meeting -> meeting.type() }
@@ -98,21 +90,15 @@ internal class MeetingsEngine(
         return ListActiveMeetingsRequest.Response(response)
     }
 
-    private fun ListPastMeetingsRequest.toBody() = ListMeetingsPagingBody(
-        amount.serializable(),
-        pagingId?.serializable()
-    )
-
     suspend fun listPastMeetings(
         request: ListPastMeetingsRequest
     ): ListPastMeetingsRequest.Response {
         val url = baseUrl / "history" / "past"
-        val body = request.toBody()
-
-        val response = httpClient.post(url.string) {
+        val response = httpClient.get(url.string) {
             apiVersion(request.apiVersion)
             token(request.token)
-            setBody(body)
+            parameter("amount", request.amount.int)
+            parameter("pagingId", request.pagingId?.string)
         }.bodyAsSuccess<PagingResponseSerializable<MeetingSerializable>>()
             .type()
             .mapItems { meeting -> meeting.type() }
@@ -164,7 +150,7 @@ internal class MeetingsEngine(
 
     suspend fun createMeeting(
         request: CreateMeetingRequest
-    ): CreateMeetingRequest.Response = with(request) {
+    ): CreateMeetingRequest.Response {
         val url = baseUrl / "create"
         val body = request.toBody()
         val response = httpClient.post(url.string) {
@@ -199,7 +185,7 @@ internal class MeetingsEngine(
     suspend fun editMeeting(request: EditMeetingRequest): EditMeetingRequest.Response = with(request) {
         val url = baseUrl / "edit"
         val body = request.toBody()
-        val response = httpClient.post(url.string) {
+        val response = httpClient.put(url.string) {
             apiVersion(request.apiVersion)
             token(request.token)
             setBody(body)
