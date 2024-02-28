@@ -20,8 +20,8 @@ internal class SearchEngine(
         val response =  httpClient.get(baseUrl.string) {
             apiVersion(request.apiVersion)
             token(request.token)
-            parameter("latitude", request.location.latitude)
-            parameter("longitude", request.location.longitude)
+            parameter("latitude", request.location?.latitude)
+            parameter("longitude", request.location?.longitude)
             parameter("prompt", request.prompt)
         }.bodyAsSuccess<List<SearchItemSerializable>>()
         return SearchRequest.Response(response.map { it.type() })

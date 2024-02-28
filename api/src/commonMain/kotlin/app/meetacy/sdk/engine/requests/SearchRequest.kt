@@ -6,7 +6,7 @@ import app.meetacy.sdk.types.search.SearchItem
 
 public data class SearchRequest(
     val token: Token,
-    val location: Location,
+    val location: Location?,
     val prompt: String
 ) : MeetacyRequest<SearchRequest.Response> {
     public data class Response(val items: List<SearchItem>)
