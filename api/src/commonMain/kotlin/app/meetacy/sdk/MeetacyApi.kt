@@ -35,7 +35,7 @@ public class MeetacyApi(
 
     public suspend fun search(
         token: Token,
-        location: Location,
+        location: Location?,
         prompt: String
     ): List<SearchItemRepository> {
         return engine.execute(
