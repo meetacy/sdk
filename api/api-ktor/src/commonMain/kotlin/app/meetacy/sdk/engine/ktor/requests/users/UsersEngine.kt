@@ -26,30 +26,21 @@ internal class UsersEngine(
 ) {
     private val baseUrl = baseUrl / "users"
 
-    private fun toBody() = GetUserBody(null)
-
     suspend fun getMe(request: GetMeRequest): GetMeRequest.Response {
         val url = baseUrl / "get"
-        val body = toBody()
-        val response = httpClient.post(url.string) {
+        val response = httpClient.get(url.string) {
             apiVersion(request.apiVersion)
             token(request.token)
-            setBody(body)
         }.bodyAsSuccess<UserDetailsSerializable>()
         return GetMeRequest.Response(response.type() as SelfUserDetails)
     }
 
-    @Serializable
-    private data class GetUserBody(val id: UserIdSerializable?)
-    private fun GetUserRequest.toBody() = GetUserBody(userId?.serializable())
-
     suspend fun getUser(request: GetUserRequest): GetUserRequest.Response {
         val url = baseUrl / "get"
-        val body = request.toBody()
-        val response = httpClient.post(url.string) {
+        val response = httpClient.get(url.string) {
             apiVersion(request.apiVersion)
             token(request.token)
-            setBody(body)
+            parameter("id", request.userId)
         }.bodyAsSuccess<UserDetailsSerializable>()
         return GetUserRequest.Response(response.type())
     }
