@@ -11,6 +11,7 @@ import app.meetacy.sdk.types.annotation.UnsafeConstructor
 import app.meetacy.sdk.types.auth.Token
 import app.meetacy.sdk.types.location.Location
 import app.meetacy.sdk.updates.AuthorizedUpdatesApi
+import app.meetacy.sdk.users.AuthorizedSelfUserDetailsRepository
 import app.meetacy.sdk.users.AuthorizedSelfUserRepository
 import app.meetacy.sdk.users.AuthorizedUsersApi
 
@@ -36,11 +37,12 @@ public class AuthorizedMeetacyApi @UnsafeConstructor constructor(
     public val notifications: AuthorizedNotificationsApi = AuthorizedNotificationsApi(api = this)
     public val updates: AuthorizedUpdatesApi = AuthorizedUpdatesApi(api = this)
 
-    public suspend fun getMe(): AuthorizedSelfUserRepository =
-        AuthorizedSelfUserRepository(
-            data = base.getMe(token),
+    public suspend fun getMe(): AuthorizedSelfUserDetailsRepository =
+        AuthorizedSelfUserDetailsRepository(
+            data = base.getMe(token).data,
             api = this
         )
+
     public suspend fun search(location: Location?, prompt: String): List<AuthorizedSearchItemRepository> =
         base.search(token, location, prompt).map { AuthorizedSearchItemRepository.of(it.data, api = this) }
 

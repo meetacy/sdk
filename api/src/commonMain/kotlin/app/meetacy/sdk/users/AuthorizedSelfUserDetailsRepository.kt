@@ -1,27 +1,36 @@
 package app.meetacy.sdk.users
 
 import app.meetacy.sdk.AuthorizedMeetacyApi
+import app.meetacy.sdk.MeetacyApi
+import app.meetacy.sdk.auth.AuthApi
 import app.meetacy.sdk.auth.AuthorizedAuthApi
 import app.meetacy.sdk.files.AuthorizedFilesApi
 import app.meetacy.sdk.files.FileRepository
+import app.meetacy.sdk.files.FilesApi
 import app.meetacy.sdk.friends.AuthorizedFriendsApi
+import app.meetacy.sdk.friends.FriendsApi
 import app.meetacy.sdk.invitations.AuthorizedInvitationsApi
+import app.meetacy.sdk.invitations.InvitationsApi
 import app.meetacy.sdk.meetings.AuthorizedMeetingsApi
+import app.meetacy.sdk.meetings.MeetingsApi
 import app.meetacy.sdk.notifications.AuthorizedNotificationsApi
+import app.meetacy.sdk.notifications.NotificationsApi
+import app.meetacy.sdk.types.amount.Amount
 import app.meetacy.sdk.types.auth.Token
 import app.meetacy.sdk.types.email.Email
 import app.meetacy.sdk.types.file.FileId
 import app.meetacy.sdk.types.optional.Optional
-import app.meetacy.sdk.types.user.SelfUser
+import app.meetacy.sdk.types.user.SelfUserDetails
 import app.meetacy.sdk.types.user.UserId
 import app.meetacy.sdk.types.user.Username
 import app.meetacy.sdk.updates.AuthorizedUpdatesApi
+import app.meetacy.sdk.updates.UpdatesApi
 
-public class AuthorizedSelfUserRepository(
-    override val data: SelfUser,
+public class AuthorizedSelfUserDetailsRepository(
+    override val data: SelfUserDetails,
     public val api: AuthorizedMeetacyApi
-) : AuthorizedUserRepository {
-    override val base: SelfUserRepository get() = SelfUserRepository(data, api.base)
+) : AuthorizedUserDetailsRepository {
+    override val base: SelfUserDetailsRepository get() = SelfUserDetailsRepository(data, api.base)
 
     override val id: UserId get() = data.id
     override val email: Email? get() = data.email
@@ -29,7 +38,10 @@ public class AuthorizedSelfUserRepository(
     override val emailVerified: Boolean get() = data.emailVerified
     override val username: Username? get() = data.username
     override val avatar: FileRepository? get() = FileRepository(data.avatarId, api)
+    override val subscribersAmount: Amount.OrZero get() = data.subscribersAmount
+    override val subscriptionsAmount: Amount.OrZero get() = data.subscriptionsAmount
 
+    override val isSelf: Boolean get() = true
     override val relationship: Nothing? get() = null
 
     public val token: Token get() = api.token
@@ -54,7 +66,15 @@ public class AuthorizedSelfUserRepository(
         avatarId: Optional<FileId?> = Optional.Undefined
     ): AuthorizedSelfUserRepository = api.users.edit(nickname, username, avatarId)
 
-    override suspend fun details(): AuthorizedUserDetailsRepository {
+    public suspend fun usernameAvailable(username: Username): Username {
+        return api.users.usernameAvailable(username)
+    }
+
+    override suspend fun updated(): AuthorizedSelfUserDetailsRepository {
         return api.getMe()
+    }
+
+    override fun toUser(): AuthorizedSelfUserRepository {
+        return AuthorizedSelfUserRepository(data.toUser(), api)
     }
 }

@@ -15,6 +15,7 @@ import app.meetacy.sdk.types.serializable.optional.serializable
 import app.meetacy.sdk.types.serializable.user.*
 import app.meetacy.sdk.types.url.Url
 import app.meetacy.sdk.types.user.SelfUser
+import app.meetacy.sdk.types.user.SelfUserDetails
 import io.ktor.client.*
 import io.ktor.client.request.*
 import kotlinx.serialization.Serializable
@@ -34,8 +35,8 @@ internal class UsersEngine(
             apiVersion(request.apiVersion)
             token(request.token)
             setBody(body)
-        }.bodyAsSuccess<UserSerializable>()
-        return GetMeRequest.Response(response.type() as SelfUser)
+        }.bodyAsSuccess<UserDetailsSerializable>()
+        return GetMeRequest.Response(response.type() as SelfUserDetails)
     }
 
     @Serializable
@@ -49,7 +50,7 @@ internal class UsersEngine(
             apiVersion(request.apiVersion)
             token(request.token)
             setBody(body)
-        }.bodyAsSuccess<UserSerializable>()
+        }.bodyAsSuccess<UserDetailsSerializable>()
         return GetUserRequest.Response(response.type())
     }
 

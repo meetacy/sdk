@@ -7,7 +7,6 @@ import app.meetacy.sdk.engine.requests.UsernameAvailableRequest
 import app.meetacy.sdk.types.auth.Token
 import app.meetacy.sdk.types.file.FileId
 import app.meetacy.sdk.types.optional.Optional
-import app.meetacy.sdk.types.user.User
 import app.meetacy.sdk.types.user.UserId
 import app.meetacy.sdk.types.user.Username
 
@@ -16,10 +15,13 @@ import app.meetacy.sdk.types.user.Username
  * - [AuthorizedUsersApi]
  * - [RegularUserRepository]
  * - [SelfUserRepository]
+ * - [RegularUserDetailsRepository]
+ * - [SelfUserDetailsRepository]
  */
 public class UsersApi(private val api: MeetacyApi) {
-    public suspend fun get(token: Token, userId: UserId): User {
-        return api.engine.execute(GetUserRequest(token, userId)).user
+    public suspend fun get(token: Token, userId: UserId): UserDetailsRepository {
+        val user = api.engine.execute(GetUserRequest(token, userId)).user
+        return UserDetailsRepository.of(user, api)
     }
 
     public suspend fun edit(

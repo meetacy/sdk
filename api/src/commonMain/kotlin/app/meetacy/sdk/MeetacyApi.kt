@@ -14,7 +14,9 @@ import app.meetacy.sdk.types.annotation.UnsafeConstructor
 import app.meetacy.sdk.types.auth.Token
 import app.meetacy.sdk.types.location.Location
 import app.meetacy.sdk.types.user.SelfUser
+import app.meetacy.sdk.types.user.SelfUserDetails
 import app.meetacy.sdk.updates.UpdatesApi
+import app.meetacy.sdk.users.SelfUserDetailsRepository
 import app.meetacy.sdk.users.UsersApi
 
 public class MeetacyApi(
@@ -29,8 +31,12 @@ public class MeetacyApi(
     public val notifications: NotificationsApi = NotificationsApi(api = this)
     public val updates: UpdatesApi = UpdatesApi(api = this)
 
-    public suspend fun getMe(token: Token): SelfUser {
-        return engine.execute(GetMeRequest(token)).me
+    public suspend fun getMe(token: Token): SelfUserDetailsRepository {
+        val user = engine.execute(GetMeRequest(token)).me
+        return SelfUserDetailsRepository(
+            data = user,
+            api = this
+        )
     }
 
     public suspend fun search(

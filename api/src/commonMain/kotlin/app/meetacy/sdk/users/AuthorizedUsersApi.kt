@@ -12,12 +12,17 @@ import app.meetacy.sdk.types.user.Username
  * When modifying this class, corresponding classes should be altered:
  * - [AuthorizedSelfUserRepository]
  * - [AuthorizedRegularUserRepository]
+ * - [AuthorizedRegularUserDetailsRepository]
+ * - [AuthorizedSelfUserDetailsRepository]
  */
 public class AuthorizedUsersApi(private val api: AuthorizedMeetacyApi) {
     public val token: Token get() = api.token
     public val base: UsersApi get() = api.base.users
 
-    public suspend fun get(userId: UserId): User = base.get(token, userId)
+    public suspend fun get(userId: UserId): AuthorizedUserDetailsRepository {
+        val user = base.get(token, userId)
+        return AuthorizedUserDetailsRepository.of(user.data, api)
+    }
 
     public suspend fun edit(
         nickname: String,

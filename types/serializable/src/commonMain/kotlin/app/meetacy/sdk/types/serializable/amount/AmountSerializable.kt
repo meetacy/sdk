@@ -9,7 +9,14 @@ import kotlin.jvm.JvmInline
 
 @Serializable
 @JvmInline
-public value class AmountSerializable(public val int: Int)
+public value class AmountSerializable(public val int: Int) {
+    @Serializable
+    @JvmInline
+    public value class OrZero(public val int: Int)
+}
 
 public fun AmountSerializable.type(): Amount = Amount(int)
 public fun Amount.serializable(): AmountSerializable = AmountSerializable(int)
+
+public fun AmountSerializable.OrZero.type(): Amount.OrZero = Amount.OrZero(int)
+public fun Amount.OrZero.serializable(): AmountSerializable.OrZero = AmountSerializable.OrZero(int)
