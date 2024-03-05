@@ -40,7 +40,7 @@ internal class UsersEngine(
         val response = httpClient.get(url.string) {
             apiVersion(request.apiVersion)
             token(request.token)
-            parameter("id", request.userId)
+            parameter("id", request.userId?.string)
         }.bodyAsSuccess<UserDetailsSerializable>()
         return GetUserRequest.Response(response.type())
     }
