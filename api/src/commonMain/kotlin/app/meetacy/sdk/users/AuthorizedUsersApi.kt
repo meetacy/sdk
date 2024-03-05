@@ -1,6 +1,7 @@
 package app.meetacy.sdk.users
 
 import app.meetacy.sdk.AuthorizedMeetacyApi
+import app.meetacy.sdk.engine.requests.GetUserByUsernameRequest
 import app.meetacy.sdk.types.auth.Token
 import app.meetacy.sdk.types.file.FileId
 import app.meetacy.sdk.types.optional.Optional
@@ -21,6 +22,11 @@ public class AuthorizedUsersApi(private val api: AuthorizedMeetacyApi) {
 
     public suspend fun get(userId: UserId): AuthorizedUserDetailsRepository {
         val user = base.get(token, userId)
+        return AuthorizedUserDetailsRepository.of(user.data, api)
+    }
+
+    public suspend fun get(username: Username): AuthorizedUserDetailsRepository {
+        val user = base.get(token, username)
         return AuthorizedUserDetailsRepository.of(user.data, api)
     }
 
