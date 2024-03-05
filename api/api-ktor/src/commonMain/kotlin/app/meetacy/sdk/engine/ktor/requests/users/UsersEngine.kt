@@ -3,10 +3,7 @@ package app.meetacy.sdk.engine.ktor.requests.users
 import app.meetacy.sdk.engine.ktor.apiVersion
 import app.meetacy.sdk.engine.ktor.response.bodyAsSuccess
 import app.meetacy.sdk.engine.ktor.token
-import app.meetacy.sdk.engine.requests.EditUserRequest
-import app.meetacy.sdk.engine.requests.GetMeRequest
-import app.meetacy.sdk.engine.requests.GetUserRequest
-import app.meetacy.sdk.engine.requests.UsernameAvailableRequest
+import app.meetacy.sdk.engine.requests.*
 import app.meetacy.sdk.types.optional.map
 import app.meetacy.sdk.types.serializable.file.FileIdSerializable
 import app.meetacy.sdk.types.serializable.file.serializable
@@ -35,14 +32,24 @@ internal class UsersEngine(
         return GetMeRequest.Response(response.type() as SelfUserDetails)
     }
 
-    suspend fun getUser(request: GetUserRequest): GetUserRequest.Response {
+    suspend fun getUserById(request: GetUserByIdRequest): GetUserByIdRequest.Response {
         val url = baseUrl / "get"
         val response = httpClient.get(url.string) {
             apiVersion(request.apiVersion)
             token(request.token)
-            parameter("id", request.userId?.string)
+            parameter("id", request.userId.string)
         }.bodyAsSuccess<UserDetailsSerializable>()
-        return GetUserRequest.Response(response.type())
+        return GetUserByIdRequest.Response(response.type())
+    }
+
+    suspend fun getUserByUsername(request: GetUserByUsernameRequest): GetUserByUsernameRequest.Response {
+        val url = baseUrl / "get"
+        val response = httpClient.post(url.string) {
+            apiVersion(request.apiVersion)
+            token(request.token)
+            parameter("username", request.username.string)
+        }.bodyAsSuccess<UserDetailsSerializable>()
+        return GetUserByUsernameRequest.Response(response.type())
     }
 
     @Serializable
