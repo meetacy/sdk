@@ -127,7 +127,8 @@ public class KtorMeetacyEngine(
             is EmitFriendsLocationRequest -> friends.streamFriendsLocation(request) as T
             // users
             is GetMeRequest -> users.getMe(request) as T
-            is GetUserRequest -> users.getUser(request) as T
+            is GetUserByIdRequest -> users.getUserById(request) as T
+            is GetUserByUsernameRequest -> users.getUserByUsername(request) as T
             is EditUserRequest -> users.editUser(request) as T
             is UsernameAvailableRequest -> users.usernameAvailable(request) as T
             // meetings
