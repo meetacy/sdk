@@ -54,7 +54,7 @@ public class AuthorizedFriendsApi(private val api: AuthorizedMeetacyApi) {
         pagingId: PagingId? = null,
         userId: UserId? = null
     ): PagingRepository<AuthorizedUserDetailsRepository> =
-        base.subscriptions(token, amount, pagingId, userId).mapItems { user ->
+        base.subscribers(token, amount, pagingId, userId).mapItems { user ->
             AuthorizedUserDetailsRepository.of(user.data, api)
         }
 
