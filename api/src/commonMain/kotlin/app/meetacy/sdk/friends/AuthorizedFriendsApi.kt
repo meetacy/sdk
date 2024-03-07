@@ -36,6 +36,30 @@ public class AuthorizedFriendsApi(private val api: AuthorizedMeetacyApi) {
             )
         }
 
+    public suspend fun subscriptions(
+        amount: Amount,
+        pagingId: PagingId? = null,
+        userId: UserId? = null
+    ): PagingRepository<AuthorizedRegularUserRepository> =
+        base.subscriptions(token, amount, pagingId, userId).mapItems { user ->
+            AuthorizedRegularUserRepository(
+                data = user.data,
+                api = api
+            )
+        }
+
+    public suspend fun subscribers(
+        amount: Amount,
+        pagingId: PagingId? = null,
+        userId: UserId? = null
+    ): PagingRepository<AuthorizedRegularUserRepository> =
+        base.subscribers(token, amount, pagingId, userId).mapItems { user ->
+            AuthorizedRegularUserRepository(
+                data = user.data,
+                api = api
+            )
+        }
+
     public fun paging(
         chunkSize: Amount,
         startPagingId: PagingId? = null,

@@ -7,10 +7,7 @@ import app.meetacy.sdk.engine.ktor.handleRSocketExceptions
 import app.meetacy.sdk.engine.ktor.response.StatusTrueResponse
 import app.meetacy.sdk.engine.ktor.response.bodyAsSuccess
 import app.meetacy.sdk.engine.ktor.token
-import app.meetacy.sdk.engine.requests.AddFriendRequest
-import app.meetacy.sdk.engine.requests.DeleteFriendRequest
-import app.meetacy.sdk.engine.requests.EmitFriendsLocationRequest
-import app.meetacy.sdk.engine.requests.ListFriendsRequest
+import app.meetacy.sdk.engine.requests.*
 import app.meetacy.sdk.types.annotation.UnsafeConstructor
 import app.meetacy.sdk.types.datetime.DateTime
 import app.meetacy.sdk.types.location.Location
@@ -101,6 +98,39 @@ internal class FriendsEngine(
 
         return ListFriendsRequest.Response(response)
     }
+
+    suspend fun subscriptions(request: GetSubscriptionsRequest): GetSubscriptionsRequest.Response {
+        val url =  baseUrl / "relationship" / "subscriptions"
+
+        val response = httpClient.post(url.string) {
+            apiVersion(request.apiVersion)
+            token(request.token)
+            parameter("id", request.userId?.string)
+            parameter("amount", request.amount.int)
+            parameter("pagingId", request.pagingId?.string)
+        }.bodyAsSuccess<PagingResponseSerializable<UserSerializable>>()
+            .type()
+            .mapItems { user -> user.type() as RegularUser }
+
+        return GetSubscriptionsRequest.Response(response)
+    }
+
+    suspend fun subscribers(request: GetSubscribersRequest): GetSubscribersRequest.Response {
+        val url =  baseUrl / "relationship" / "subscribers"
+
+        val response = httpClient.post(url.string) {
+            apiVersion(request.apiVersion)
+            token(request.token)
+            parameter("id", request.userId?.string)
+            parameter("amount", request.amount.int)
+            parameter("pagingId", request.pagingId?.string)
+        }.bodyAsSuccess<PagingResponseSerializable<UserSerializable>>()
+            .type()
+            .mapItems { user -> user.type() as RegularUser }
+
+        return GetSubscribersRequest.Response(response)
+    }
+
 
     suspend fun streamFriendsLocation(request: EmitFriendsLocationRequest) = handleRSocketExceptions(json) {
         val url = baseUrl.replaceProtocolWithWebsocket() / "location" / "stream"

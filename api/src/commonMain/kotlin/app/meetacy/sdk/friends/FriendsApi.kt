@@ -1,9 +1,7 @@
 package app.meetacy.sdk.friends
 
 import app.meetacy.sdk.MeetacyApi
-import app.meetacy.sdk.engine.requests.AddFriendRequest
-import app.meetacy.sdk.engine.requests.DeleteFriendRequest
-import app.meetacy.sdk.engine.requests.ListFriendsRequest
+import app.meetacy.sdk.engine.requests.*
 import app.meetacy.sdk.friends.location.FriendsLocationApi
 import app.meetacy.sdk.users.RegularUserRepository
 import app.meetacy.sdk.types.amount.Amount
@@ -36,6 +34,48 @@ public class FriendsApi(private val api: MeetacyApi) {
         api.engine.execute(
             request = ListFriendsRequest(
                 token = token,
+                amount = currentAmount,
+                pagingId = currentPagingId
+            )
+        ).paging.mapItems { regularUser ->
+            RegularUserRepository(regularUser, api)
+        }
+    }
+
+    public suspend fun subscriptions(
+        token: Token,
+        amount: Amount,
+        pagingId: PagingId? = null,
+        userId: UserId? = null
+    ): PagingRepository<RegularUserRepository> = PagingRepository(
+        amount = amount,
+        startPagingId = pagingId
+    ) { currentAmount, currentPagingId ->
+        api.engine.execute(
+            request = GetSubscriptionsRequest(
+                token = token,
+                userId = userId,
+                amount = currentAmount,
+                pagingId = currentPagingId
+            )
+        ).paging.mapItems { regularUser ->
+            RegularUserRepository(regularUser, api)
+        }
+    }
+
+    public suspend fun subscribers(
+        token: Token,
+        amount: Amount,
+        pagingId: PagingId? = null,
+        userId: UserId? = null,
+    ): PagingRepository<RegularUserRepository> = PagingRepository(
+        amount = amount,
+        startPagingId = pagingId
+    ) { currentAmount, currentPagingId ->
+        api.engine.execute(
+            request = GetSubscribersRequest(
+                token = token,
+                userId = userId,
                 amount = currentAmount,
                 pagingId = currentPagingId
             )
