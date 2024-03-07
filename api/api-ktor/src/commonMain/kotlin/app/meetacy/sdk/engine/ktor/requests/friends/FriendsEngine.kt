@@ -102,7 +102,7 @@ internal class FriendsEngine(
     suspend fun subscriptions(request: GetSubscriptionsRequest): GetSubscriptionsRequest.Response {
         val url =  baseUrl / "relationship" / "subscriptions"
 
-        val response = httpClient.post(url.string) {
+        val response = httpClient.get(url.string) {
             apiVersion(request.apiVersion)
             token(request.token)
             parameter("id", request.userId?.string)
@@ -118,7 +118,7 @@ internal class FriendsEngine(
     suspend fun subscribers(request: GetSubscribersRequest): GetSubscribersRequest.Response {
         val url =  baseUrl / "relationship" / "subscribers"
 
-        val response = httpClient.post(url.string) {
+        val response = httpClient.get(url.string) {
             apiVersion(request.apiVersion)
             token(request.token)
             parameter("id", request.userId?.string)
