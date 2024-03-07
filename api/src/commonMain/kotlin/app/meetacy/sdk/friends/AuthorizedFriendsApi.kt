@@ -4,9 +4,13 @@ import app.meetacy.sdk.AuthorizedMeetacyApi
 import app.meetacy.sdk.friends.location.AuthorizedFriendsLocationApi
 import app.meetacy.sdk.types.amount.Amount
 import app.meetacy.sdk.types.auth.Token
-import app.meetacy.sdk.types.paging.*
+import app.meetacy.sdk.types.paging.PagingId
+import app.meetacy.sdk.types.paging.PagingRepository
+import app.meetacy.sdk.types.paging.PagingSource
+import app.meetacy.sdk.types.paging.mapItems
 import app.meetacy.sdk.types.user.UserId
 import app.meetacy.sdk.users.AuthorizedRegularUserRepository
+import app.meetacy.sdk.users.AuthorizedUserDetailsRepository
 
 /**
  * When modifying this class, corresponding classes should be altered:
@@ -40,24 +44,18 @@ public class AuthorizedFriendsApi(private val api: AuthorizedMeetacyApi) {
         amount: Amount,
         pagingId: PagingId? = null,
         userId: UserId? = null
-    ): PagingRepository<AuthorizedRegularUserRepository> =
+    ): PagingRepository<AuthorizedUserDetailsRepository> =
         base.subscriptions(token, amount, pagingId, userId).mapItems { user ->
-            AuthorizedRegularUserRepository(
-                data = user.data,
-                api = api
-            )
+            AuthorizedUserDetailsRepository.of(user.data, api)
         }
 
     public suspend fun subscribers(
         amount: Amount,
         pagingId: PagingId? = null,
         userId: UserId? = null
-    ): PagingRepository<AuthorizedRegularUserRepository> =
-        base.subscribers(token, amount, pagingId, userId).mapItems { user ->
-            AuthorizedRegularUserRepository(
-                data = user.data,
-                api = api
-            )
+    ): PagingRepository<AuthorizedUserDetailsRepository> =
+        base.subscriptions(token, amount, pagingId, userId).mapItems { user ->
+            AuthorizedUserDetailsRepository.of(user.data, api)
         }
 
     public fun paging(

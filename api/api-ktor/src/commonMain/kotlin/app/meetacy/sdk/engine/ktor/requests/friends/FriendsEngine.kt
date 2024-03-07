@@ -11,18 +11,15 @@ import app.meetacy.sdk.engine.requests.*
 import app.meetacy.sdk.types.annotation.UnsafeConstructor
 import app.meetacy.sdk.types.datetime.DateTime
 import app.meetacy.sdk.types.location.Location
-import app.meetacy.sdk.types.serializable.paging.PagingResponseSerializable
 import app.meetacy.sdk.types.serializable.amount.AmountSerializable
 import app.meetacy.sdk.types.serializable.amount.serializable
 import app.meetacy.sdk.types.serializable.location.LocationSerializable
 import app.meetacy.sdk.types.serializable.location.type
 import app.meetacy.sdk.types.serializable.paging.PagingIdSerializable
+import app.meetacy.sdk.types.serializable.paging.PagingResponseSerializable
 import app.meetacy.sdk.types.serializable.paging.serializable
 import app.meetacy.sdk.types.serializable.paging.type
-import app.meetacy.sdk.types.serializable.user.UserIdSerializable
-import app.meetacy.sdk.types.serializable.user.UserSerializable
-import app.meetacy.sdk.types.serializable.user.serializable
-import app.meetacy.sdk.types.serializable.user.type
+import app.meetacy.sdk.types.serializable.user.*
 import app.meetacy.sdk.types.url.Url
 import app.meetacy.sdk.types.user.RegularUser
 import app.meetacy.sdk.types.user.UserLocationSnapshot
@@ -108,9 +105,9 @@ internal class FriendsEngine(
             parameter("id", request.userId?.string)
             parameter("amount", request.amount.int)
             parameter("pagingId", request.pagingId?.string)
-        }.bodyAsSuccess<PagingResponseSerializable<UserSerializable>>()
+        }.bodyAsSuccess<PagingResponseSerializable<UserDetailsSerializable>>()
             .type()
-            .mapItems { user -> user.type() as RegularUser }
+            .mapItems { userDetails -> userDetails.type() }
 
         return GetSubscriptionsRequest.Response(response)
     }
@@ -124,9 +121,9 @@ internal class FriendsEngine(
             parameter("id", request.userId?.string)
             parameter("amount", request.amount.int)
             parameter("pagingId", request.pagingId?.string)
-        }.bodyAsSuccess<PagingResponseSerializable<UserSerializable>>()
+        }.bodyAsSuccess<PagingResponseSerializable<UserDetailsSerializable>>()
             .type()
-            .mapItems { user -> user.type() as RegularUser }
+            .mapItems { userDetails -> userDetails.type() }
 
         return GetSubscribersRequest.Response(response)
     }
