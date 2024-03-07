@@ -12,6 +12,6 @@ public data class GetSubscribersRequest(
     val amount: Amount,
     val pagingId: PagingId?,
     val userId: UserId?,
-) : MeetacyRequest<GetSubscriptionsRequest.Response> {
+) : MeetacyRequest<GetSubscribersRequest.Response> {
     public data class Response(val paging: PagingResponse<UserDetails>)
 }
