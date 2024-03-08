@@ -7,10 +7,7 @@ import app.meetacy.sdk.engine.ktor.handleRSocketExceptions
 import app.meetacy.sdk.engine.ktor.response.StatusTrueResponse
 import app.meetacy.sdk.engine.ktor.response.bodyAsSuccess
 import app.meetacy.sdk.engine.ktor.token
-import app.meetacy.sdk.engine.requests.AddFriendRequest
-import app.meetacy.sdk.engine.requests.DeleteFriendRequest
-import app.meetacy.sdk.engine.requests.EmitFriendsLocationRequest
-import app.meetacy.sdk.engine.requests.ListFriendsRequest
+import app.meetacy.sdk.engine.requests.*
 import app.meetacy.sdk.types.annotation.UnsafeConstructor
 import app.meetacy.sdk.types.datetime.DateTime
 import app.meetacy.sdk.types.location.Location
@@ -18,6 +15,7 @@ import app.meetacy.sdk.types.serializable.paging.PagingResponseSerializable
 import app.meetacy.sdk.types.serializable.amount.AmountSerializable
 import app.meetacy.sdk.types.serializable.amount.serializable
 import app.meetacy.sdk.types.serializable.location.LocationSerializable
+import app.meetacy.sdk.types.serializable.location.serializable
 import app.meetacy.sdk.types.serializable.location.type
 import app.meetacy.sdk.types.serializable.paging.PagingIdSerializable
 import app.meetacy.sdk.types.serializable.paging.serializable
@@ -120,6 +118,20 @@ internal class FriendsEngine(
         }
 
         request.collector.emitAll(flow)
+    }
+
+    @Serializable
+    private data class PushLocationBody(val location: LocationSerializable)
+    private fun PushLocationRequest.toBody() = PushLocationBody(location.serializable())
+
+    suspend fun pushLocation(request: PushLocationRequest) {
+        val url = baseUrl / "location" / "push"
+        val body = request.toBody()
+        httpClient.post(url.string) {
+            apiVersion(request.apiVersion)
+            token(request.token)
+            setBody(body)
+        }.body<StatusTrueResponse>()
     }
 }
 

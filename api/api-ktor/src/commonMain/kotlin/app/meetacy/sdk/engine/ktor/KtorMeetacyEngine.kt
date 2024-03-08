@@ -125,6 +125,7 @@ public class KtorMeetacyEngine(
             is DeleteFriendRequest -> friends.delete(request) as T
             is ListFriendsRequest -> friends.list(request) as T
             is EmitFriendsLocationRequest -> friends.streamFriendsLocation(request) as T
+            is PushLocationRequest -> friends.pushLocation(request) as T
             // users
             is GetMeRequest -> users.getMe(request) as T
             is GetUserByIdRequest -> users.getUserById(request) as T
