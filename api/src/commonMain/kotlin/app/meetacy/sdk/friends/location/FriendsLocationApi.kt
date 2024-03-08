@@ -2,6 +2,7 @@ package app.meetacy.sdk.friends.location
 
 import app.meetacy.sdk.MeetacyApi
 import app.meetacy.sdk.engine.requests.EmitFriendsLocationRequest
+import app.meetacy.sdk.engine.requests.PushLocationRequest
 import app.meetacy.sdk.types.auth.Token
 import app.meetacy.sdk.types.location.Location
 import app.meetacy.sdk.users.RegularUserRepository
@@ -35,4 +36,11 @@ public class FriendsLocationApi(
                 capturedAt = userOnMap.capturedAt
             )
         }
+
+    public suspend fun push(
+        token: Token,
+        location: Location
+    ) {
+        api.engine.execute(PushLocationRequest(token, location))
+    }
 }

@@ -14,17 +14,19 @@ public class AuthorizedFriendsLocationApi(
     public val base: FriendsLocationApi get() = api.base.friends.location
 
     public fun flow(selfLocation: Flow<Location>): Flow<AuthorizedUserLocationSnapshotRepository> {
-        return api.base.friends.location
-            .flow(api.token, selfLocation)
-            .map { userOnMap ->
-                AuthorizedUserLocationSnapshotRepository(
-                    user = AuthorizedRegularUserRepository(
-                        data = userOnMap.user.data,
-                        api = api
-                    ),
-                    location = userOnMap.location,
-                    capturedAt = userOnMap.capturedAt
-                )
-            }
+        return base.flow(api.token, selfLocation).map { userOnMap ->
+            AuthorizedUserLocationSnapshotRepository(
+                user = AuthorizedRegularUserRepository(
+                    data = userOnMap.user.data,
+                    api = api
+                ),
+                location = userOnMap.location,
+                capturedAt = userOnMap.capturedAt
+            )
+        }
+    }
+
+    public suspend fun push(location: Location) {
+        base.push(token, location)
     }
 }
