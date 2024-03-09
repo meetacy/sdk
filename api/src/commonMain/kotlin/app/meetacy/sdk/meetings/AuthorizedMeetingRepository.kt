@@ -74,4 +74,8 @@ public class AuthorizedMeetingRepository(
     public suspend fun participate() {
         api.meetings.participate(data.id)
     }
+
+    public suspend fun quit() {
+        api.meetings.quit(data.id)
+    }
 }

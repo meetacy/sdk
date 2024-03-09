@@ -139,6 +139,7 @@ public class KtorMeetacyEngine(
             is ListMeetingsMapRequest -> meetings.listMeetingsMap(request) as T
             is CreateMeetingRequest -> meetings.createMeeting(request) as T
             is ParticipateMeetingRequest -> meetings.participateMeeting(request) as T
+            is QuitMeetingRequest -> meetings.quitMeeting(request) as T
             is GetMeetingRequest -> meetings.getMeeting(request) as T
             is EditMeetingRequest -> meetings.editMeeting(request) as T
             is ListMeetingParticipantsRequest -> meetings.listMeetingParticipants(request) as T
