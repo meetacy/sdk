@@ -77,6 +77,10 @@ public class MeetingRepository(
         api.meetings.participate(token, id)
     }
 
+    public suspend fun leave(token: Token) {
+        api.meetings.leave(token, id)
+    }
+
     public suspend fun updated(
         token: Token
     ): MeetingRepository {

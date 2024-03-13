@@ -1,10 +1,7 @@
 package app.meetacy.sdk.meetings
 
 import app.meetacy.sdk.MeetacyApi
-import app.meetacy.sdk.engine.requests.CreateMeetingRequest
-import app.meetacy.sdk.engine.requests.EditMeetingRequest
-import app.meetacy.sdk.engine.requests.GetMeetingRequest
-import app.meetacy.sdk.engine.requests.ParticipateMeetingRequest
+import app.meetacy.sdk.engine.requests.*
 import app.meetacy.sdk.meetings.history.MeetingsHistoryApi
 import app.meetacy.sdk.meetings.map.MeetingsMapApi
 import app.meetacy.sdk.meetings.participants.MeetingParticipantsApi
@@ -101,6 +98,10 @@ public class MeetingsApi(private val api: MeetacyApi) {
 
     public suspend fun participate(token: Token, meetingId: MeetingId) {
         api.engine.execute(ParticipateMeetingRequest(token, meetingId))
+    }
+
+    public suspend fun leave(token: Token, meetingId: MeetingId) {
+        api.engine.execute(LeaveMeetingRequest(token, meetingId))
     }
 
     public suspend fun get(token: Token, meetingId: MeetingId): MeetingRepository {
