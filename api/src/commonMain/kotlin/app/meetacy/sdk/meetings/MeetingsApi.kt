@@ -100,8 +100,8 @@ public class MeetingsApi(private val api: MeetacyApi) {
         api.engine.execute(ParticipateMeetingRequest(token, meetingId))
     }
 
-    public suspend fun quit(token: Token, meetingId: MeetingId) {
-        api.engine.execute(QuitMeetingRequest(token, meetingId))
+    public suspend fun leave(token: Token, meetingId: MeetingId) {
+        api.engine.execute(LeaveMeetingRequest(token, meetingId))
     }
 
     public suspend fun get(token: Token, meetingId: MeetingId): MeetingRepository {

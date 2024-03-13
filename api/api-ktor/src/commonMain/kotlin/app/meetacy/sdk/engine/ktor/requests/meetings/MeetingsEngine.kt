@@ -232,12 +232,12 @@ internal class MeetingsEngine(
     }
 
     @Serializable
-    private data class QuitMeetingBody(val meetingId: MeetingIdSerializable)
+    private data class LeaveMeetingBody(val meetingId: MeetingIdSerializable)
 
-    private fun QuitMeetingRequest.toBody() = QuitMeetingBody(meetingId.serializable())
+    private fun LeaveMeetingRequest.toBody() = LeaveMeetingBody(meetingId.serializable())
 
-    suspend fun quitMeeting(request: QuitMeetingRequest) {
-        val url = baseUrl / "quit"
+    suspend fun leaveMeeting(request: LeaveMeetingRequest) {
+        val url = baseUrl / "leave"
         val body = request.toBody()
         httpClient.post(url.string) {
             apiVersion(request.apiVersion)

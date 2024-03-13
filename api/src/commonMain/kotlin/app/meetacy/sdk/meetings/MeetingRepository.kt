@@ -77,8 +77,8 @@ public class MeetingRepository(
         api.meetings.participate(token, id)
     }
 
-    public suspend fun quit(token: Token) {
-        api.meetings.quit(token, id)
+    public suspend fun leave(token: Token) {
+        api.meetings.leave(token, id)
     }
 
     public suspend fun updated(
