@@ -87,7 +87,7 @@ public class FriendsApi(private val api: MeetacyApi) {
         }
     }
 
-    public fun paging(
+    public fun listPaging(
         token: Token,
         chunkSize: Amount,
         startPagingId: PagingId? = null,
@@ -97,6 +97,30 @@ public class FriendsApi(private val api: MeetacyApi) {
             chunkSize, startPagingId, limit
         ) { currentAmount, currentPagingId ->
             list(token, currentAmount, currentPagingId).response
+        }
+    }
+    public fun subscribersPaging(
+        token: Token,
+        chunkSize: Amount,
+        startPagingId: PagingId? = null,
+        limit: Amount? = null
+    ): PagingSource<UserDetailsRepository> {
+        return PagingSource(
+            chunkSize, startPagingId, limit
+        ) { currentAmount, currentPagingId ->
+            subscribers(token, currentAmount, currentPagingId).response
+        }
+    }
+    public fun subscriptionsPaging(
+        token: Token,
+        chunkSize: Amount,
+        startPagingId: PagingId? = null,
+        limit: Amount? = null
+    ): PagingSource<UserDetailsRepository> {
+        return PagingSource(
+            chunkSize, startPagingId, limit
+        ) { currentAmount, currentPagingId ->
+            subscriptions(token, currentAmount, currentPagingId).response
         }
     }
 }

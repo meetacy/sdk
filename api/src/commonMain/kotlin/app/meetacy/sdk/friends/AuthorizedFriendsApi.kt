@@ -58,7 +58,7 @@ public class AuthorizedFriendsApi(private val api: AuthorizedMeetacyApi) {
             AuthorizedUserDetailsRepository.of(user.data, api)
         }
 
-    public fun paging(
+    public fun listPaging(
         chunkSize: Amount,
         startPagingId: PagingId? = null,
         limit: Amount? = null
@@ -67,6 +67,28 @@ public class AuthorizedFriendsApi(private val api: AuthorizedMeetacyApi) {
             chunkSize, startPagingId, limit
         ) { currentAmount, currentPagingId ->
             list(currentAmount, currentPagingId).response
+        }
+    }
+    public fun subscribersPaging(
+        chunkSize: Amount,
+        startPagingId: PagingId? = null,
+        limit: Amount? = null
+    ): PagingSource<AuthorizedUserDetailsRepository> {
+        return PagingSource(
+            chunkSize, startPagingId, limit
+        ) { currentAmount, currentPagingId ->
+            subscribers(currentAmount, currentPagingId).response
+        }
+    }
+    public fun subscriptionsPaging(
+        chunkSize: Amount,
+        startPagingId: PagingId? = null,
+        limit: Amount? = null
+    ): PagingSource<AuthorizedUserDetailsRepository> {
+        return PagingSource(
+            chunkSize, startPagingId, limit
+        ) { currentAmount, currentPagingId ->
+            subscriptions(currentAmount, currentPagingId).response
         }
     }
 }
