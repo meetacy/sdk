@@ -2,6 +2,8 @@ package app.meetacy.sdk.friends
 
 import app.meetacy.sdk.AuthorizedMeetacyApi
 import app.meetacy.sdk.friends.location.AuthorizedFriendsLocationApi
+import app.meetacy.sdk.friends.subscribers.AuthorizedSubscribersApi
+import app.meetacy.sdk.friends.subscriptions.AuthorizedSubscriptionsApi
 import app.meetacy.sdk.types.amount.Amount
 import app.meetacy.sdk.types.auth.Token
 import app.meetacy.sdk.types.paging.PagingId
@@ -10,7 +12,6 @@ import app.meetacy.sdk.types.paging.PagingSource
 import app.meetacy.sdk.types.paging.mapItems
 import app.meetacy.sdk.types.user.UserId
 import app.meetacy.sdk.users.AuthorizedRegularUserRepository
-import app.meetacy.sdk.users.AuthorizedUserDetailsRepository
 
 /**
  * When modifying this class, corresponding classes should be altered:
@@ -21,6 +22,8 @@ public class AuthorizedFriendsApi(private val api: AuthorizedMeetacyApi) {
     public val base: FriendsApi get() = api.base.friends
 
     public val location: AuthorizedFriendsLocationApi = AuthorizedFriendsLocationApi(api)
+    public val subscribers: AuthorizedSubscribersApi = AuthorizedSubscribersApi(api)
+    public val subscriptions: AuthorizedSubscriptionsApi = AuthorizedSubscriptionsApi(api)
 
     public suspend fun add(friendId: UserId) {
         base.add(token, friendId)
@@ -40,25 +43,7 @@ public class AuthorizedFriendsApi(private val api: AuthorizedMeetacyApi) {
             )
         }
 
-    public suspend fun subscriptions(
-        amount: Amount,
-        pagingId: PagingId? = null,
-        userId: UserId? = null
-    ): PagingRepository<AuthorizedUserDetailsRepository> =
-        base.subscriptions(token, amount, pagingId, userId).mapItems { user ->
-            AuthorizedUserDetailsRepository.of(user.data, api)
-        }
-
-    public suspend fun subscribers(
-        amount: Amount,
-        pagingId: PagingId? = null,
-        userId: UserId? = null
-    ): PagingRepository<AuthorizedUserDetailsRepository> =
-        base.subscribers(token, amount, pagingId, userId).mapItems { user ->
-            AuthorizedUserDetailsRepository.of(user.data, api)
-        }
-
-    public fun listPaging(
+    public fun paging(
         chunkSize: Amount,
         startPagingId: PagingId? = null,
         limit: Amount? = null
@@ -67,28 +52,6 @@ public class AuthorizedFriendsApi(private val api: AuthorizedMeetacyApi) {
             chunkSize, startPagingId, limit
         ) { currentAmount, currentPagingId ->
             list(currentAmount, currentPagingId).response
-        }
-    }
-    public fun subscribersPaging(
-        chunkSize: Amount,
-        startPagingId: PagingId? = null,
-        limit: Amount? = null
-    ): PagingSource<AuthorizedUserDetailsRepository> {
-        return PagingSource(
-            chunkSize, startPagingId, limit
-        ) { currentAmount, currentPagingId ->
-            subscribers(currentAmount, currentPagingId).response
-        }
-    }
-    public fun subscriptionsPaging(
-        chunkSize: Amount,
-        startPagingId: PagingId? = null,
-        limit: Amount? = null
-    ): PagingSource<AuthorizedUserDetailsRepository> {
-        return PagingSource(
-            chunkSize, startPagingId, limit
-        ) { currentAmount, currentPagingId ->
-            subscriptions(currentAmount, currentPagingId).response
         }
     }
 }

@@ -25,6 +25,8 @@ import app.meetacy.sdk.types.user.UserId
 import app.meetacy.sdk.types.user.Username
 import app.meetacy.sdk.updates.AuthorizedUpdatesApi
 import app.meetacy.sdk.updates.UpdatesApi
+import app.meetacy.sdk.users.subscribers.AuthorizedSubscribersRepository
+import app.meetacy.sdk.users.subscriptions.AuthorizedSubscriptionsRepository
 
 public class AuthorizedSelfUserDetailsRepository(
     override val data: SelfUserDetails,
@@ -43,6 +45,9 @@ public class AuthorizedSelfUserDetailsRepository(
 
     override val isSelf: Boolean get() = true
     override val relationship: Nothing? get() = null
+
+    override val subscribers: AuthorizedSubscribersRepository = AuthorizedSubscribersRepository(api, id)
+    override val subscriptions: AuthorizedSubscriptionsRepository = AuthorizedSubscriptionsRepository(api, id)
 
     public val token: Token get() = api.token
     public val files: AuthorizedFilesApi get() = api.files

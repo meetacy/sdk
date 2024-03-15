@@ -8,6 +8,7 @@ import app.meetacy.sdk.types.optional.Optional
 import app.meetacy.sdk.types.user.User
 import app.meetacy.sdk.types.user.UserId
 import app.meetacy.sdk.types.user.Username
+import app.meetacy.sdk.users.subscribers.SubscribersRepository
 
 /**
  * When modifying this class, corresponding classes should be altered:

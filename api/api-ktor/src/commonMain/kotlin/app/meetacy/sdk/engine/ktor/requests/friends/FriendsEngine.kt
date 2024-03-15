@@ -4,6 +4,8 @@ package app.meetacy.sdk.engine.ktor.requests.friends
 
 import app.meetacy.sdk.engine.ktor.apiVersion
 import app.meetacy.sdk.engine.ktor.handleRSocketExceptions
+import app.meetacy.sdk.engine.ktor.requests.friends.subscribers.SubscribersEngine
+import app.meetacy.sdk.engine.ktor.requests.friends.subscriptions.SubscriptionsEngine
 import app.meetacy.sdk.engine.ktor.response.StatusTrueResponse
 import app.meetacy.sdk.engine.ktor.response.bodyAsSuccess
 import app.meetacy.sdk.engine.ktor.token
@@ -45,6 +47,16 @@ internal class FriendsEngine(
     private val json: Json
 ) {
     private val baseUrl =  baseUrl / "friends"
+
+    val subscribers = SubscribersEngine(
+        baseUrl = this.baseUrl,
+        httpClient = httpClient
+    )
+
+    val subscriptions = SubscriptionsEngine(
+        baseUrl = this.baseUrl,
+        httpClient = httpClient
+    )
 
     @Serializable
     private data class AddFriendBody(val friendId: UserIdSerializable)
@@ -95,39 +107,6 @@ internal class FriendsEngine(
 
         return ListFriendsRequest.Response(response)
     }
-
-    suspend fun subscriptions(request: GetSubscriptionsRequest): GetSubscriptionsRequest.Response {
-        val url =  baseUrl / "subscriptions"
-
-        val response = httpClient.get(url.string) {
-            apiVersion(request.apiVersion)
-            token(request.token)
-            parameter("id", request.userId?.string)
-            parameter("amount", request.amount.int)
-            parameter("pagingId", request.pagingId?.string)
-        }.bodyAsSuccess<PagingResponseSerializable<UserDetailsSerializable>>()
-            .type()
-            .mapItems { userDetails -> userDetails.type() }
-
-        return GetSubscriptionsRequest.Response(response)
-    }
-
-    suspend fun subscribers(request: GetSubscribersRequest): GetSubscribersRequest.Response {
-        val url =  baseUrl / "subscribers"
-
-        val response = httpClient.get(url.string) {
-            apiVersion(request.apiVersion)
-            token(request.token)
-            parameter("id", request.userId?.string)
-            parameter("amount", request.amount.int)
-            parameter("pagingId", request.pagingId?.string)
-        }.bodyAsSuccess<PagingResponseSerializable<UserDetailsSerializable>>()
-            .type()
-            .mapItems { userDetails -> userDetails.type() }
-
-        return GetSubscribersRequest.Response(response)
-    }
-
 
     suspend fun streamFriendsLocation(request: EmitFriendsLocationRequest) = handleRSocketExceptions(json) {
         val url = baseUrl.replaceProtocolWithWebsocket() / "location" / "stream"

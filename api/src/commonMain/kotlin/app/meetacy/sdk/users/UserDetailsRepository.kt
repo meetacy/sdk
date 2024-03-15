@@ -6,6 +6,8 @@ import app.meetacy.sdk.types.amount.Amount
 import app.meetacy.sdk.types.auth.Token
 import app.meetacy.sdk.types.email.Email
 import app.meetacy.sdk.types.user.*
+import app.meetacy.sdk.users.subscribers.SubscribersRepository
+import app.meetacy.sdk.users.subscriptions.SubscriptionsRepository
 
 public sealed interface UserDetailsRepository {
     public val data: UserDetails
@@ -20,6 +22,9 @@ public sealed interface UserDetailsRepository {
     public val avatar: FileRepository?
     public val subscribersAmount: Amount.OrZero
     public val subscriptionsAmount: Amount.OrZero
+
+    public val subscribers: SubscribersRepository
+    public val subscriptions: SubscriptionsRepository
 
     public suspend fun updated(token: Token): UserDetailsRepository
     public fun toUser(): UserRepository
