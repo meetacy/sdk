@@ -93,6 +93,10 @@ public class AuthorizedMeetingsApi(
         base.participate(api.token, meetingId)
     }
 
+    public suspend fun leave(meetingId: MeetingId) {
+        base.leave(api.token, meetingId)
+    }
+
     public suspend fun get(meetingId: MeetingId): AuthorizedMeetingRepository {
         val repository = base.get(api.token, meetingId)
 

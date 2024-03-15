@@ -4,15 +4,7 @@ import app.meetacy.sdk.engine.ktor.apiVersion
 import app.meetacy.sdk.engine.ktor.response.StatusTrueResponse
 import app.meetacy.sdk.engine.ktor.response.bodyAsSuccess
 import app.meetacy.sdk.engine.ktor.token
-import app.meetacy.sdk.engine.requests.CreateMeetingRequest
-import app.meetacy.sdk.engine.requests.EditMeetingRequest
-import app.meetacy.sdk.engine.requests.GetMeetingRequest
-import app.meetacy.sdk.engine.requests.ListActiveMeetingsRequest
-import app.meetacy.sdk.engine.requests.ListMeetingParticipantsRequest
-import app.meetacy.sdk.engine.requests.ListMeetingsHistoryRequest
-import app.meetacy.sdk.engine.requests.ListMeetingsMapRequest
-import app.meetacy.sdk.engine.requests.ListPastMeetingsRequest
-import app.meetacy.sdk.engine.requests.ParticipateMeetingRequest
+import app.meetacy.sdk.engine.requests.*
 import app.meetacy.sdk.types.optional.map
 import app.meetacy.sdk.types.serializable.amount.AmountSerializable
 import app.meetacy.sdk.types.serializable.amount.serializable
@@ -35,8 +27,8 @@ import app.meetacy.sdk.types.serializable.paging.type
 import app.meetacy.sdk.types.serializable.user.UserSerializable
 import app.meetacy.sdk.types.serializable.user.type
 import app.meetacy.sdk.types.url.Url
-import io.ktor.client.HttpClient
-import io.ktor.client.call.body
+import io.ktor.client.*
+import io.ktor.client.call.*
 import io.ktor.client.request.*
 import kotlinx.serialization.Serializable
 
@@ -231,6 +223,21 @@ internal class MeetingsEngine(
 
     suspend fun participateMeeting(request: ParticipateMeetingRequest) {
         val url = baseUrl / "participate"
+        val body = request.toBody()
+        httpClient.post(url.string) {
+            apiVersion(request.apiVersion)
+            token(request.token)
+            setBody(body)
+        }.body<StatusTrueResponse>()
+    }
+
+    @Serializable
+    private data class LeaveMeetingBody(val meetingId: MeetingIdSerializable)
+
+    private fun LeaveMeetingRequest.toBody() = LeaveMeetingBody(meetingId.serializable())
+
+    suspend fun leaveMeeting(request: LeaveMeetingRequest) {
+        val url = baseUrl / "leave"
         val body = request.toBody()
         httpClient.post(url.string) {
             apiVersion(request.apiVersion)

@@ -16,6 +16,7 @@ import app.meetacy.sdk.types.location.Location
 import app.meetacy.sdk.types.serializable.amount.AmountSerializable
 import app.meetacy.sdk.types.serializable.amount.serializable
 import app.meetacy.sdk.types.serializable.location.LocationSerializable
+import app.meetacy.sdk.types.serializable.location.serializable
 import app.meetacy.sdk.types.serializable.location.type
 import app.meetacy.sdk.types.serializable.paging.PagingIdSerializable
 import app.meetacy.sdk.types.serializable.paging.PagingResponseSerializable
@@ -126,6 +127,20 @@ internal class FriendsEngine(
         }
 
         request.collector.emitAll(flow)
+    }
+
+    @Serializable
+    private data class PushLocationBody(val location: LocationSerializable)
+    private fun PushLocationRequest.toBody() = PushLocationBody(location.serializable())
+
+    suspend fun pushLocation(request: PushLocationRequest) {
+        val url = baseUrl / "location" / "push"
+        val body = request.toBody()
+        httpClient.post(url.string) {
+            apiVersion(request.apiVersion)
+            token(request.token)
+            setBody(body)
+        }.body<StatusTrueResponse>()
     }
 }
 

@@ -127,6 +127,7 @@ public class KtorMeetacyEngine(
             is ListSubscribersRequest -> friends.subscribers.list(request) as T
             is ListSubscriptionsRequest -> friends.subscriptions.list(request) as T
             is EmitFriendsLocationRequest -> friends.streamFriendsLocation(request) as T
+            is PushLocationRequest -> friends.pushLocation(request) as T
             // users
             is GetMeRequest -> users.getMe(request) as T
             is GetUserByIdRequest -> users.getUserById(request) as T
@@ -140,6 +141,7 @@ public class KtorMeetacyEngine(
             is ListMeetingsMapRequest -> meetings.listMeetingsMap(request) as T
             is CreateMeetingRequest -> meetings.createMeeting(request) as T
             is ParticipateMeetingRequest -> meetings.participateMeeting(request) as T
+            is LeaveMeetingRequest -> meetings.leaveMeeting(request) as T
             is GetMeetingRequest -> meetings.getMeeting(request) as T
             is EditMeetingRequest -> meetings.editMeeting(request) as T
             is ListMeetingParticipantsRequest -> meetings.listMeetingParticipants(request) as T
