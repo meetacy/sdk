@@ -5,6 +5,8 @@ import app.meetacy.sdk.files.FileRepository
 import app.meetacy.sdk.types.amount.Amount
 import app.meetacy.sdk.types.auth.Token
 import app.meetacy.sdk.types.user.*
+import app.meetacy.sdk.users.subscribers.SubscribersRepository
+import app.meetacy.sdk.users.subscriptions.SubscriptionsRepository
 
 public class RegularUserDetailsRepository(
     override val data: RegularUserDetails,
@@ -21,6 +23,9 @@ public class RegularUserDetailsRepository(
     override val isSelf: Boolean get() = false
     override val email: Nothing? get() = null
     override val emailVerified: Nothing? get() = null
+
+    override val subscribers: SubscribersRepository = SubscribersRepository(api, id)
+    override val subscriptions: SubscriptionsRepository = SubscriptionsRepository(api, id)
 
     public suspend fun addFriend(token: Token) {
         api.friends.add(token, data.id)

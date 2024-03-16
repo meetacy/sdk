@@ -13,8 +13,6 @@ import app.meetacy.sdk.search.SearchItemRepository
 import app.meetacy.sdk.types.annotation.UnsafeConstructor
 import app.meetacy.sdk.types.auth.Token
 import app.meetacy.sdk.types.location.Location
-import app.meetacy.sdk.types.user.SelfUser
-import app.meetacy.sdk.types.user.SelfUserDetails
 import app.meetacy.sdk.updates.UpdatesApi
 import app.meetacy.sdk.users.SelfUserDetailsRepository
 import app.meetacy.sdk.users.UsersApi
@@ -40,13 +38,13 @@ public class MeetacyApi(
     }
 
     public suspend fun search(
+        prompt: String,
         token: Token,
-        location: Location?,
-        prompt: String
+        location: Location?
     ): List<SearchItemRepository> {
         return engine.execute(
             request = SearchRequest(
-                token, location, prompt
+                prompt, token, location
             )
         ).items.map { searchItem ->
             SearchItemRepository.of(searchItem, api = this)

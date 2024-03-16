@@ -4,6 +4,8 @@ package app.meetacy.sdk.engine.ktor.requests.friends
 
 import app.meetacy.sdk.engine.ktor.apiVersion
 import app.meetacy.sdk.engine.ktor.handleRSocketExceptions
+import app.meetacy.sdk.engine.ktor.requests.friends.subscribers.SubscribersEngine
+import app.meetacy.sdk.engine.ktor.requests.friends.subscriptions.SubscriptionsEngine
 import app.meetacy.sdk.engine.ktor.response.StatusTrueResponse
 import app.meetacy.sdk.engine.ktor.response.bodyAsSuccess
 import app.meetacy.sdk.engine.ktor.token
@@ -11,19 +13,16 @@ import app.meetacy.sdk.engine.requests.*
 import app.meetacy.sdk.types.annotation.UnsafeConstructor
 import app.meetacy.sdk.types.datetime.DateTime
 import app.meetacy.sdk.types.location.Location
-import app.meetacy.sdk.types.serializable.paging.PagingResponseSerializable
 import app.meetacy.sdk.types.serializable.amount.AmountSerializable
 import app.meetacy.sdk.types.serializable.amount.serializable
 import app.meetacy.sdk.types.serializable.location.LocationSerializable
 import app.meetacy.sdk.types.serializable.location.serializable
 import app.meetacy.sdk.types.serializable.location.type
 import app.meetacy.sdk.types.serializable.paging.PagingIdSerializable
+import app.meetacy.sdk.types.serializable.paging.PagingResponseSerializable
 import app.meetacy.sdk.types.serializable.paging.serializable
 import app.meetacy.sdk.types.serializable.paging.type
-import app.meetacy.sdk.types.serializable.user.UserIdSerializable
-import app.meetacy.sdk.types.serializable.user.UserSerializable
-import app.meetacy.sdk.types.serializable.user.serializable
-import app.meetacy.sdk.types.serializable.user.type
+import app.meetacy.sdk.types.serializable.user.*
 import app.meetacy.sdk.types.url.Url
 import app.meetacy.sdk.types.user.RegularUser
 import app.meetacy.sdk.types.user.UserLocationSnapshot
@@ -49,6 +48,16 @@ internal class FriendsEngine(
     private val json: Json
 ) {
     private val baseUrl =  baseUrl / "friends"
+
+    val subscribers = SubscribersEngine(
+        baseUrl = this.baseUrl,
+        httpClient = httpClient
+    )
+
+    val subscriptions = SubscriptionsEngine(
+        baseUrl = this.baseUrl,
+        httpClient = httpClient
+    )
 
     @Serializable
     private data class AddFriendBody(val friendId: UserIdSerializable)

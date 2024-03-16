@@ -5,6 +5,9 @@ import app.meetacy.sdk.files.FileRepository
 import app.meetacy.sdk.types.email.Email
 import app.meetacy.sdk.types.file.FileId
 import app.meetacy.sdk.types.user.*
+import app.meetacy.sdk.users.subscribers.AuthorizedSubscribersRepository
+import app.meetacy.sdk.users.subscribers.SubscribersRepository
+import app.meetacy.sdk.users.subscriptions.AuthorizedSubscriptionsRepository
 
 public sealed interface AuthorizedUserRepository {
     public val data: User
@@ -17,6 +20,9 @@ public sealed interface AuthorizedUserRepository {
     public val username: Username?
     public val relationship: Relationship?
     public val avatar: FileRepository?
+
+    public val subscribers: AuthorizedSubscribersRepository
+    public val subscriptions: AuthorizedSubscriptionsRepository
 
     public suspend fun details(): AuthorizedUserDetailsRepository
 

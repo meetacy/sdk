@@ -12,7 +12,6 @@ import app.meetacy.sdk.types.auth.Token
 import app.meetacy.sdk.types.location.Location
 import app.meetacy.sdk.updates.AuthorizedUpdatesApi
 import app.meetacy.sdk.users.AuthorizedSelfUserDetailsRepository
-import app.meetacy.sdk.users.AuthorizedSelfUserRepository
 import app.meetacy.sdk.users.AuthorizedUsersApi
 
 /**
@@ -44,6 +43,6 @@ public class AuthorizedMeetacyApi @UnsafeConstructor constructor(
         )
 
     public suspend fun search(location: Location?, prompt: String): List<AuthorizedSearchItemRepository> =
-        base.search(token, location, prompt).map { AuthorizedSearchItemRepository.of(it.data, api = this) }
+        base.search(prompt, token, location).map { AuthorizedSearchItemRepository.of(it.data, api = this) }
 
 }

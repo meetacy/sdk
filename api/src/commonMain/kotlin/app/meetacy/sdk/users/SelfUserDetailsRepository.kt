@@ -17,6 +17,8 @@ import app.meetacy.sdk.types.user.SelfUserDetails
 import app.meetacy.sdk.types.user.UserId
 import app.meetacy.sdk.types.user.Username
 import app.meetacy.sdk.updates.UpdatesApi
+import app.meetacy.sdk.users.subscribers.SubscribersRepository
+import app.meetacy.sdk.users.subscriptions.SubscriptionsRepository
 
 public class SelfUserDetailsRepository(
     override val data: SelfUserDetails,
@@ -42,6 +44,9 @@ public class SelfUserDetailsRepository(
     public val invitations: InvitationsApi get() = api.invitations
     public val notifications: NotificationsApi get() = api.notifications
     public val updates: UpdatesApi get() = api.updates
+
+    override val subscribers: SubscribersRepository = SubscribersRepository(api, id)
+    override val subscriptions: SubscriptionsRepository = SubscriptionsRepository(api, id)
 
     public suspend fun edited(
         token: Token,

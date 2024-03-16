@@ -1,22 +1,29 @@
 package app.meetacy.sdk.friends
 
 import app.meetacy.sdk.MeetacyApi
-import app.meetacy.sdk.engine.requests.AddFriendRequest
-import app.meetacy.sdk.engine.requests.DeleteFriendRequest
-import app.meetacy.sdk.engine.requests.ListFriendsRequest
+import app.meetacy.sdk.engine.requests.*
 import app.meetacy.sdk.friends.location.FriendsLocationApi
-import app.meetacy.sdk.users.RegularUserRepository
+import app.meetacy.sdk.friends.subscribers.SubscribersApi
+import app.meetacy.sdk.friends.subscriptions.SubscriptionsApi
 import app.meetacy.sdk.types.amount.Amount
 import app.meetacy.sdk.types.auth.Token
-import app.meetacy.sdk.types.paging.*
+import app.meetacy.sdk.types.paging.PagingId
+import app.meetacy.sdk.types.paging.PagingRepository
+import app.meetacy.sdk.types.paging.PagingSource
 import app.meetacy.sdk.types.user.UserId
+import app.meetacy.sdk.users.RegularUserRepository
+import app.meetacy.sdk.users.UserDetailsRepository
+import app.meetacy.sdk.users.UserRepository
 
 /**
  * When modifying this class, corresponding classes should be altered:
  * - [app.meetacy.sdk.users.RegularUserRepository]
+ * - [app.meetacy.sdk.friends.AuthorizedFriendsApi]
  */
 public class FriendsApi(private val api: MeetacyApi) {
     public val location: FriendsLocationApi = FriendsLocationApi(api)
+    public val subscribers: SubscribersApi = SubscribersApi(api)
+    public val subscriptions: SubscriptionsApi = SubscriptionsApi(api)
 
     public suspend fun add(token: Token, friendId: UserId) {
         api.engine.execute(AddFriendRequest(token, friendId))
