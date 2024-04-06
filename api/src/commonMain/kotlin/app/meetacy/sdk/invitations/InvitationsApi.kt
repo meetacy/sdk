@@ -1,31 +1,30 @@
 package app.meetacy.sdk.invitations
 
 import app.meetacy.sdk.MeetacyApi
-import app.meetacy.sdk.engine.requests.*
+import app.meetacy.sdk.engine.requests.AcceptInvitationRequest
+import app.meetacy.sdk.engine.requests.CancelInvitationRequest
+import app.meetacy.sdk.engine.requests.CreateInvitationRequest
+import app.meetacy.sdk.engine.requests.DenyInvitationRequest
 import app.meetacy.sdk.types.auth.Token
-import app.meetacy.sdk.types.datetime.DateTime
 import app.meetacy.sdk.types.invitation.InvitationId
 import app.meetacy.sdk.types.meeting.MeetingId
-import app.meetacy.sdk.types.user.User
 import app.meetacy.sdk.types.user.UserId
-import app.meetacy.sdk.users.UserRepository
-import kotlin.jvm.JvmName
 
 public class InvitationsApi(private val api: MeetacyApi) {
     public suspend fun create(
         token: Token,
-        userId: UserId,
+        usersIds: List<UserId>,
         meetingId: MeetingId
-    ): InvitationsRepository {
-        val invitation = api.engine.execute(
+    ): List<InvitationsRepository> {
+        val invitations = api.engine.execute(
             request = CreateInvitationRequest(
                 token,
-                userId,
+                usersIds,
                 meetingId
             )
-        ).invitation
+        ).invitations
 
-        return InvitationsRepository(invitation, api)
+        return invitations.map { InvitationsRepository(it, api) }
     }
 
     public suspend fun accept(

@@ -8,6 +8,7 @@ import app.meetacy.sdk.engine.requests.AcceptInvitationRequest
 import app.meetacy.sdk.engine.requests.CancelInvitationRequest
 import app.meetacy.sdk.engine.requests.CreateInvitationRequest
 import app.meetacy.sdk.engine.requests.DenyInvitationRequest
+import app.meetacy.sdk.types.invitation.Invitation
 import app.meetacy.sdk.types.serializable.invitation.InvitationIdSerializable
 import app.meetacy.sdk.types.serializable.invitation.InvitationSerializable
 import app.meetacy.sdk.types.serializable.invitation.serializable
@@ -17,6 +18,7 @@ import app.meetacy.sdk.types.serializable.meeting.serializable
 import app.meetacy.sdk.types.serializable.user.UserIdSerializable
 import app.meetacy.sdk.types.serializable.user.serializable
 import app.meetacy.sdk.types.url.Url
+import app.meetacy.sdk.types.user.UserId
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.post
@@ -32,12 +34,12 @@ internal class InvitationsEngine(
     @Serializable
     private data class CreateInvitationBody(
         val meetingId: MeetingIdSerializable,
-        val userId: UserIdSerializable
+        val usersIds: List<UserIdSerializable>
     )
 
     private fun CreateInvitationRequest.toBody() = CreateInvitationBody(
         meetingId.serializable(),
-        userId.serializable()
+        usersIds.map(UserId::serializable)
     )
 
     suspend fun create(
@@ -49,8 +51,8 @@ internal class InvitationsEngine(
             apiVersion(request.apiVersion)
             token(request.token)
             setBody(body)
-        }.bodyAsSuccess<InvitationSerializable>()
-        return CreateInvitationRequest.Response(response.type())
+        }.bodyAsSuccess<List<InvitationSerializable>>()
+        return CreateInvitationRequest.Response(response.map(InvitationSerializable::type))
     }
 
     @Serializable
