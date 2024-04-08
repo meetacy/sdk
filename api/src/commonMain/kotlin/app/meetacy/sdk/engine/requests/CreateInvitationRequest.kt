@@ -7,8 +7,8 @@ import app.meetacy.sdk.types.user.UserId
 
 public data class CreateInvitationRequest(
     val token: Token,
-    val userId: UserId,
+    val usersIds: List<UserId>,
     val meetingId: MeetingId
 ) : MeetacyRequest<CreateInvitationRequest.Response> {
-    public data class Response(val invitation: Invitation)
+    public data class Response(val invitations: List<Invitation>)
 }

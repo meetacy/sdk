@@ -2,25 +2,21 @@ package app.meetacy.sdk.invitations
 
 import app.meetacy.sdk.AuthorizedMeetacyApi
 import app.meetacy.sdk.types.auth.Token
-import app.meetacy.sdk.types.datetime.DateTime
 import app.meetacy.sdk.types.invitation.InvitationId
 import app.meetacy.sdk.types.meeting.MeetingId
-import app.meetacy.sdk.types.user.User
 import app.meetacy.sdk.types.user.UserId
-import app.meetacy.sdk.users.UserRepository
-import kotlin.jvm.JvmName
 
 public class AuthorizedInvitationsApi(private val api: AuthorizedMeetacyApi) {
     public val token: Token get() = api.token
     public val base: InvitationsApi = api.base.invitations
 
     public suspend fun create(
-        userId: UserId,
+        usersIds: List<UserId>,
         meetingId: MeetingId
-    ): AuthorizedInvitationRepository {
-        val invitation = base.create(token, userId, meetingId).data
+    ): List<AuthorizedInvitationRepository> {
+        val invitations = base.create(token, usersIds, meetingId)
 
-        return AuthorizedInvitationRepository(invitation, api)
+        return invitations.map { AuthorizedInvitationRepository(it.data, api) }
     }
 
     public suspend fun accept(invitationId: InvitationId) {
