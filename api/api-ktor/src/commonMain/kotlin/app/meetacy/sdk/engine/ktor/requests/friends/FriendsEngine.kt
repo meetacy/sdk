@@ -22,7 +22,10 @@ import app.meetacy.sdk.types.serializable.paging.PagingIdSerializable
 import app.meetacy.sdk.types.serializable.paging.PagingResponseSerializable
 import app.meetacy.sdk.types.serializable.paging.serializable
 import app.meetacy.sdk.types.serializable.paging.type
-import app.meetacy.sdk.types.serializable.user.*
+import app.meetacy.sdk.types.serializable.user.UserIdSerializable
+import app.meetacy.sdk.types.serializable.user.UserSerializable
+import app.meetacy.sdk.types.serializable.user.serializable
+import app.meetacy.sdk.types.serializable.user.type
 import app.meetacy.sdk.types.url.Url
 import app.meetacy.sdk.types.user.RegularUser
 import app.meetacy.sdk.types.user.UserLocationSnapshot
@@ -73,17 +76,12 @@ internal class FriendsEngine(
         }.body<StatusTrueResponse>()
     }
 
-    @Serializable
-    private data class DeleteFriendBody(val friendId: UserIdSerializable)
-    private fun DeleteFriendRequest.toBody() = DeleteFriendBody(friendId.serializable())
-
     suspend fun delete(request: DeleteFriendRequest) {
         val url =  baseUrl / "delete"
-        val body = request.toBody()
         httpClient.delete(url.string) {
             apiVersion(request.apiVersion)
             token(request.token)
-            setBody(body)
+            parameter("friendId", request.friendId.string)
         }.body<StatusTrueResponse>()
     }
 
